@@ -1,0 +1,11 @@
+{
+  "PsbVersion": 4,
+  "PsbType": "Motion",
+  "Platform": "ems",
+  "CryptKey": null,
+  "ExternalTextures": false,
+  "Context": {},
+  "Resources": {
+    "0": "vanilla-santa-resources/tex-texture.png"
+  }
+}

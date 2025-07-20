@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>FreeMote-Test</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<script type="text/JavaScript" src="./driver/FreeMoteDriver.js" charset="UTF-8"></script>
+<script type="text/JavaScript" src="./driver/emoteplayer.js" charset="UTF-8"></script>
+<script type="text/JavaScript" src="main.js" charset="UTF-8"></script>
+<style>
+body{
+  font-family: "微软雅黑";
+  color: white;
+  background:url("img/bg.jpg") no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  }
+</style>
+</head>
+<body onload="start()" style="position:relative;">
+  <canvas id="canvas" width="100%" height="100%" style="position: fixed;top:0; margin:0px auto; padding:0;z-index:1;"></canvas>
+
+  <div id="loading" style="font-size:30px; margin:0 auto;">Loading...</div>
+
+</body>
+</html>
