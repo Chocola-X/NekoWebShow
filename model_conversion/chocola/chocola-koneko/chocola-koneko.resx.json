@@ -1,0 +1,9 @@
+{
+  "PsbVersion": 4,
+  "PsbType": "Motion",
+  "Platform": "ems",
+  "CryptKey": null,
+  "ExternalTextures": false,
+  "Context": {},
+  "Resources": {}
+}
