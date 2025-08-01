@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>猫娘乐园角色E-mote图鉴</title>
+  <link rel="icon" href="neko.png" type="image/png">
+  <script src="./driver/FreeMoteDriver.js" charset="UTF-8"></script>
+  <script src="./driver/emoteplayer.js" charset="UTF-8"></script>
+  <script src="./config/chocola-config.js" charset="UTF-8"></script>
+  <script type="text/JavaScript" src="main.js" charset="UTF-8"></script>
+  <style>
+    body {
+      font-family: "微软雅黑";
+      color: white;
+      background: url("img/bg.png") no-repeat center center fixed;
+      background-size: cover;
+      margin: 0;
+      padding: 0;
+    }
+    /* 顶部内容栏 */
+    #topbar {
+      position: fixed;
+      top: 4px;
+      left: 4px;
+      right: 4px;
+      height: 40px; /* 高度为页面高度的5% */
+      display: flex;
+      align-items: center;
+      padding: 0 16px;
+      background: rgba(255, 204, 229, 0.7); /* 淡白粉色半透明 */
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      transform: translateX(-100%);
+      transition: transform 0.3s ease;
+      z-index: 999;
+    }
+    #topbar.open {
+      transform: translateX(0);
+    }
+    /* 切换图标 */
+    #toggle-icon {
+      position: fixed;
+      top: 4px;
+      right: 4px;
+      height: 40px; /* 高度为页面高度的5% */
+      width: auto; /* 确保图标宽度自适应 */
+      cursor: pointer;
+      z-index: 1000;
+    }
+    /* 菜单项 */
+    .menu-item {
+      margin-left: 24px;
+      position: relative;
+      cursor: pointer;
+      user-select: none;
+    }
+    .menu-item > .label {
+      font-size: 16px;
+      color: #333;
+    }
+    .dropdown {
+      position: absolute;
+      /* 下拉距离整个标题栏底部4px，标题高度5vh */
+      top: 36px;
+      left: 50%; /* 支持居中 */
+      transform: translateX(-50%) scaleY(0);
+      transform-origin: top center;
+      background: rgba(255, 204, 229, 0.7);
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+      overflow: hidden;
+      transition: transform 0.2s ease;
+      z-index: 1001;
+      /* 自适应文字宽度 */
+      white-space: nowrap;
+      width: max-content;
+    }
+    .dropdown.open {
+      transform: translateX(-50%) scaleY(1);
+    }
+    .dropdown a {
+      display: block;
+      padding: 8px 16px;
+      text-decoration: none;
+      color: #555;
+      font-size: 14px;
+    }
+    .dropdown a:hover {
+      background: rgba(255, 182, 203, 0.7);
+      border-radius: 8px; /* 选中选项的提示颜色有圆角处理 */
+    }
+    /* Loading 框 */
+    #loading {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      width: 120px;
+      height: 32px;
+      background: rgba(255, 182, 203, 0.7);
+      border-radius: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+      transition: opacity 1s ease-in-out;
+      font-size: 20px;
+      text-align: center;
+    }
+    
+    .infotext {
+      font-size: 12px;
+      text-align: center;
+      color: #333;
+      padding: 0 20px; /* 左右各12px间距 */
+
+    }
+
+    /* 设置链接样式：颜色不变，左右间距12px */
+    .infotext a {
+      color: inherit; /* 继承父元素颜色，即 #333 */
+      text-decoration: none; /* 可选：去掉下划线 */
+      
+      display: inline-block; /* 可选：让 padding 生效更稳定 */
+    }
+
+    /* 鼠标悬停时也不变色（可选） */
+    .infotext a:hover {
+      color: inherit;
+      text-decoration: underline; /* 可选：悬停时加下划线，但颜色不变 */
+    }
+
+  </style>
+</head>
+<body onload="start('./data/chocola-casual.pure.psb')">
+
+  <canvas id="canvas" width="100%" height="100%" style="position: fixed; top:0; margin:0; padding:0; z-index:1;"></canvas>
+  
+    <div id="loading">Loading...</div>
+  
+
+  <!-- 切换图标 -->
+  <img id="toggle-icon" src="neko.png" alt="Toggle Topbar" />
+
+  <!-- 顶部内容栏 -->
+  <div id="topbar">
+    <div class="label" style="font-weight:bold; font-size:18px; color:#333;">猫娘乐园角色E-mote图鉴</div>
+    <!-- 内容元素示例 -->
+    <div class="menu-item">
+      <span class="label">Choaola ▾</span>
+      <div class="dropdown">
+        <a href="https://chocola.nekopara.uk/chocola-casual">Casual</a>
+        <a href="https://chocola.nekopara.uk/chocola-dress">Dress</a>
+        <a href="https://chocola.nekopara.uk/chocola-lolita">Lolita</a>
+        <a href="https://chocola.nekopara.uk/chocola-maid">Maid</a>
+        <a href="https://chocola.nekopara.uk/chocola-pajama">Pajama</a>
+        <a href="https://chocola.nekopara.uk/chocola-santa">Santa</a>
+        <a href="https://chocola.nekopara.uk/chocola-winter">Winter</a>
+        <a href="https://chocola.nekopara.uk/chocola-wintermaid">Wintermaid</a>
+        <a href="https://chocola.nekopara.uk/chocola-yukata">Yukata</a>
+        <a href="https://chocola.nekopara.uk/chocola-teenage">Teenage</a>
+        <a href="https://chocola.nekopara.uk/chocola-koneko">Koneko</a>
+      </div>
+    </div>
+    <div class="menu-item">
+      <span class="label">Vnailla ▾</span>
+      <div class="dropdown">
+        <a href="https://vanilla.nekopara.uk/vanilla-casual">Casual</a>
+        <a href="https://vanilla.nekopara.uk/vanilla-dress">Dress</a>
+        <a href="https://vanilla.nekopara.uk/vanilla-lolita">Lolita</a>
+        <a href="https://vanilla.nekopara.uk/vanilla-maid">Maid</a>
+        <a href="https://vanilla.nekopara.uk/vanilla-pajama">Pajama</a>
+        <a href="https://vanilla.nekopara.uk/vanilla-santa">Santa</a>
+        <a href="https://vanilla.nekopara.uk/vanilla-winter">Winter</a>
+        <a href="https://vanilla.nekopara.uk/vanilla-wintermaid">Wintermaid</a>
+        <a href="https://vanilla.nekopara.uk/vanilla-yukata">Yukata</a>
+        <a href="https://vanilla.nekopara.uk/vanilla-teenage">Teenage</a>
+        <a href="https://vanilla.nekopara.uk/vanilla-koneko">Koneko</a>
+      </div>
+    </div>
+    <div class="menu-item">
+      <span class="label">Azuki ▾</span>
+      <div class="dropdown">
+        <a href="https://azuki.nekopara.uk/azuki-casual">Casual</a>
+        <a href="https://azuki.nekopara.uk/azuki-dress">Dress</a>
+        <a href="https://azuki.nekopara.uk/azuki-maid">Maid</a>
+        <a href="https://azuki.nekopara.uk/azuki-santa">Santa</a>
+        <a href="https://azuki.nekopara.uk/azuki-winter">Winter</a>
+        <a href="https://azuki.nekopara.uk/azuki-wintermaid">Wintermaid</a>
+        <a href="https://azuki.nekopara.uk/azuki-yukata">Yukata</a>
+        <a href="https://azuki.nekopara.uk/azuki-teenage">Teenage</a>
+      </div>
+    </div>
+    <div class="menu-item">
+      <span class="label">Coconut ▾</span>
+      <div class="dropdown">
+        <a href="https://coconut.nekopara.uk/coconut-casual">Casual</a>
+        <a href="https://coconut.nekopara.uk/coconut-dress">Dress</a>
+        <a href="https://coconut.nekopara.uk/coconut-maid">Maid</a>
+        <a href="https://coconut.nekopara.uk/coconut-pajama">Pajama</a>
+        <a href="https://coconut.nekopara.uk/coconut-santa">Santa</a>
+        <a href="https://coconut.nekopara.uk/coconut-winter">Winter</a>
+        <a href="https://coconut.nekopara.uk/coconut-wintermaid">Wintermaid</a>
+        <a href="https://coconut.nekopara.uk/coconut-yukata">Yukata</a>
+        <a href="https://coconut.nekopara.uk/coconut-teenage">Teenage</a>
+        <a href="https://coconut.nekopara.uk/coconut-koneko">Koneko</a>
+      </div>
+    </div>
+    <div class="menu-item">
+      <span class="label">Maple ▾</span>
+      <div class="dropdown">
+        <a href="https://maple.nekopara.uk/maple-casual">Casual</a>
+        <a href="https://maple.nekopara.uk/maple-dress">Dress</a>
+        <a href="https://maple.nekopara.uk/maple-maid">Maid</a>
+        <a href="https://maple.nekopara.uk/maple-pajama">Pajama</a>
+        <a href="https://maple.nekopara.uk/maple-santa">Santa</a>
+        <a href="https://maple.nekopara.uk/maple-winter">Winter</a>
+        <a href="https://maple.nekopara.uk/maple-wintermaid">Wintermaid</a>
+        <a href="https://maple.nekopara.uk/maple-yukata">Yukata</a>
+        <a href="https://maple.nekopara.uk/maple-teenage">Teenage</a>
+      </div>
+    </div>
+    <div class="menu-item">
+      <span class="label">Cinnamon ▾</span>
+      <div class="dropdown">
+        <a href="https://chocola.nekopara.uk/chocola-casual">Casual</a>
+        <a href="https://chocola.nekopara.uk/chocola-dress">Dress</a>
+        <a href="https://chocola.nekopara.uk/chocola-maid">Maid</a>
+        <a href="https://chocola.nekopara.uk/chocola-santa">Santa</a>
+        <a href="https://chocola.nekopara.uk/chocola-winter">Winter</a>
+        <a href="https://chocola.nekopara.uk/chocola-wintermaid">Wintermaid</a>
+        <a href="https://chocola.nekopara.uk/chocola-yukata">Yukata</a>
+        <a href="https://chocola.nekopara.uk/chocola-teenage">Teenage</a>
+      </div>
+    </div>
+    <div class="menu-item">
+      <span class="label">Milk ▾</span>
+      <div class="dropdown">
+        <a href="https://milk.nekopara.uk/milk-teenage">Teenage</a>
+        <a href="https://milk.nekopara.uk/milk-winter">Winter</a>
+      </div>
+    </div>
+    <div class="menu-item">
+      <span class="label">Fraise ▾</span>
+      <div class="dropdown">
+        <a href="https://fraise.nekopara.uk/fraise-maid">Maid</a>
+      </div>
+    </div>
+    <!-- 可继续添加更多 menu-item -->
+    <div class="infotext">By：<a href="https://www.nekopara.uk" target="_blank">GTX690战术核显卡导弹</a></div>
+    <div class="infotext">Github Project:<a href="https://github.com/Chocola-X/NekoWebShow" target="_blank">NekoWebShow</a></div>
+  </div>
+
+  <script>
+    // 切换顶部栏展开/收起
+    const icon = document.getElementById('toggle-icon');
+    const topbar = document.getElementById('topbar');
+    icon.addEventListener('click', () => {
+      topbar.classList.toggle('open');
+    });
+    // 点击任意菜单项显示下拉，并自动收起其他下拉
+    document.querySelectorAll('.menu-item').forEach(item => {
+      const dropdown = item.querySelector('.dropdown');
+      item.addEventListener('click', e => {
+        e.stopPropagation();
+        // 收起其他打开的下拉
+        document.querySelectorAll('.dropdown.open').forEach(dd => {
+          if (dd !== dropdown) dd.classList.remove('open');
+        });
+        // 切换当前下拉
+        dropdown.classList.toggle('open');
+      });
+    });
+    // 点击页面空白处，关闭所有下拉
+    document.addEventListener('click', () => {
+      document.querySelectorAll('.dropdown.open').forEach(dd => {
+        dd.classList.remove('open');
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,4 +1,4 @@
-function start() {
+function start(psb_url) {
     // 获取窗口宽度
     if (window.innerWidth)
         winWidth = window.innerWidth;
@@ -15,21 +15,59 @@ function start() {
         winHeight = document.documentElement.clientHeight;
         winWidth = document.documentElement.clientWidth;
     }
+    //const psb_url = "./data/azuki-casual.pure.psb";
+    run(winWidth,winHeight,psb_url, getConfig());
+}
+
+function calculateScale(width, height) {
+    // 已知基准尺寸和对应的缩放比例
+    const baseWidth = 1200;
+    const baseHeight = 1000;
+    const baseScaleWH = 0.58; // 1200x1000 对应的比例
+    const baseScaleHalf = 0.28; // 600x500 对应的比例
+
+    // 计算相对于基准尺寸的比例
+    const scaleByWidth = width / baseWidth
+    const scaleByHeight = height / baseHeight
+
+    // 取最小比例来决定缩放比
+    const minScale = Math.min(scaleByWidth, scaleByHeight)
+
+    // 简单线性插值，根据最小边决定最终缩放比
+    // 如果 minScale <= 0.5（即 600x500 的比例），使用 baseScaleHalf 作为下限
+    // 如果 minScale >= 1（即 1200x1000 的比例），使用 baseScaleWH 作为上限
+    let scale
+
+    if (minScale <= 0.5) {
+        scale = baseScaleHalf * (minScale / 0.5)
+    } else if (minScale >= 1) {
+        scale = baseScaleWH + (minScale - 1) * (baseScaleWH * 0.2) // 可以自定义扩展
+    } else {
+        // 在 0.5 到 1 之间做线性插值
+        const ratio = (minScale - 0.5) / 0.5
+        scale = baseScaleHalf + ratio * (baseScaleWH - baseScaleHalf)
+    }
+
+    return parseFloat(scale.toFixed(2)) // 保留两位小数
+}
+
+function run(width,height,psb_url,reactionConfig) {
+
 
     // initialize emote player
-    EmotePlayer.createRenderCanvas(winWidth, winHeight);
+    EmotePlayer.createRenderCanvas(width,height);
     const canvas = document.getElementById('canvas');
     const player = new EmotePlayer(canvas);
-    canvas.width = winWidth;
-    canvas.height = winHeight;
-    player.scale = 0.7;
+    canvas.width = width;
+    canvas.height = height;
+    player.scale = calculateScale(width, height);
     c = player.coord;
     c[1] -= 40;
     player.coord = c;
     player.diffTimelineSlot4 = '差分用_waiting_loop';
 
     // load data then, register mouse event
-    player.promiseLoadDataFromURL("./data/azuki-casual.pure.psb")
+    player.promiseLoadDataFromURL(psb_url)
     .then(() => {
         document.getElementById('loading').innerHTML = "Done!";
         setTimeout(()=>
@@ -67,17 +105,45 @@ function start() {
         canvas.addEventListener('touchmove', (ev) => {
             eyetracking_rection(ev.touches[0]);
             ev.preventDefault();
-        }, false); 
+        }, false);
 
-        // mouse touch reaction
+
+
+        // 应用反应配置
+        function applyReactionConfig(config) {
+            player.mainTimelineLabel = config.mainTimelineLabel || '';
+            player.diffTimelineSlot1 = config.diffTimelineSlot1 || '';
+            player.diffTimelineSlot2 = config.diffTimelineSlot2 || '';
+
+            if (config.audio) {
+                player.playAudio(config.audio);
+            }
+
+            if (config.variables) {
+                config.variables.forEach(v => {
+                    if (v.duration !== undefined && v.delay !== undefined) {
+                        player.setVariable(v.name, v.value, v.duration, v.delay);
+                    } else if (v.duration !== undefined) {
+                        player.setVariable(v.name, v.value, v.duration);
+                    } else {
+                        player.setVariable(v.name, v.value);
+                    }
+                });
+            }
+        }
+
+        // 鼠标触摸反应函数
         let touching = false;
         const touch_reaction = (ev) => {
-            if (touching)
-                return;
+            if (touching) return;
+
+            // 计算各个部位的距离（保持原有计算逻辑）
             const bustPosition = player.getMarkerPosition('bust');
             const bustLength = Math.sqrt((bustPosition.clientX - ev.clientX) ** 2 + (bustPosition.clientY - ev.clientY) ** 2);
+
             const eyePosition = player.getMarkerPosition('eye');
             const eyeLength = Math.sqrt((eyePosition.clientX - ev.clientX) ** 2 + (eyePosition.clientY - ev.clientY) ** 2);
+
             const headPositionAX = player.getMarkerPosition('headAX');
             const headPositionAY = player.getMarkerPosition('headAY');
             const headPositionBX = player.getMarkerPosition('headBX');
@@ -85,10 +151,12 @@ function start() {
             const headCenterX = (headPositionAX.clientX + headPositionBX.clientX) / 2;
             const headCenterY = (headPositionAY.clientY + headPositionBY.clientY) / 2;
             const headLength = Math.sqrt((headCenterX - ev.clientX) ** 2 + (headCenterY - ev.clientY) ** 2);
+
             const faceLength = Math.sqrt(
                 (headCenterX - ev.clientX) ** 2 +
                 ((headCenterY + 40) - ev.clientY) ** 2
             );
+
             const pantPositionAX = player.getMarkerPosition('pantAX');
             const pantPositionAY = player.getMarkerPosition('pantAY');
             const pantPositionBX = player.getMarkerPosition('pantBX');
@@ -96,84 +164,78 @@ function start() {
             const pantCenterX = (pantPositionAX.clientX + pantPositionBX.clientX) / 2;
             const pantCenterY = (pantPositionAY.clientY + pantPositionBY.clientY) / 2;
             const pantLength = Math.sqrt((pantCenterX - ev.clientX) ** 2 + (pantCenterY - ev.clientY) ** 2);
+
             console.log(`Distances: Head=${headLength.toFixed(2)}, Bust=${bustLength.toFixed(2)}, Eye=${eyeLength.toFixed(2)}`);
-            // bust touch reaction
-            if (bustLength < 50) {
+
+            // 胸部触摸反应
+            if (bustLength < 50 && reactionConfig.bust?.length) {
                 touching = true;
-                player.mainTimelineLabel = '怒る01';
-                player.diffTimelineSlot1 = 'はじらい';
-                player.diffTimelineSlot2 = 'いやいや';
-                player.setVariable('arm_type', 2, 300);
-                player.playAudio("./sounds/azuki/b01.wav");
-                player.setVariable("face_mouth", 35, 250, 0);  // 嘴型形状，数值范围通常0-100
-                player.setVariable("face_talk", 1, 150, 0);  // 说话动作，数值范围0-1
-                console.log(`bust touch reaction`);
+                const reactions = reactionConfig.bust;
+                const selected = reactions[Math.floor(Math.random() * reactions.length)];
+
+                console.log('bust touch reaction');
+                applyReactionConfig(selected.reaction);
+
                 setTimeout(() => {
+                    applyReactionConfig(selected.recovery);
                     touching = false;
-                    player.mainTimelineLabel = 'sample_怒02';
-                    player.diffTimelineSlot1 = 'がっかり';
-                    player.diffTimelineSlot2 = '';
-                    player.setVariable('arm_type', 0, 300);
-                }, 1500);
+                }, selected.duration);
             }
-            // eye touch reaction
-            else if (eyeLength < 30) {
+            // 眼部触摸反应
+            else if (eyeLength < 30 && reactionConfig.eye?.length) {
                 touching = true;
-                player.mainTimelineLabel = '困る01';
-                player.diffTimelineSlot1 = 'ひく';
-                player.setVariable('face_eye_open', 10);
-                console.log(`eye touch reaction`);
+                const reactions = reactionConfig.eye;
+                const selected = reactions[Math.floor(Math.random() * reactions.length)];
+
+                console.log('eye touch reaction');
+                applyReactionConfig(selected.reaction);
+
                 setTimeout(() => {
+                    applyReactionConfig(selected.recovery);
                     touching = false;
-                    player.mainTimelineLabel = '平常';
-                    player.diffTimelineSlot1 = '';
-                    player.setVariable('face_mouth', 0);
-                    player.setVariable('face_eye_open', 0);
-                }, 1000);
+                }, selected.duration);
             }
-            // face touch reaction
-            else if (faceLength < 80) {
+            // 脸部触摸反应
+            else if (faceLength < 80 && reactionConfig.face?.length) {
                 touching = true;
-                player.mainTimelineLabel = '喜ぶ01';
-                player.diffTimelineSlot1 = 'わくわく';
-                player.setVariable('face_talk', 10, 20);
-                console.log(`face touch reaction`);
+                const reactions = reactionConfig.face;
+                const selected = reactions[Math.floor(Math.random() * reactions.length)];
+
+                console.log('face touch reaction');
+                applyReactionConfig(selected.reaction);
+
                 setTimeout(() => {
+                    applyReactionConfig(selected.recovery);
                     touching = false;
-                    player.mainTimelineLabel = '平常';
-                    player.diffTimelineSlot1 = '';
-                    player.setVariable('face_eye_open', 0);
-                }, 1000);
+                }, selected.duration);
             }
-            // head touch reaction
-            else if(headLength < 120) {
+            // 头部触摸反应
+            else if (headLength < 120 && reactionConfig.head?.length) {
                 touching = true;
-                player.mainTimelineLabel = '楽しい01';
-                player.diffTimelineSlot1 = 'うんうん';
-                player.playAudio("./sounds/azuki/h02.wav");
-                player.setVariable('face_mouth', 20);
-                player.setVariable('face_talk', 20);
-                console.log(`head touch reaction`);
+                const reactions = reactionConfig.head;
+                const selected = reactions[Math.floor(Math.random() * reactions.length)];
+
+                console.log('head touch reaction');
+                applyReactionConfig(selected.reaction);
+
                 setTimeout(() => {
+                    applyReactionConfig(selected.recovery);
                     touching = false;
-                    player.mainTimelineLabel = 'sample_喜04';
-                    player.diffTimelineSlot1 = '';
-                }, 1500);
+                }, selected.duration);
             }
-            // pant touch reaction
-            else if(pantLength < 180) {
+            // 裤子触摸反应
+            else if (pantLength < 180 && reactionConfig.pant?.length) {
                 touching = true;
-                player.mainTimelineLabel = '驚き02';
-                player.diffTimelineSlot1 = 'いやいや';
-                player.diffTimelineSlot2 = 'ぷんぷん';
-                player.diffTimelineSlot3 = 'はじらい';
-                console.log(`pant touch reaction`);
+                const reactions = reactionConfig.pant;
+                const selected = reactions[Math.floor(Math.random() * reactions.length)];
+
+                console.log('pant touch reaction');
+                applyReactionConfig(selected.reaction);
+
                 setTimeout(() => {
+                    applyReactionConfig(selected.recovery);
                     touching = false;
-                    player.mainTimelineLabel = '平常';
-                    player.diffTimelineSlot1 = '';
-                    player.diffTimelineSlot2 = '';
-                }, 1500)
+                }, selected.duration);
             }
         };
         // bind to mouse click event
