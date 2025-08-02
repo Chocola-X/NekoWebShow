@@ -54,11 +54,11 @@ $pages = [
       'psb_url' => './data/chocola-yukata.pure.psb'
   ],
   'chocola-teenage' => [
-      'use_config' => 'chocola-config.js',
+      'use_config' => 'kochocola-config.js',
       'psb_url' => './data/chocola-teenage.pure.psb'
   ],
   'chocola-koneko' => [
-      'use_config' => 'chocola-config.js',
+      'use_config' => 'kochocola-config.js',
       'psb_url' => './data/chocola-koneko.pure.psb'
   ],
   'vanilla-casual' => [
@@ -98,11 +98,11 @@ $pages = [
       'psb_url' => './data/vanilla-yukata.pure.psb'
   ],
   'vanilla-teenage' => [
-      'use_config' => 'vanilla-config.js',
+      'use_config' => 'kovanilla-config.js',
       'psb_url' => './data/vanilla-teenage.pure.psb'
   ],
   'vanilla-koneko' => [
-      'use_config' => 'vanilla-config.js',
+      'use_config' => 'kovanilla-config.js',
       'psb_url' => './data/vanilla-koneko.pure.psb'
   ],
   'azuki-casual' => [
@@ -134,7 +134,7 @@ $pages = [
       'psb_url' => './data/azuki-yukata.pure.psb'
   ],
   'azuki-teenage' => [
-      'use_config' => 'azuki-config.js',
+      'use_config' => 'koazuki-config.js',
       'psb_url' => './data/azuki-teenage.pure.psb'
   ],
   'coconut-casual' => [
@@ -170,11 +170,11 @@ $pages = [
       'psb_url' => './data/coconut-yukata.pure.psb'
   ],
   'coconut-teenage' => [
-      'use_config' => 'coconut-config.js',
+      'use_config' => 'kococonut-config.js',
       'psb_url' => './data/coconut-teenage.pure.psb'
   ],
   'coconut-koneko' => [
-      'use_config' => 'coconut-config.js',
+      'use_config' => 'kococonut-config.js',
       'psb_url' => './data/coconut-koneko.pure.psb'
   ],
   'maple-casual' => [
@@ -206,7 +206,7 @@ $pages = [
       'psb_url' => './data/maple-yukata.pure.psb'
   ],
   'maple-teenage' => [
-      'use_config' => 'maple-config.js',
+      'use_config' => 'komaple-config.js',
       'psb_url' => './data/maple-teenage.pure.psb'
   ],
   'cinnamon-casual' => [
@@ -238,7 +238,7 @@ $pages = [
       'psb_url' => './data/cinnamon-yukata.pure.psb'
   ],
   'cinnamon-teenage' => [
-      'use_config' => 'cinnamon-config.js',
+      'use_config' => 'kocinnamon-config.js',
       'psb_url' => './data/cinnamon-teenage.pure.psb'
   ],
   'milk-teenage' => [
