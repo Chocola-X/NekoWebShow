@@ -4,7 +4,9 @@
   <img src="https://teachermate.oss-cn-qingdao.aliyuncs.com/6QCbQ-1754206210534-NekoWebShow_logo.png" alt="NekoWebShow" />
 </div>
 
-[展示地址](https://show.nekopara.uk)
+[展示地址（php版本）](https://show.nekopara.uk)
+
+[展示地址（html版本）](https://chocola-x.github.io/NekoWebShow/)
 
 [部署/使用指南](https://www.nekopara.uk/archives/nekowebshow.html)
 
