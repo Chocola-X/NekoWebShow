@@ -432,7 +432,7 @@ if (!isset($pages[$path])) {
       </div>
     </div>
     <div class="menu-item">
-      <span class="label">Vnailla ▾</span>
+      <span class="label">Vanilla ▾</span>
       <div class="dropdown">
         <a href="<?php echo $domain_vanilla; ?>/vanilla-casual">Casual</a>
         <a href="<?php echo $domain_vanilla; ?>/vanilla-dress">Dress</a>
