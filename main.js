@@ -19,36 +19,28 @@ function start(psb_url) {
     run(winWidth,winHeight,psb_url, getConfig());
 }
 
-function calculateScale(width, height) {
-    // 已知基准尺寸和对应的缩放比例
-    const baseWidth = 1200;
-    const baseHeight = 1000;
-    const baseScaleWH = 0.58; // 1200x1000 对应的比例
-    const baseScaleHalf = 0.28; // 600x500 对应的比例
+function getHeightRatio(height) {
+    // 已知点 (height1, ratio1) 和 (height2, ratio2)
+    const height1 = 600;
+    const ratio1 = 0.3;
+    const height2 = 1600;
+    const ratio2 = 0.9;
 
-    // 计算相对于基准尺寸的比例
-    const scaleByWidth = width / baseWidth
-    const scaleByHeight = height / baseHeight
+    // 计算斜率 m
+    const m = (ratio2 - ratio1) / (height2 - height1);
 
-    // 取最小比例来决定缩放比
-    const minScale = Math.min(scaleByWidth, scaleByHeight)
+    // 计算截距 b
+    const b = ratio1 - m * height1;
 
-    // 简单线性插值，根据最小边决定最终缩放比
-    // 如果 minScale <= 0.5（即 600x500 的比例），使用 baseScaleHalf 作为下限
-    // 如果 minScale >= 1（即 1200x1000 的比例），使用 baseScaleWH 作为上限
-    let scale
+    // 计算对应高度的高度比例
+    let ratio = m * height + b;
 
-    if (minScale <= 0.5) {
-        scale = baseScaleHalf * (minScale / 0.5)
-    } else if (minScale >= 1) {
-        scale = baseScaleWH + (minScale - 1) * (baseScaleWH * 0.2) // 可以自定义扩展
-    } else {
-        // 在 0.5 到 1 之间做线性插值
-        const ratio = (minScale - 0.5) / 0.5
-        scale = baseScaleHalf + ratio * (baseScaleWH - baseScaleHalf)
+    // 确保比例不低于0.05
+    if (ratio < 0.05) {
+        ratio = 0.05;
     }
 
-    return parseFloat(scale.toFixed(2)) // 保留两位小数
+    return ratio;
 }
 
 function run(width,height,psb_url,reactionConfig) {
@@ -60,7 +52,7 @@ function run(width,height,psb_url,reactionConfig) {
     const player = new EmotePlayer(canvas);
     canvas.width = width;
     canvas.height = height;
-    player.scale = calculateScale(width, height);
+    player.scale = getHeightRatio(height);
     c = player.coord;
     c[1] -= 40;
     player.coord = c;
