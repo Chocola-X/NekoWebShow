@@ -15,243 +15,243 @@ $path = trim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/');
 $pages = [
   '' => [
     'use_config' => 'chocola-config.js',
-    'psb_url' => './data/chocola-lolita.pure.psb' // 默认使用 chocola-lolita
+    'psb_url' => './data/chocola-lolita.pure.psb.zip' // 默认使用 chocola-lolita
   ],
   'chocola-casual' => [
       'use_config' => 'chocola-config.js',
-      'psb_url' => './data/chocola-casual.pure.psb'
+      'psb_url' => './data/chocola-casual.pure.psb.zip'
   ],
   'chocola-dress' => [
       'use_config' => 'chocola-config.js',
-      'psb_url' => './data/chocola-dress.pure.psb'
+      'psb_url' => './data/chocola-dress.pure.psb.zip'
   ],
   'chocola-lolita' => [
       'use_config' => 'chocola-config.js',
-      'psb_url' => './data/chocola-lolita.pure.psb'
+      'psb_url' => './data/chocola-lolita.pure.psb.zip'
   ],
   'chocola-maid' => [
       'use_config' => 'chocola-config.js',
-      'psb_url' => './data/chocola-maid.pure.psb'
+      'psb_url' => './data/chocola-maid.pure.psb.zip'
   ],
   'chocola-pajama' => [
       'use_config' => 'chocola-config.js',
-      'psb_url' => './data/chocola-pajama.pure.psb'
+      'psb_url' => './data/chocola-pajama.pure.psb.zip'
   ],
   'chocola-santa' => [
       'use_config' => 'chocola-config.js',
-      'psb_url' => './data/chocola-santa.pure.psb'
+      'psb_url' => './data/chocola-santa.pure.psb.zip'
   ],
   'chocola-winter' => [
       'use_config' => 'chocola-config.js',
-      'psb_url' => './data/chocola-winter.pure.psb'
+      'psb_url' => './data/chocola-winter.pure.psb.zip'
   ],
   'chocola-wintermaid' => [
       'use_config' => 'chocola-config.js',
-      'psb_url' => './data/chocola-wintermaid.pure.psb'
+      'psb_url' => './data/chocola-wintermaid.pure.psb.zip'
   ],
   'chocola-yukata' => [
       'use_config' => 'chocola-config.js',
-      'psb_url' => './data/chocola-yukata.pure.psb'
+      'psb_url' => './data/chocola-yukata.pure.psb.zip'
   ],
   'chocola-teenage' => [
       'use_config' => 'kochocola-config.js',
-      'psb_url' => './data/chocola-teenage.pure.psb'
+      'psb_url' => './data/chocola-teenage.pure.psb.zip'
   ],
   'chocola-koneko' => [
       'use_config' => 'kochocola-config.js',
-      'psb_url' => './data/chocola-koneko.pure.psb'
+      'psb_url' => './data/chocola-koneko.pure.psb.zip'
   ],
   'vanilla-casual' => [
     'use_config' => 'vanilla-config.js',
-    'psb_url' => './data/vanilla-casual.pure.psb'
+    'psb_url' => './data/vanilla-casual.pure.psb.zip'
   ],
   'vanilla-dress' => [
       'use_config' => 'vanilla-config.js',
-      'psb_url' => './data/vanilla-dress.pure.psb'
+      'psb_url' => './data/vanilla-dress.pure.psb.zip'
   ],
   'vanilla-lolita' => [
       'use_config' => 'vanilla-config.js',
-      'psb_url' => './data/vanilla-lolita.pure.psb'
+      'psb_url' => './data/vanilla-lolita.pure.psb.zip'
   ],
   'vanilla-maid' => [
       'use_config' => 'vanilla-config.js',
-      'psb_url' => './data/vanilla-maid.pure.psb'
+      'psb_url' => './data/vanilla-maid.pure.psb.zip'
   ],
   'vanilla-pajama' => [
       'use_config' => 'vanilla-config.js',
-      'psb_url' => './data/vanilla-pajama.pure.psb'
+      'psb_url' => './data/vanilla-pajama.pure.psb.zip'
   ],
   'vanilla-santa' => [
       'use_config' => 'vanilla-config.js',
-      'psb_url' => './data/vanilla-santa.pure.psb'
+      'psb_url' => './data/vanilla-santa.pure.psb.zip'
   ],
   'vanilla-winter' => [
       'use_config' => 'vanilla-config.js',
-      'psb_url' => './data/vanilla-winter.pure.psb'
+      'psb_url' => './data/vanilla-winter.pure.psb.zip'
   ],
   'vanilla-wintermaid' => [
       'use_config' => 'vanilla-config.js',
-      'psb_url' => './data/vanilla-wintermaid.pure.psb'
+      'psb_url' => './data/vanilla-wintermaid.pure.psb.zip'
   ],
   'vanilla-yukata' => [
       'use_config' => 'vanilla-config.js',
-      'psb_url' => './data/vanilla-yukata.pure.psb'
+      'psb_url' => './data/vanilla-yukata.pure.psb.zip'
   ],
   'vanilla-teenage' => [
       'use_config' => 'kovanilla-config.js',
-      'psb_url' => './data/vanilla-teenage.pure.psb'
+      'psb_url' => './data/vanilla-teenage.pure.psb.zip'
   ],
   'vanilla-koneko' => [
       'use_config' => 'kovanilla-config.js',
-      'psb_url' => './data/vanilla-koneko.pure.psb'
+      'psb_url' => './data/vanilla-koneko.pure.psb.zip'
   ],
   'azuki-casual' => [
     'use_config' => 'azuki-config.js',
-    'psb_url' => './data/azuki-casual.pure.psb'
+    'psb_url' => './data/azuki-casual.pure.psb.zip'
   ],
   'azuki-dress' => [
       'use_config' => 'azuki-config.js',
-      'psb_url' => './data/azuki-dress.pure.psb'
+      'psb_url' => './data/azuki-dress.pure.psb.zip'
   ],
   'azuki-maid' => [
       'use_config' => 'azuki-config.js',
-      'psb_url' => './data/azuki-maid.pure.psb'
+      'psb_url' => './data/azuki-maid.pure.psb.zip'
   ],
   'azuki-santa' => [
       'use_config' => 'azuki-config.js',
-      'psb_url' => './data/azuki-santa.pure.psb'
+      'psb_url' => './data/azuki-santa.pure.psb.zip'
   ],
   'azuki-winter' => [
       'use_config' => 'azuki-config.js',
-      'psb_url' => './data/azuki-winter.pure.psb'
+      'psb_url' => './data/azuki-winter.pure.psb.zip'
   ],
   'azuki-wintermaid' => [
       'use_config' => 'azuki-config.js',
-      'psb_url' => './data/azuki-wintermaid.pure.psb'
+      'psb_url' => './data/azuki-wintermaid.pure.psb.zip'
   ],
   'azuki-yukata' => [
       'use_config' => 'azuki-config.js',
-      'psb_url' => './data/azuki-yukata.pure.psb'
+      'psb_url' => './data/azuki-yukata.pure.psb.zip'
   ],
   'azuki-teenage' => [
       'use_config' => 'koazuki-config.js',
-      'psb_url' => './data/azuki-teenage.pure.psb'
+      'psb_url' => './data/azuki-teenage.pure.psb.zip'
   ],
   'coconut-casual' => [
     'use_config' => 'coconut-config.js',
-    'psb_url' => './data/coconut-casual.pure.psb'
+    'psb_url' => './data/coconut-casual.pure.psb.zip'
   ],
   'coconut-dress' => [
       'use_config' => 'coconut-config.js',
-      'psb_url' => './data/coconut-dress.pure.psb'
+      'psb_url' => './data/coconut-dress.pure.psb.zip'
   ],
   'coconut-maid' => [
       'use_config' => 'coconut-config.js',
-      'psb_url' => './data/coconut-maid.pure.psb'
+      'psb_url' => './data/coconut-maid.pure.psb.zip'
   ],
   'coconut-pajama' => [
       'use_config' => 'coconut-config.js',
-      'psb_url' => './data/coconut-pajama.pure.psb'
+      'psb_url' => './data/coconut-pajama.pure.psb.zip'
   ],
   'coconut-santa' => [
       'use_config' => 'coconut-config.js',
-      'psb_url' => './data/coconut-santa.pure.psb'
+      'psb_url' => './data/coconut-santa.pure.psb.zip'
   ],
   'coconut-winter' => [
       'use_config' => 'coconut-config.js',
-      'psb_url' => './data/coconut-winter.pure.psb'
+      'psb_url' => './data/coconut-winter.pure.psb.zip'
   ],
   'coconut-wintermaid' => [
       'use_config' => 'coconut-config.js',
-      'psb_url' => './data/coconut-wintermaid.pure.psb'
+      'psb_url' => './data/coconut-wintermaid.pure.psb.zip'
   ],
   'coconut-yukata' => [
       'use_config' => 'coconut-config.js',
-      'psb_url' => './data/coconut-yukata.pure.psb'
+      'psb_url' => './data/coconut-yukata.pure.psb.zip'
   ],
   'coconut-teenage' => [
       'use_config' => 'kococonut-config.js',
-      'psb_url' => './data/coconut-teenage.pure.psb'
+      'psb_url' => './data/coconut-teenage.pure.psb.zip'
   ],
   'coconut-koneko' => [
       'use_config' => 'kococonut-config.js',
-      'psb_url' => './data/coconut-koneko.pure.psb'
+      'psb_url' => './data/coconut-koneko.pure.psb.zip'
   ],
   'maple-casual' => [
     'use_config' => 'maple-config.js',
-    'psb_url' => './data/maple-casual.pure.psb'
+    'psb_url' => './data/maple-casual.pure.psb.zip'
   ],
   'maple-dress' => [
       'use_config' => 'maple-config.js',
-      'psb_url' => './data/maple-dress.pure.psb'
+      'psb_url' => './data/maple-dress.pure.psb.zip'
   ],
   'maple-maid' => [
       'use_config' => 'maple-config.js',
-      'psb_url' => './data/maple-maid.pure.psb'
+      'psb_url' => './data/maple-maid.pure.psb.zip'
   ],
   'maple-santa' => [
       'use_config' => 'maple-config.js',
-      'psb_url' => './data/maple-santa.pure.psb'
+      'psb_url' => './data/maple-santa.pure.psb.zip'
   ],
   'maple-winter' => [
       'use_config' => 'maple-config.js',
-      'psb_url' => './data/maple-winter.pure.psb'
+      'psb_url' => './data/maple-winter.pure.psb.zip'
   ],
   'maple-wintermaid' => [
       'use_config' => 'maple-config.js',
-      'psb_url' => './data/maple-wintermaid.pure.psb'
+      'psb_url' => './data/maple-wintermaid.pure.psb.zip'
   ],
   'maple-yukata' => [
       'use_config' => 'maple-config.js',
-      'psb_url' => './data/maple-yukata.pure.psb'
+      'psb_url' => './data/maple-yukata.pure.psb.zip'
   ],
   'maple-teenage' => [
       'use_config' => 'komaple-config.js',
-      'psb_url' => './data/maple-teenage.pure.psb'
+      'psb_url' => './data/maple-teenage.pure.psb.zip'
   ],
   'cinnamon-casual' => [
     'use_config' => 'cinnamon-config.js',
-    'psb_url' => './data/cinnamon-casual.pure.psb'
+    'psb_url' => './data/cinnamon-casual.pure.psb.zip'
   ],
   'cinnamon-dress' => [
       'use_config' => 'cinnamon-config.js',
-      'psb_url' => './data/cinnamon-dress.pure.psb'
+      'psb_url' => './data/cinnamon-dress.pure.psb.zip'
   ],
   'cinnamon-maid' => [
       'use_config' => 'cinnamon-config.js',
-      'psb_url' => './data/cinnamon-maid.pure.psb'
+      'psb_url' => './data/cinnamon-maid.pure.psb.zip'
   ],
   'cinnamon-santa' => [
       'use_config' => 'cinnamon-config.js',
-      'psb_url' => './data/cinnamon-santa.pure.psb'
+      'psb_url' => './data/cinnamon-santa.pure.psb.zip'
   ],
   'cinnamon-winter' => [
       'use_config' => 'cinnamon-config.js',
-      'psb_url' => './data/cinnamon-winter.pure.psb'
+      'psb_url' => './data/cinnamon-winter.pure.psb.zip'
   ],
   'cinnamon-wintermaid' => [
       'use_config' => 'cinnamon-config.js',
-      'psb_url' => './data/cinnamon-wintermaid.pure.psb'
+      'psb_url' => './data/cinnamon-wintermaid.pure.psb.zip'
   ],
   'cinnamon-yukata' => [
       'use_config' => 'cinnamon-config.js',
-      'psb_url' => './data/cinnamon-yukata.pure.psb'
+      'psb_url' => './data/cinnamon-yukata.pure.psb.zip'
   ],
   'cinnamon-teenage' => [
       'use_config' => 'kocinnamon-config.js',
-      'psb_url' => './data/cinnamon-teenage.pure.psb'
+      'psb_url' => './data/cinnamon-teenage.pure.psb.zip'
   ],
   'milk-teenage' => [
     'use_config' => 'komilk-config.js',
-    'psb_url' => './data/milk-teenage.pure.psb'
+    'psb_url' => './data/milk-teenage.pure.psb.zip'
   ],
   'milk-winter' => [
       'use_config' => 'milk-config.js',
-      'psb_url' => './data/milk-winter.pure.psb'
+      'psb_url' => './data/milk-winter.pure.psb.zip'
   ],
   'fraise-maid' => [
     'use_config' => 'fraise-config.js',
-    'psb_url' => './data/fraise-maid.pure.psb'
+    'psb_url' => './data/fraise-maid.pure.psb.zip'
   ]
 ];
 
@@ -259,7 +259,7 @@ $pages = [
 if (!isset($pages[$path])) {
   http_response_code(404);
   $use_config = 'chocola-config.js';
-  $psb_url = 'chocola-lolita.pure.psb';
+  $psb_url = 'chocola-lolita.pure.psb.zip';
 } else {
   $use_config = $pages[$path]['use_config'];
   $psb_url = $pages[$path]['psb_url'];
@@ -278,6 +278,7 @@ if (!isset($pages[$path])) {
   <script src="./driver/emoteplayer.js" charset="UTF-8"></script>
   <script src="./config/<?php echo $use_config; ?>" charset="UTF-8"></script>
   <script type="text/JavaScript" src="main.js" charset="UTF-8"></script>
+  <script type="text/JavaScript" src="fflate.js" charset="UTF-8"></script>
   <style>
     body {
       font-family: "微软雅黑";
