@@ -1,4 +1,4 @@
-function start(psb_url) {
+function start(zipUrl) {
     // 获取窗口宽度
     if (window.innerWidth)
         winWidth = window.innerWidth;
@@ -15,8 +15,8 @@ function start(psb_url) {
         winHeight = document.documentElement.clientHeight;
         winWidth = document.documentElement.clientWidth;
     }
-    //const psb_url = "./data/azuki-casual.pure.psb";
-    run(winWidth,winHeight,psb_url, getConfig());
+    //const zipUrl = "./data/azuki-casual.pure.psb.zip";
+    run(winWidth,winHeight,zipUrl, getConfig());
 }
 
 function getHeightRatio(height) {
@@ -43,31 +43,60 @@ function getHeightRatio(height) {
     return ratio;
 }
 
-function run(width,height,psb_url,reactionConfig) {
-
-
-    // initialize emote player
-    EmotePlayer.createRenderCanvas(width,height);
+async function run(width, height, zipUrl, reactionConfig) {
+    // Initialize EmotePlayer
+    EmotePlayer.createRenderCanvas(width, height);
     const canvas = document.getElementById('canvas');
     const player = new EmotePlayer(canvas);
     canvas.width = width;
     canvas.height = height;
     player.scale = getHeightRatio(height);
-    c = player.coord;
+    let c = player.coord;
     c[1] -= 40;
     player.coord = c;
     player.diffTimelineSlot4 = '差分用_waiting_loop';
+    //增加前端解压zip功能，减少数据传输量
+    try {
+        // 1. Fetch the ZIP file
+        const resp = await fetch(zipUrl);
+        if (!resp.ok) throw new Error(`Failed to load ${zipUrl}`);
+        const zipData = new Uint8Array(await resp.arrayBuffer());
 
-    // load data then, register mouse event
-    player.promiseLoadDataFromURL(psb_url)
-    .then(() => {
+        // 2. Decompress ZIP using fflate
+        const files = await new Promise((resolve, reject) => {
+            fflate.unzip(zipData, (err, unzipped) => {
+                if (err) {
+                    console.error("ZIP decompression error:", err);
+                    reject(err);
+                } else {
+                    resolve(unzipped);
+                }
+            });
+        });
+
+        // 3. Find the .bin model file (assume only one .bin file)
+        const binFileName = Object.keys(files).find(name => name.endsWith('.psb'));
+        if (!binFileName) {
+            throw new Error("No .bin file found in ZIP");
+        }
+
+        const modelData = files[binFileName];
+
+        // 4. Create blob URL for EmotePlayer
+        const blob = new Blob([modelData], { type: 'application/octet-stream' });
+        const fakeUrl = URL.createObjectURL(blob);
+
+        // 5. Load model
+        await player.promiseLoadDataFromURL(fakeUrl);
+
+        // ===== Model loaded successfully =====
         document.getElementById('loading').innerHTML = "Done!";
-        setTimeout(()=>
-        {
+        setTimeout(() => {
             document.getElementById('loading').style.visibility = "hidden";
-        },1000);
-        // mouse move eye tracking reaction
-        const eyetracking_rection = (ev) => {
+        }, 1000);
+
+        // === Eye tracking ===
+        const eyetracking_reaction = (ev) => {
             const eyePosition = player.getMarkerPosition('eye');
             const mouseOffsetX = ev.clientX - eyePosition.clientX;
             const mouseOffsetY = ev.clientY - eyePosition.clientY;
@@ -75,33 +104,30 @@ function run(width,height,psb_url,reactionConfig) {
             const len = Math.sqrt(mouseOffsetX ** 2 + mouseOffsetY ** 2);
             const c = Math.cos(angle);
             const s = Math.sin(angle);
-            // eye tracking
+
             player.setVariableDiff('eyetrack', 'face_eye_LR', len / 3 * c, 500, -1);
             player.setVariableDiff('eyetrack', 'face_eye_UD', len / 3 * s, 500, -1);
-            // head tracking
+
             if (len > 60) {
                 player.setVariableDiff('eyetrack', 'head_slant', len / 12 * c, 1000, -1);
                 player.setVariableDiff('eyetrack', 'head_LR', len / 6 * c, 1000, -1);
                 player.setVariableDiff('eyetrack', 'head_UD', len / 6 * s, 1000, -1);
             }
-            // body tracking
+
             if (len > 120) {
                 player.setVariableDiff('eyetrack', 'body_slant', len / 18 * c, 2000, -1);
                 player.setVariableDiff('eyetrack', 'body_LR', len / 9 * c, 2000, -1);
                 player.setVariableDiff('eyetrack', 'body_UD', len / 9 * s, 2000, -1);
             }
         };
-        // bind to mousemove event
-        canvas.onmousemove = eyetracking_rection;
-        // bind to mobile touch event
+
+        canvas.onmousemove = eyetracking_reaction;
         canvas.addEventListener('touchmove', (ev) => {
-            eyetracking_rection(ev.touches[0]);
+            eyetracking_reaction(ev.touches[0]);
             ev.preventDefault();
         }, false);
 
-
-
-        // 应用反应配置
+        // === Reaction config helper ===
         function applyReactionConfig(config) {
             player.mainTimelineLabel = config.mainTimelineLabel || '';
             player.diffTimelineSlot1 = config.diffTimelineSlot1 || '';
@@ -124,12 +150,11 @@ function run(width,height,psb_url,reactionConfig) {
             }
         }
 
-        // 鼠标触摸反应函数
+        // === Touch/click reactions ===
         let touching = false;
         const touch_reaction = (ev) => {
             if (touching) return;
 
-            // 计算各个部位的距离（保持原有计算逻辑）
             const bustPosition = player.getMarkerPosition('bust');
             const bustLength = Math.sqrt((bustPosition.clientX - ev.clientX) ** 2 + (bustPosition.clientY - ev.clientY) ** 2);
 
@@ -159,80 +184,33 @@ function run(width,height,psb_url,reactionConfig) {
 
             console.log(`Distances: Head=${headLength.toFixed(2)}, Bust=${bustLength.toFixed(2)}, Eye=${eyeLength.toFixed(2)}`);
 
-            // 胸部触摸反应
-            if (bustLength < 50 && reactionConfig.bust?.length) {
-                touching = true;
-                const reactions = reactionConfig.bust;
-                const selected = reactions[Math.floor(Math.random() * reactions.length)];
+            const tryReact = (zone, threshold, reactions) => {
+                if (zone < threshold && reactions?.length) {
+                    touching = true;
+                    const selected = reactions[Math.floor(Math.random() * reactions.length)];
+                    console.log(`${threshold} touch reaction`);
+                    applyReactionConfig(selected.reaction);
+                    setTimeout(() => {
+                        applyReactionConfig(selected.recovery);
+                        touching = false;
+                    }, selected.duration);
+                    return true;
+                }
+                return false;
+            };
 
-                console.log('bust touch reaction');
-                applyReactionConfig(selected.reaction);
-
-                setTimeout(() => {
-                    applyReactionConfig(selected.recovery);
-                    touching = false;
-                }, selected.duration);
-            }
-            // 眼部触摸反应
-            else if (eyeLength < 30 && reactionConfig.eye?.length) {
-                touching = true;
-                const reactions = reactionConfig.eye;
-                const selected = reactions[Math.floor(Math.random() * reactions.length)];
-
-                console.log('eye touch reaction');
-                applyReactionConfig(selected.reaction);
-
-                setTimeout(() => {
-                    applyReactionConfig(selected.recovery);
-                    touching = false;
-                }, selected.duration);
-            }
-            // 脸部触摸反应
-            else if (faceLength < 80 && reactionConfig.face?.length) {
-                touching = true;
-                const reactions = reactionConfig.face;
-                const selected = reactions[Math.floor(Math.random() * reactions.length)];
-
-                console.log('face touch reaction');
-                applyReactionConfig(selected.reaction);
-
-                setTimeout(() => {
-                    applyReactionConfig(selected.recovery);
-                    touching = false;
-                }, selected.duration);
-            }
-            // 头部触摸反应
-            else if (headLength < 120 && reactionConfig.head?.length) {
-                touching = true;
-                const reactions = reactionConfig.head;
-                const selected = reactions[Math.floor(Math.random() * reactions.length)];
-
-                console.log('head touch reaction');
-                applyReactionConfig(selected.reaction);
-
-                setTimeout(() => {
-                    applyReactionConfig(selected.recovery);
-                    touching = false;
-                }, selected.duration);
-            }
-            // 裤子触摸反应
-            else if (pantLength < 180 && reactionConfig.pant?.length) {
-                touching = true;
-                const reactions = reactionConfig.pant;
-                const selected = reactions[Math.floor(Math.random() * reactions.length)];
-
-                console.log('pant touch reaction');
-                applyReactionConfig(selected.reaction);
-
-                setTimeout(() => {
-                    applyReactionConfig(selected.recovery);
-                    touching = false;
-                }, selected.duration);
+            if (
+                !tryReact(bustLength, 50, reactionConfig.bust) &&
+                !tryReact(eyeLength, 30, reactionConfig.eye) &&
+                !tryReact(faceLength, 80, reactionConfig.face) &&
+                !tryReact(headLength, 120, reactionConfig.head) &&
+                !tryReact(pantLength, 180, reactionConfig.pant)
+            ) {
+                // No reaction triggered
             }
         };
-        // bind to mouse click event
+
         canvas.onclick = touch_reaction;
-        // bind to mobule touch event
         canvas.addEventListener('touchstart', (ev) => {
             touch_reaction(ev.touches[0]);
             ev.preventDefault();
@@ -240,6 +218,12 @@ function run(width,height,psb_url,reactionConfig) {
         canvas.addEventListener('touchend', (ev) => {
             ev.preventDefault();
         }, false);
-   });
-}
 
+        // Clean up blob URL
+        URL.revokeObjectURL(fakeUrl);
+
+    } catch (error) {
+        console.error("Failed to load or decompress model:", error);
+        document.getElementById('loading').innerHTML = "Error!";
+    }
+}
