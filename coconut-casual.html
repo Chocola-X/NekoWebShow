@@ -1,13 +1,16 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>猫娘乐园角色E-mote图鉴</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="一个可以在浏览器中展示猫娘乐园角色E-mote动态立绘的项目，可以用做桌面动态壁纸。 本页面的角色为 Coconut (Casual服装)">
+  <title>Coconut Casual - 猫娘乐园角色E-mote图鉴</title>
   <link rel="icon" href="neko.png" type="image/png">
   <script src="./driver/FreeMoteDriver.js" charset="UTF-8"></script>
   <script src="./driver/emoteplayer.js" charset="UTF-8"></script>
   <script src="./config/coconut-config.js" charset="UTF-8"></script>
-  <script type="text/JavaScript" src="main.js" charset="UTF-8"></script>
+  <script src="./locales.js" charset="UTF-8"></script>
+    <script type="text/JavaScript" src="main.js" charset="UTF-8"></script>
   <script type="text/JavaScript" src="fflate.js" charset="UTF-8"></script>
 
   <style>
@@ -137,7 +140,7 @@
 
   <canvas id="canvas" width="100%" height="100%" style="position: fixed; top:0; margin:0; padding:0; z-index:1;"></canvas>
   
-    <div id="loading">Loading...</div>
+    <div id="loading" data-i18n="loading">Loading...</div>
   
 
   <!-- 切换图标 -->
@@ -145,110 +148,110 @@
 
   <!-- 顶部内容栏 -->
   <div id="topbar">
-    <div class="label" style="font-weight:bold; font-size:18px; color:#333;">猫娘乐园角色E-mote图鉴</div>
+    <div class="label" style="font-weight:bold; font-size:18px; color:#333;" data-i18n="pageTitle">猫娘乐园角色E-mote图鉴</div>
     <!-- 内容元素示例 -->
     <div class="menu-item">
-      <span class="label">Chocola ▾</span>
+      <span class="label" data-i18n="chocola">Chocola ▾</span>
       <div class="dropdown">
-        <a href="./chocola-casual.html">Casual</a>
-        <a href="./chocola-dress.html">Dress</a>
-        <a href="./chocola-lolita.html">Lolita</a>
-        <a href="./chocola-maid.html">Maid</a>
-        <a href="./chocola-pajama.html">Pajama</a>
-        <a href="./chocola-santa.html">Santa</a>
-        <a href="./chocola-winter.html">Winter</a>
-        <a href="./chocola-wintermaid.html">Wintermaid</a>
-        <a href="./chocola-yukata.html">Yukata</a>
-        <a href="./chocola-teenage.html">Teenage</a>
-        <a href="./chocola-koneko.html">Koneko</a>
+        <a href="./chocola-casual.html" data-i18n="casual">Casual</a>
+        <a href="./chocola-dress.html" data-i18n="dress">Dress</a>
+        <a href="./chocola-lolita.html" data-i18n="lolita">Lolita</a>
+        <a href="./chocola-maid.html" data-i18n="maid">Maid</a>
+        <a href="./chocola-pajama.html" data-i18n="pajama">Pajama</a>
+        <a href="./chocola-santa.html" data-i18n="santa">Santa</a>
+        <a href="./chocola-winter.html" data-i18n="winter">Winter</a>
+        <a href="./chocola-wintermaid.html" data-i18n="wintermaid">Wintermaid</a>
+        <a href="./chocola-yukata.html" data-i18n="yukata">Yukata</a>
+        <a href="./chocola-teenage.html" data-i18n="teenage">Teenage</a>
+        <a href="./chocola-koneko.html" data-i18n="koneko">Koneko</a>
       </div>
     </div>
     <div class="menu-item">
-      <span class="label">Vanilla ▾</span>
+      <span class="label" data-i18n="vanilla">Vanilla ▾</span>
       <div class="dropdown">
-        <a href="./vanilla-casual.html">Casual</a>
-        <a href="./vanilla-dress.html">Dress</a>
-        <a href="./vanilla-lolita.html">Lolita</a>
-        <a href="./vanilla-maid.html">Maid</a>
-        <a href="./vanilla-pajama.html">Pajama</a>
-        <a href="./vanilla-santa.html">Santa</a>
-        <a href="./vanilla-winter.html">Winter</a>
-        <a href="./vanilla-wintermaid.html">Wintermaid</a>
-        <a href="./vanilla-yukata.html">Yukata</a>
-        <a href="./vanilla-teenage.html">Teenage</a>
-        <a href="./vanilla-koneko.html">Koneko</a>
+        <a href="./vanilla-casual.html" data-i18n="casual">Casual</a>
+        <a href="./vanilla-dress.html" data-i18n="dress">Dress</a>
+        <a href="./vanilla-lolita.html" data-i18n="lolita">Lolita</a>
+        <a href="./vanilla-maid.html" data-i18n="maid">Maid</a>
+        <a href="./vanilla-pajama.html" data-i18n="pajama">Pajama</a>
+        <a href="./vanilla-santa.html" data-i18n="santa">Santa</a>
+        <a href="./vanilla-winter.html" data-i18n="winter">Winter</a>
+        <a href="./vanilla-wintermaid.html" data-i18n="wintermaid">Wintermaid</a>
+        <a href="./vanilla-yukata.html" data-i18n="yukata">Yukata</a>
+        <a href="./vanilla-teenage.html" data-i18n="teenage">Teenage</a>
+        <a href="./vanilla-koneko.html" data-i18n="koneko">Koneko</a>
       </div>
     </div>
     <div class="menu-item">
-      <span class="label">Azuki ▾</span>
+      <span class="label" data-i18n="azuki">Azuki ▾</span>
       <div class="dropdown">
-        <a href="./azuki-casual.html">Casual</a>
-        <a href="./azuki-dress.html">Dress</a>
-        <a href="./azuki-maid.html">Maid</a>
-        <a href="./azuki-santa.html">Santa</a>
-        <a href="./azuki-winter.html">Winter</a>
-        <a href="./azuki-wintermaid.html">Wintermaid</a>
-        <a href="./azuki-yukata.html">Yukata</a>
-        <a href="./azuki-teenage.html">Teenage</a>
+        <a href="./azuki-casual.html" data-i18n="casual">Casual</a>
+        <a href="./azuki-dress.html" data-i18n="dress">Dress</a>
+        <a href="./azuki-maid.html" data-i18n="maid">Maid</a>
+        <a href="./azuki-santa.html" data-i18n="santa">Santa</a>
+        <a href="./azuki-winter.html" data-i18n="winter">Winter</a>
+        <a href="./azuki-wintermaid.html" data-i18n="wintermaid">Wintermaid</a>
+        <a href="./azuki-yukata.html" data-i18n="yukata">Yukata</a>
+        <a href="./azuki-teenage.html" data-i18n="teenage">Teenage</a>
       </div>
     </div>
     <div class="menu-item">
-      <span class="label">Coconut ▾</span>
+      <span class="label" data-i18n="coconut">Coconut ▾</span>
       <div class="dropdown">
-        <a href="./coconut-casual.html">Casual</a>
-        <a href="./coconut-dress.html">Dress</a>
-        <a href="./coconut-maid.html">Maid</a>
-        <a href="./coconut-pajama.html">Pajama</a>
-        <a href="./coconut-santa.html">Santa</a>
-        <a href="./coconut-winter.html">Winter</a>
-        <a href="./coconut-wintermaid.html">Wintermaid</a>
-        <a href="./coconut-yukata.html">Yukata</a>
-        <a href="./coconut-teenage.html">Teenage</a>
-        <a href="./coconut-koneko.html">Koneko</a>
+        <a href="./coconut-casual.html" data-i18n="casual">Casual</a>
+        <a href="./coconut-dress.html" data-i18n="dress">Dress</a>
+        <a href="./coconut-maid.html" data-i18n="maid">Maid</a>
+        <a href="./coconut-pajama.html" data-i18n="pajama">Pajama</a>
+        <a href="./coconut-santa.html" data-i18n="santa">Santa</a>
+        <a href="./coconut-winter.html" data-i18n="winter">Winter</a>
+        <a href="./coconut-wintermaid.html" data-i18n="wintermaid">Wintermaid</a>
+        <a href="./coconut-yukata.html" data-i18n="yukata">Yukata</a>
+        <a href="./coconut-teenage.html" data-i18n="teenage">Teenage</a>
+        <a href="./coconut-koneko.html" data-i18n="koneko">Koneko</a>
       </div>
     </div>
     <div class="menu-item">
-      <span class="label">Maple ▾</span>
+      <span class="label" data-i18n="maple">Maple ▾</span>
       <div class="dropdown">
-        <a href="./maple-casual.html">Casual</a>
-        <a href="./maple-dress.html">Dress</a>
-        <a href="./maple-maid.html">Maid</a>
-        <a href="./maple-santa.html">Santa</a>
-        <a href="./maple-winter.html">Winter</a>
-        <a href="./maple-wintermaid.html">Wintermaid</a>
-        <a href="./maple-yukata.html">Yukata</a>
-        <a href="./maple-teenage.html">Teenage</a>
+        <a href="./maple-casual.html" data-i18n="casual">Casual</a>
+        <a href="./maple-dress.html" data-i18n="dress">Dress</a>
+        <a href="./maple-maid.html" data-i18n="maid">Maid</a>
+        <a href="./maple-santa.html" data-i18n="santa">Santa</a>
+        <a href="./maple-winter.html" data-i18n="winter">Winter</a>
+        <a href="./maple-wintermaid.html" data-i18n="wintermaid">Wintermaid</a>
+        <a href="./maple-yukata.html" data-i18n="yukata">Yukata</a>
+        <a href="./maple-teenage.html" data-i18n="teenage">Teenage</a>
       </div>
     </div>
     <div class="menu-item">
-      <span class="label">Cinnamon ▾</span>
+      <span class="label" data-i18n="cinnamon">Cinnamon ▾</span>
       <div class="dropdown">
-        <a href="./cinnamon-casual.html">Casual</a>
-        <a href="./cinnamon-dress.html">Dress</a>
-        <a href="./cinnamon-maid.html">Maid</a>
-        <a href="./cinnamon-santa.html">Santa</a>
-        <a href="./cinnamon-winter.html">Winter</a>
-        <a href="./cinnamon-wintermaid.html">Wintermaid</a>
-        <a href="./cinnamon-yukata.html">Yukata</a>
-        <a href="./cinnamon-teenage.html">Teenage</a>
+        <a href="./cinnamon-casual.html" data-i18n="casual">Casual</a>
+        <a href="./cinnamon-dress.html" data-i18n="dress">Dress</a>
+        <a href="./cinnamon-maid.html" data-i18n="maid">Maid</a>
+        <a href="./cinnamon-santa.html" data-i18n="santa">Santa</a>
+        <a href="./cinnamon-winter.html" data-i18n="winter">Winter</a>
+        <a href="./cinnamon-wintermaid.html" data-i18n="wintermaid">Wintermaid</a>
+        <a href="./cinnamon-yukata.html" data-i18n="yukata">Yukata</a>
+        <a href="./cinnamon-teenage.html" data-i18n="teenage">Teenage</a>
       </div>
     </div>
     <div class="menu-item">
-      <span class="label">Milk ▾</span>
+      <span class="label" data-i18n="milk">Milk ▾</span>
       <div class="dropdown">
-        <a href="./milk-teenage.html">Teenage</a>
-        <a href="./milk-winter.html">Winter</a>
+        <a href="./milk-teenage.html" data-i18n="teenage">Teenage</a>
+        <a href="./milk-winter.html" data-i18n="winter">Winter</a>
       </div>
     </div>
     <div class="menu-item">
-      <span class="label">Fraise ▾</span>
+      <span class="label" data-i18n="fraise">Fraise ▾</span>
       <div class="dropdown">
-        <a href="./fraise-maid.html">Maid</a>
+        <a href="./fraise-maid.html" data-i18n="maid">Maid</a>
       </div>
     </div>
     <!-- 可继续添加更多 menu-item -->
-    <div class="infotext">By：<a href="https://www.nekopara.uk" target="_blank">GTX690战术核显卡导弹</a></div>
-    <div class="infotext">Github Project:<a href="https://github.com/Chocola-X/NekoWebShow" target="_blank">NekoWebShow</a></div>
+    <div class="infotext" data-i18n="by" data-i18n-params='{"author": "GTX690战术核显卡导弹"}'>By： <a href="https://www.nekopara.uk" target="_blank">GTX690战术核显卡导弹</a></div>
+    <div class="infotext" data-i18n="githubProject" data-i18n-params='{"project": "NekoWebShow"}'>Github Project: <a href="https://github.com/Chocola-X/NekoWebShow" target="_blank">NekoWebShow</a></div>
   </div>
 
   <script>
