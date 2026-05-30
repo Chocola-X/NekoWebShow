@@ -8,8 +8,20 @@ $domain_cinnamon = 'https://cinnamon.nekopara.uk';
 $domain_milk = 'https://milk.nekopara.uk';
 $domain_fraise = 'https://fraise.nekopara.uk';
 $background_url = './img/bg.png';
-// 获取当前请求路径
-$path = trim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/');
+// 获取当前请求路径，并兼容部署在 /NekoWebShow/ 这类子目录下的情况。
+$request_path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+$script_dir = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'])), '/');
+if ($script_dir !== '' && $script_dir !== '.') {
+  if ($request_path === $script_dir) {
+    $request_path = '';
+  } elseif (strpos($request_path, $script_dir . '/') === 0) {
+    $request_path = substr($request_path, strlen($script_dir) + 1);
+  }
+}
+$path = trim($request_path, '/');
+if ($path === 'index.php') {
+  $path = '';
+}
 
 // 定义页面内容（可以换成读取文件或数据库）
 $pages = [
@@ -259,7 +271,7 @@ $pages = [
 if (!isset($pages[$path])) {
   http_response_code(404);
   $use_config = 'chocola-config.js';
-  $psb_url = 'chocola-lolita.pure.psb.zip';
+  $psb_url = './data/chocola-lolita.pure.psb.zip';
 } else {
   $use_config = $pages[$path]['use_config'];
   $psb_url = $pages[$path]['psb_url'];
