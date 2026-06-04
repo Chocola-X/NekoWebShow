@@ -300,6 +300,17 @@ if (!isset($pages[$path])) {
       margin: 0;
       padding: 0;
     }
+    #canvas {
+      position: fixed;
+      top: 0;
+      left: 50%;
+      width: 120vh;
+      height: 100vh;
+      margin: 0;
+      padding: 0;
+      transform: translateX(-50%);
+      z-index: 1;
+    }
     /* 顶部内容栏 */
     #topbar {
       position: fixed;
@@ -416,7 +427,7 @@ if (!isset($pages[$path])) {
 </head>
 <body onload="start('<?php echo $psb_url; ?>')">
 
-  <canvas id="canvas" width="100%" height="100%" style="position: fixed; top:0; margin:0; padding:0; z-index:1;"></canvas>
+  <canvas id="canvas"></canvas>
   
     <div id="loading">Loading...</div>
   
