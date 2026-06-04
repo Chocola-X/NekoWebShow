@@ -691,15 +691,22 @@ class EmotePlayer
             markerCoord = [ markerX * c * _scale + markerY * -s * _scale + _x,
                             markerX * s * _scale + markerY *  c * _scale + _y ];
         }
-        const w = this.canvas.width / 2;
-        const h = this.canvas.height / 2;
         const rect = this.canvas.getBoundingClientRect();
+        const canvasWidth = this.canvas.width || rect.width;
+        const canvasHeight = this.canvas.height || rect.height;
+        const w = canvasWidth / 2;
+        const h = canvasHeight / 2;
+        const scaleX = rect.width / canvasWidth;
+        const scaleY = rect.height / canvasHeight;
+        const offsetX = markerCoord[0] + w;
+        const offsetY = markerCoord[1] + h;
+
         return { x: markerCoord[0],
                  y: markerCoord[1],
-                 offsetX: markerCoord[0] + w,
-                 offsetY: markerCoord[1] + h,
-                 clientX: markerCoord[0] + w + rect.left,
-                 clientY: markerCoord[1] + h + rect.top };
+                 offsetX: offsetX,
+                 offsetY: offsetY,
+                 clientX: rect.left + offsetX * scaleX,
+                 clientY: rect.top + offsetY * scaleY };
     }
 
     get speed() {

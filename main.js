@@ -1,13 +1,60 @@
 function start(zipUrl) {
-    let winWidth = window.innerWidth || document.body?.clientWidth || 0;
-    let winHeight = window.innerHeight || document.body?.clientHeight || 0;
+    const canvas = document.getElementById('canvas');
+    const displaySize = getDisplaySize();
+    applyCanvasLayout(canvas, displaySize);
+
+    const renderSize = getRenderSize(displaySize);
+    run(renderSize.width, renderSize.height, zipUrl, getConfig());
+}
+
+function getViewportSize() {
+    let width = window.innerWidth || document.body?.clientWidth || 0;
+    let height = window.innerHeight || document.body?.clientHeight || 0;
 
     if (document.documentElement?.clientHeight && document.documentElement?.clientWidth) {
-        winHeight = document.documentElement.clientHeight;
-        winWidth = document.documentElement.clientWidth;
+        height = document.documentElement.clientHeight;
+        width = document.documentElement.clientWidth;
     }
 
-    run(winWidth, winHeight, zipUrl, getConfig());
+    return {
+        width: Math.max(1, width),
+        height: Math.max(1, height)
+    };
+}
+
+function getDisplaySize() {
+    const viewport = getViewportSize();
+
+    return {
+        width: Math.ceil(viewport.height * 1.2),
+        height: viewport.height,
+        viewportWidth: viewport.width,
+        viewportHeight: viewport.height
+    };
+}
+
+function getRenderSize(displaySize = getDisplaySize()) {
+    const aspectRatio = displaySize.height > 0 ? displaySize.width / displaySize.height : 1.2;
+    const renderHeight = Math.max(Math.ceil(displaySize.height), 1080);
+    const renderWidth = Math.ceil(renderHeight * aspectRatio);
+
+    return {
+        width: renderWidth,
+        height: renderHeight
+    };
+}
+
+function applyCanvasLayout(canvas, displaySize = getDisplaySize()) {
+    if (!canvas) {
+        return;
+    }
+
+    canvas.style.position = 'fixed';
+    canvas.style.top = '0';
+    canvas.style.width = `${displaySize.width}px`;
+    canvas.style.height = `${displaySize.height}px`;
+    canvas.style.left = '50%';
+    canvas.style.transform = 'translateX(-50%)';
 }
 
 function getHeightRatio(height) {
@@ -26,11 +73,38 @@ async function run(width, height, zipUrl, reactionConfig) {
     const player = new EmotePlayer(canvas);
     canvas.width = width;
     canvas.height = height;
-    player.scale = getHeightRatio(height);
-    let c = player.coord;
-    c[1] -= 40;
-    player.coord = c;
+    const baseCoord = player.coord.slice();
+
+    function applyResponsivePlayerLayout() {
+        const displaySize = getDisplaySize();
+        const displayScale = height / displaySize.height;
+
+        applyCanvasLayout(canvas, displaySize);
+        player.scale = getHeightRatio(displaySize.height) * displayScale;
+
+        const c = player.coord;
+        c[0] = baseCoord[0];
+        c[1] = baseCoord[1] - 40 * displayScale;
+        player.coord = c;
+
+        if (EmotePlayer.device) {
+            EmotePlayer.device.invalidateAnimation();
+        }
+    }
+
+    applyResponsivePlayerLayout();
     player.diffTimelineSlot4 = '差分用_waiting_loop';
+
+    let resizeFrame = null;
+    window.addEventListener('resize', () => {
+        if (resizeFrame !== null) {
+            cancelAnimationFrame(resizeFrame);
+        }
+        resizeFrame = requestAnimationFrame(() => {
+            resizeFrame = null;
+            applyResponsivePlayerLayout();
+        });
+    });
 
     const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
     const hasOwn = (obj, key) => Object.prototype.hasOwnProperty.call(obj, key);
@@ -177,32 +251,42 @@ async function run(width, height, zipUrl, reactionConfig) {
     const lipSync = createLipSync();
 
     try {
-        const resp = await fetch(zipUrl);
-        if (!resp.ok) {
-            throw new Error(`Failed to load ${zipUrl}`);
-        }
-        const zipData = new Uint8Array(await resp.arrayBuffer());
-        const files = await new Promise((resolve, reject) => {
-            fflate.unzip(zipData, (err, unzipped) => {
-                if (err) {
-                    reject(err);
-                } else {
-                    resolve(unzipped);
-                }
+        let zipData = null;
+        let files = null;
+        let modelData = null;
+
+        try {
+            const resp = await fetch(zipUrl);
+            if (!resp.ok) {
+                throw new Error(`Failed to load ${zipUrl}`);
+            }
+            zipData = new Uint8Array(await resp.arrayBuffer());
+            files = await new Promise((resolve, reject) => {
+                fflate.unzip(zipData, (err, unzipped) => {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        resolve(unzipped);
+                    }
+                });
             });
-        });
 
-        const binFileName = Object.keys(files).find(name => name.endsWith('.psb'));
-        if (!binFileName) {
-            throw new Error('No .psb file found in ZIP');
+            zipData = null;
+
+            const binFileName = Object.keys(files).find(name => name.endsWith('.psb'));
+            if (!binFileName) {
+                throw new Error('No .psb file found in ZIP');
+            }
+
+            modelData = files[binFileName];
+            files = null;
+
+            player.loadData(modelData);
+        } finally {
+            modelData = null;
+            files = null;
+            zipData = null;
         }
-
-        const modelData = files[binFileName];
-        const blob = new Blob([modelData], { type: 'application/octet-stream' });
-        const fakeUrl = URL.createObjectURL(blob);
-
-        await player.promiseLoadDataFromURL(fakeUrl);
-        URL.revokeObjectURL(fakeUrl);
 
         document.getElementById('loading').innerHTML = 'Done!';
         setTimeout(() => {
