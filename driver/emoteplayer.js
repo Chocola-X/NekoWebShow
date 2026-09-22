@@ -249,11 +249,27 @@ class EmoteDevice
                  && this.checkAnimationRequired()) {
             this.animating = true;
             this.lastAnimationTime = null;
+            this.lastFrameTime = null;
             this.requestId = requestAnimationFrame(this.drawAnimation.bind(this));
         }                
     }
 
     drawAnimation(timeStamp) {
+        // FPS cap: skip this rAF tick and reschedule when not yet due.
+        const fpsLimit = EmotePlayer.fpsLimit || 0;
+        if (fpsLimit > 0) {
+            const minInterval = 1000 / fpsLimit;
+            if (this.lastFrameTime !== null && this.lastFrameTime !== undefined) {
+                const elapsed = timeStamp - this.lastFrameTime;
+                if (elapsed < minInterval) {
+                    setTimeout(() => {
+                        this.requestId = requestAnimationFrame(this.drawAnimation.bind(this));
+                    }, minInterval - elapsed);
+                    return;
+                }
+            }
+            this.lastFrameTime = timeStamp;
+        }
         if (this.lastAnimationTime === null)
             this.lastAnimationTime = timeStamp;
 
@@ -1209,6 +1225,7 @@ EmotePlayer.maskMode = EmotePlayer.MaskMode.ALPHA;
 EmotePlayer.protectTranslucentTextureColor = true;
 EmotePlayer.maskRegionClipping = true;
 EmotePlayer.globalMeshDivisionRatio = 1.0;
+EmotePlayer.fpsLimit = 0; // 0 = unlimited; set >0 to cap frames per second
 
 for (label of [ 'hairScale', 'partsScale', 'bustScale' ]) {
     const propLabel = 'global' + label.charAt(0).toUpperCase() + label.slice(1);

@@ -286,150 +286,19 @@ if (!isset($pages[$path])) {
   <meta charset="UTF-8">
   <title>猫娘乐园角色E-mote图鉴</title>
   <link rel="icon" href="neko.png" type="image/png">
+  <link rel="stylesheet" href="ui.css">
   <script src="./driver/FreeMoteDriver.js" charset="UTF-8"></script>
   <script src="./driver/emoteplayer.js" charset="UTF-8"></script>
   <script src="./config/<?php echo $use_config; ?>" charset="UTF-8"></script>
+  <script src="./locales.js" charset="UTF-8"></script>
   <script type="text/JavaScript" src="main.js" charset="UTF-8"></script>
   <script type="text/JavaScript" src="fflate.js" charset="UTF-8"></script>
-  <style>
-    body {
-      font-family: "微软雅黑";
-      color: white;
-      background: url("<?php echo $background_url; ?>") no-repeat center center fixed;
-      background-size: cover;
-      margin: 0;
-      padding: 0;
-    }
-    #canvas {
-      position: fixed;
-      top: 0;
-      left: 50%;
-      width: 120vh;
-      height: 100vh;
-      margin: 0;
-      padding: 0;
-      transform: translateX(-50%);
-      z-index: 1;
-    }
-    /* 顶部内容栏 */
-    #topbar {
-      position: fixed;
-      top: 4px;
-      left: 4px;
-      right: 4px;
-      height: 40px; /* 高度为页面高度的5% */
-      display: flex;
-      align-items: center;
-      padding: 0 16px;
-      background: rgba(255, 204, 229, 0.7); /* 淡白粉色半透明 */
-      border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-      transform: translateX(-100%);
-      transition: transform 0.3s ease;
-      z-index: 999;
-    }
-    #topbar.open {
-      transform: translateX(0);
-    }
-    /* 切换图标 */
-    #toggle-icon {
-      position: fixed;
-      top: 4px;
-      right: 4px;
-      height: 40px; /* 高度为页面高度的5% */
-      width: auto; /* 确保图标宽度自适应 */
-      cursor: pointer;
-      z-index: 1000;
-    }
-    /* 菜单项 */
-    .menu-item {
-      margin-left: 24px;
-      position: relative;
-      cursor: pointer;
-      user-select: none;
-    }
-    .menu-item > .label {
-      font-size: 16px;
-      color: #333;
-    }
-    .dropdown {
-      position: absolute;
-      /* 下拉距离整个标题栏底部4px，标题高度5vh */
-      top: 36px;
-      left: 50%; /* 支持居中 */
-      transform: translateX(-50%) scaleY(0);
-      transform-origin: top center;
-      background: rgba(255, 204, 229, 0.7);
-      border-radius: 8px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-      overflow: hidden;
-      transition: transform 0.2s ease;
-      z-index: 1001;
-      /* 自适应文字宽度 */
-      white-space: nowrap;
-      width: max-content;
-    }
-    .dropdown.open {
-      transform: translateX(-50%) scaleY(1);
-    }
-    .dropdown a {
-      display: block;
-      padding: 8px 16px;
-      text-decoration: none;
-      color: #555;
-      font-size: 14px;
-    }
-    .dropdown a:hover {
-      background: rgba(255, 182, 203, 0.7);
-      border-radius: 8px; /* 选中选项的提示颜色有圆角处理 */
-    }
-    /* Loading 框 */
-    #loading {
-      position: fixed;
-      top: 20px;
-      left: 20px;
-      width: 120px;
-      height: 32px;
-      background: rgba(255, 182, 203, 0.7);
-      border-radius: 15px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 10;
-      transition: opacity 1s ease-in-out;
-      font-size: 20px;
-      text-align: center;
-    }
-    
-    .infotext {
-      font-size: 12px;
-      text-align: center;
-      color: #333;
-      padding: 0 20px; /* 左右各12px间距 */
-
-    }
-
-    /* 设置链接样式：颜色不变，左右间距12px */
-    .infotext a {
-      color: inherit; /* 继承父元素颜色，即 #333 */
-      text-decoration: none; /* 可选：去掉下划线 */
-      
-      display: inline-block; /* 可选：让 padding 生效更稳定 */
-    }
-
-    /* 鼠标悬停时也不变色（可选） */
-    .infotext a:hover {
-      color: inherit;
-      text-decoration: underline; /* 可选：悬停时加下划线，但颜色不变 */
-    }
-
-  </style>
 </head>
 <body onload="start('<?php echo $psb_url; ?>')">
 
   <canvas id="canvas"></canvas>
   
-    <div id="loading">Loading...</div>
+    <div id="loading" data-i18n="loading">Loading...</div>
   
 
   <!-- 切换图标 -->
@@ -437,138 +306,112 @@ if (!isset($pages[$path])) {
 
   <!-- 顶部内容栏 -->
   <div id="topbar">
-    <div class="label" style="font-weight:bold; font-size:18px; color:#333;">猫娘乐园角色E-mote图鉴</div>
+    <div class="label" data-i18n="pageTitle" style="font-weight:bold; font-size:18px; color:#6f4e37;">猫娘乐园角色E-mote图鉴</div>
     <!-- 内容元素示例 -->
     <div class="menu-item">
-      <span class="label">Chocola ▾</span>
+      <span class="label" data-i18n="chocola">Chocola</span>
       <div class="dropdown">
-        <a href="<?php echo $domain_chocola; ?>/chocola-casual">Casual</a>
-        <a href="<?php echo $domain_chocola; ?>/chocola-dress">Dress</a>
-        <a href="<?php echo $domain_chocola; ?>/chocola-lolita">Lolita</a>
-        <a href="<?php echo $domain_chocola; ?>/chocola-maid">Maid</a>
-        <a href="<?php echo $domain_chocola; ?>/chocola-pajama">Pajama</a>
-        <a href="<?php echo $domain_chocola; ?>/chocola-santa">Santa</a>
-        <a href="<?php echo $domain_chocola; ?>/chocola-winter">Winter</a>
-        <a href="<?php echo $domain_chocola; ?>/chocola-wintermaid">Wintermaid</a>
-        <a href="<?php echo $domain_chocola; ?>/chocola-yukata">Yukata</a>
-        <a href="<?php echo $domain_chocola; ?>/chocola-teenage">Teenage</a>
-        <a href="<?php echo $domain_chocola; ?>/chocola-koneko">Koneko</a>
+        <a href="<?php echo $domain_chocola; ?>/chocola-casual" data-i18n="casual">Casual</a>
+        <a href="<?php echo $domain_chocola; ?>/chocola-dress" data-i18n="dress">Dress</a>
+        <a href="<?php echo $domain_chocola; ?>/chocola-lolita" data-i18n="lolita">Lolita</a>
+        <a href="<?php echo $domain_chocola; ?>/chocola-maid" data-i18n="maid">Maid</a>
+        <a href="<?php echo $domain_chocola; ?>/chocola-pajama" data-i18n="pajama">Pajama</a>
+        <a href="<?php echo $domain_chocola; ?>/chocola-santa" data-i18n="santa">Santa</a>
+        <a href="<?php echo $domain_chocola; ?>/chocola-winter" data-i18n="winter">Winter</a>
+        <a href="<?php echo $domain_chocola; ?>/chocola-wintermaid" data-i18n="wintermaid">Wintermaid</a>
+        <a href="<?php echo $domain_chocola; ?>/chocola-yukata" data-i18n="yukata">Yukata</a>
+        <a href="<?php echo $domain_chocola; ?>/chocola-teenage" data-i18n="teenage">Teenage</a>
+        <a href="<?php echo $domain_chocola; ?>/chocola-koneko" data-i18n="koneko">Koneko</a>
       </div>
     </div>
     <div class="menu-item">
-      <span class="label">Vanilla ▾</span>
+      <span class="label" data-i18n="vanilla">Vanilla</span>
       <div class="dropdown">
-        <a href="<?php echo $domain_vanilla; ?>/vanilla-casual">Casual</a>
-        <a href="<?php echo $domain_vanilla; ?>/vanilla-dress">Dress</a>
-        <a href="<?php echo $domain_vanilla; ?>/vanilla-lolita">Lolita</a>
-        <a href="<?php echo $domain_vanilla; ?>/vanilla-maid">Maid</a>
-        <a href="<?php echo $domain_vanilla; ?>/vanilla-pajama">Pajama</a>
-        <a href="<?php echo $domain_vanilla; ?>/vanilla-santa">Santa</a>
-        <a href="<?php echo $domain_vanilla; ?>/vanilla-winter">Winter</a>
-        <a href="<?php echo $domain_vanilla; ?>/vanilla-wintermaid">Wintermaid</a>
-        <a href="<?php echo $domain_vanilla; ?>/vanilla-yukata">Yukata</a>
-        <a href="<?php echo $domain_vanilla; ?>/vanilla-teenage">Teenage</a>
-        <a href="<?php echo $domain_vanilla; ?>/vanilla-koneko">Koneko</a>
+        <a href="<?php echo $domain_vanilla; ?>/vanilla-casual" data-i18n="casual">Casual</a>
+        <a href="<?php echo $domain_vanilla; ?>/vanilla-dress" data-i18n="dress">Dress</a>
+        <a href="<?php echo $domain_vanilla; ?>/vanilla-lolita" data-i18n="lolita">Lolita</a>
+        <a href="<?php echo $domain_vanilla; ?>/vanilla-maid" data-i18n="maid">Maid</a>
+        <a href="<?php echo $domain_vanilla; ?>/vanilla-pajama" data-i18n="pajama">Pajama</a>
+        <a href="<?php echo $domain_vanilla; ?>/vanilla-santa" data-i18n="santa">Santa</a>
+        <a href="<?php echo $domain_vanilla; ?>/vanilla-winter" data-i18n="winter">Winter</a>
+        <a href="<?php echo $domain_vanilla; ?>/vanilla-wintermaid" data-i18n="wintermaid">Wintermaid</a>
+        <a href="<?php echo $domain_vanilla; ?>/vanilla-yukata" data-i18n="yukata">Yukata</a>
+        <a href="<?php echo $domain_vanilla; ?>/vanilla-teenage" data-i18n="teenage">Teenage</a>
+        <a href="<?php echo $domain_vanilla; ?>/vanilla-koneko" data-i18n="koneko">Koneko</a>
       </div>
     </div>
     <div class="menu-item">
-      <span class="label">Azuki ▾</span>
+      <span class="label" data-i18n="azuki">Azuki</span>
       <div class="dropdown">
-        <a href="<?php echo $domain_azuki; ?>/azuki-casual">Casual</a>
-        <a href="<?php echo $domain_azuki; ?>/azuki-dress">Dress</a>
-        <a href="<?php echo $domain_azuki; ?>/azuki-maid">Maid</a>
-        <a href="<?php echo $domain_azuki; ?>/azuki-santa">Santa</a>
-        <a href="<?php echo $domain_azuki; ?>/azuki-winter">Winter</a>
-        <a href="<?php echo $domain_azuki; ?>/azuki-wintermaid">Wintermaid</a>
-        <a href="<?php echo $domain_azuki; ?>/azuki-yukata">Yukata</a>
-        <a href="<?php echo $domain_azuki; ?>/azuki-teenage">Teenage</a>
+        <a href="<?php echo $domain_azuki; ?>/azuki-casual" data-i18n="casual">Casual</a>
+        <a href="<?php echo $domain_azuki; ?>/azuki-dress" data-i18n="dress">Dress</a>
+        <a href="<?php echo $domain_azuki; ?>/azuki-maid" data-i18n="maid">Maid</a>
+        <a href="<?php echo $domain_azuki; ?>/azuki-santa" data-i18n="santa">Santa</a>
+        <a href="<?php echo $domain_azuki; ?>/azuki-winter" data-i18n="winter">Winter</a>
+        <a href="<?php echo $domain_azuki; ?>/azuki-wintermaid" data-i18n="wintermaid">Wintermaid</a>
+        <a href="<?php echo $domain_azuki; ?>/azuki-yukata" data-i18n="yukata">Yukata</a>
+        <a href="<?php echo $domain_azuki; ?>/azuki-teenage" data-i18n="teenage">Teenage</a>
       </div>
     </div>
     <div class="menu-item">
-      <span class="label">Coconut ▾</span>
+      <span class="label" data-i18n="coconut">Coconut</span>
       <div class="dropdown">
-        <a href="<?php echo $domain_coconut; ?>/coconut-casual">Casual</a>
-        <a href="<?php echo $domain_coconut; ?>/coconut-dress">Dress</a>
-        <a href="<?php echo $domain_coconut; ?>/coconut-maid">Maid</a>
-        <a href="<?php echo $domain_coconut; ?>/coconut-pajama">Pajama</a>
-        <a href="<?php echo $domain_coconut; ?>/coconut-santa">Santa</a>
-        <a href="<?php echo $domain_coconut; ?>/coconut-winter">Winter</a>
-        <a href="<?php echo $domain_coconut; ?>/coconut-wintermaid">Wintermaid</a>
-        <a href="<?php echo $domain_coconut; ?>/coconut-yukata">Yukata</a>
-        <a href="<?php echo $domain_coconut; ?>/coconut-teenage">Teenage</a>
-        <a href="<?php echo $domain_coconut; ?>/coconut-koneko">Koneko</a>
+        <a href="<?php echo $domain_coconut; ?>/coconut-casual" data-i18n="casual">Casual</a>
+        <a href="<?php echo $domain_coconut; ?>/coconut-dress" data-i18n="dress">Dress</a>
+        <a href="<?php echo $domain_coconut; ?>/coconut-maid" data-i18n="maid">Maid</a>
+        <a href="<?php echo $domain_coconut; ?>/coconut-pajama" data-i18n="pajama">Pajama</a>
+        <a href="<?php echo $domain_coconut; ?>/coconut-santa" data-i18n="santa">Santa</a>
+        <a href="<?php echo $domain_coconut; ?>/coconut-winter" data-i18n="winter">Winter</a>
+        <a href="<?php echo $domain_coconut; ?>/coconut-wintermaid" data-i18n="wintermaid">Wintermaid</a>
+        <a href="<?php echo $domain_coconut; ?>/coconut-yukata" data-i18n="yukata">Yukata</a>
+        <a href="<?php echo $domain_coconut; ?>/coconut-teenage" data-i18n="teenage">Teenage</a>
+        <a href="<?php echo $domain_coconut; ?>/coconut-koneko" data-i18n="koneko">Koneko</a>
       </div>
     </div>
     <div class="menu-item">
-      <span class="label">Maple ▾</span>
+      <span class="label" data-i18n="maple">Maple</span>
       <div class="dropdown">
-        <a href="<?php echo $domain_maple; ?>/maple-casual">Casual</a>
-        <a href="<?php echo $domain_maple; ?>/maple-dress">Dress</a>
-        <a href="<?php echo $domain_maple; ?>/maple-maid">Maid</a>
-        <a href="<?php echo $domain_maple; ?>/maple-santa">Santa</a>
-        <a href="<?php echo $domain_maple; ?>/maple-winter">Winter</a>
-        <a href="<?php echo $domain_maple; ?>/maple-wintermaid">Wintermaid</a>
-        <a href="<?php echo $domain_maple; ?>/maple-yukata">Yukata</a>
-        <a href="<?php echo $domain_maple; ?>/maple-teenage">Teenage</a>
+        <a href="<?php echo $domain_maple; ?>/maple-casual" data-i18n="casual">Casual</a>
+        <a href="<?php echo $domain_maple; ?>/maple-dress" data-i18n="dress">Dress</a>
+        <a href="<?php echo $domain_maple; ?>/maple-maid" data-i18n="maid">Maid</a>
+        <a href="<?php echo $domain_maple; ?>/maple-santa" data-i18n="santa">Santa</a>
+        <a href="<?php echo $domain_maple; ?>/maple-winter" data-i18n="winter">Winter</a>
+        <a href="<?php echo $domain_maple; ?>/maple-wintermaid" data-i18n="wintermaid">Wintermaid</a>
+        <a href="<?php echo $domain_maple; ?>/maple-yukata" data-i18n="yukata">Yukata</a>
+        <a href="<?php echo $domain_maple; ?>/maple-teenage" data-i18n="teenage">Teenage</a>
       </div>
     </div>
     <div class="menu-item">
-      <span class="label">Cinnamon ▾</span>
+      <span class="label" data-i18n="cinnamon">Cinnamon</span>
       <div class="dropdown">
-        <a href="<?php echo $domain_cinnamon; ?>/cinnamon-casual">Casual</a>
-        <a href="<?php echo $domain_cinnamon; ?>/cinnamon-dress">Dress</a>
-        <a href="<?php echo $domain_cinnamon; ?>/cinnamon-maid">Maid</a>
-        <a href="<?php echo $domain_cinnamon; ?>/cinnamon-santa">Santa</a>
-        <a href="<?php echo $domain_cinnamon; ?>/cinnamon-winter">Winter</a>
-        <a href="<?php echo $domain_cinnamon; ?>/cinnamon-wintermaid">Wintermaid</a>
-        <a href="<?php echo $domain_cinnamon; ?>/cinnamon-yukata">Yukata</a>
-        <a href="<?php echo $domain_cinnamon; ?>/cinnamon-teenage">Teenage</a>
+        <a href="<?php echo $domain_cinnamon; ?>/cinnamon-casual" data-i18n="casual">Casual</a>
+        <a href="<?php echo $domain_cinnamon; ?>/cinnamon-dress" data-i18n="dress">Dress</a>
+        <a href="<?php echo $domain_cinnamon; ?>/cinnamon-maid" data-i18n="maid">Maid</a>
+        <a href="<?php echo $domain_cinnamon; ?>/cinnamon-santa" data-i18n="santa">Santa</a>
+        <a href="<?php echo $domain_cinnamon; ?>/cinnamon-winter" data-i18n="winter">Winter</a>
+        <a href="<?php echo $domain_cinnamon; ?>/cinnamon-wintermaid" data-i18n="wintermaid">Wintermaid</a>
+        <a href="<?php echo $domain_cinnamon; ?>/cinnamon-yukata" data-i18n="yukata">Yukata</a>
+        <a href="<?php echo $domain_cinnamon; ?>/cinnamon-teenage" data-i18n="teenage">Teenage</a>
       </div>
     </div>
     <div class="menu-item">
-      <span class="label">Milk ▾</span>
+      <span class="label" data-i18n="milk">Milk</span>
       <div class="dropdown">
-        <a href="<?php echo $domain_milk; ?>/milk-teenage">Teenage</a>
-        <a href="<?php echo $domain_milk; ?>/milk-winter">Winter</a>
+        <a href="<?php echo $domain_milk; ?>/milk-teenage" data-i18n="teenage">Teenage</a>
+        <a href="<?php echo $domain_milk; ?>/milk-winter" data-i18n="winter">Winter</a>
       </div>
     </div>
     <div class="menu-item">
-      <span class="label">Fraise ▾</span>
+      <span class="label" data-i18n="fraise">Fraise</span>
       <div class="dropdown">
-        <a href="<?php echo $domain_fraise; ?>/fraise-maid">Maid</a>
+        <a href="<?php echo $domain_fraise; ?>/fraise-maid" data-i18n="maid">Maid</a>
       </div>
     </div>
     <!-- 可继续添加更多 menu-item -->
-    <div class="infotext">By：<a href="https://www.nekopara.uk" target="_blank">GTX690战术核显卡导弹</a></div>
-    <div class="infotext">Github Project:<a href="https://github.com/Chocola-X/NekoWebShow" target="_blank">NekoWebShow</a></div>
+    <div class="infotext" data-i18n="by" data-i18n-params='{"author": "GTX690战术核显卡导弹"}'>By：<a href="https://www.nekopara.uk" target="_blank">GTX690战术核显卡导弹</a></div>
+    <div class="infotext" data-i18n="githubProject" data-i18n-params='{"project": "NekoWebShow"}'>Github Project:<a href="https://github.com/Chocola-X/NekoWebShow" target="_blank">NekoWebShow</a></div>
   </div>
 
-  <script>
-    // 切换顶部栏展开/收起
-    const icon = document.getElementById('toggle-icon');
-    const topbar = document.getElementById('topbar');
-    icon.addEventListener('click', () => {
-      topbar.classList.toggle('open');
-    });
-    // 点击任意菜单项显示下拉，并自动收起其他下拉
-    document.querySelectorAll('.menu-item').forEach(item => {
-      const dropdown = item.querySelector('.dropdown');
-      item.addEventListener('click', e => {
-        e.stopPropagation();
-        // 收起其他打开的下拉
-        document.querySelectorAll('.dropdown.open').forEach(dd => {
-          if (dd !== dropdown) dd.classList.remove('open');
-        });
-        // 切换当前下拉
-        dropdown.classList.toggle('open');
-      });
-    });
-    // 点击页面空白处，关闭所有下拉
-    document.addEventListener('click', () => {
-      document.querySelectorAll('.dropdown.open').forEach(dd => {
-        dd.classList.remove('open');
-      });
-    });
-  </script>
+  <script type="text/JavaScript" src="ui.js" charset="UTF-8"></script>
 </body>
 </html>

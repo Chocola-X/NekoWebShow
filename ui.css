@@ -1,0 +1,283 @@
+/* ============================================================
+   NekoWebShow 控制 UI 样式（PHP 版与静态版共用）
+   - 左侧边栏 · 每个角色一个抽屉（手风琴式展开/收起）
+   - 二次元风格：白色半透明底 · 咖啡色文字 · 粉色描边 · 无阴影
+   ============================================================ */
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "微软雅黑", "PingFang SC", "Microsoft YaHei", sans-serif;
+  color: white;
+  background: url("img/bg.png") no-repeat center center fixed;
+  background-size: cover;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+#canvas {
+  position: fixed;
+  top: 0;
+  left: 50%;
+  width: 120vh;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  transform: translateX(-50%);
+  z-index: 1;
+}
+
+/* ---------------- 侧边栏容器 ---------------- */
+#topbar {
+  position: fixed;
+  left: 8px;
+  top: 8px;
+  width: 264px;
+  max-height: calc(100vh - 16px);
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  background: rgba(255, 255, 255, 0.78);
+  border: 2px solid #f2a0c0;
+  border-radius: 18px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  transform: translateX(-120%);
+  opacity: 0;
+  visibility: hidden;
+  transition: transform 0.42s ease-in-out,
+              opacity 0.32s ease,
+              visibility 0s 0.42s;
+  z-index: 999;
+  scrollbar-width: thin;
+  scrollbar-color: #f2a0c0 transparent;
+}
+
+#topbar.open {
+  transform: translateX(0);
+  opacity: 1;
+  visibility: visible;
+  transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1),
+              opacity 0.3s ease,
+              visibility 0s 0s;
+}
+
+/* 被拖动后：取消滑入动画，只保留淡入淡出 */
+#topbar.free,
+#topbar.free.open {
+  transform: translateX(0);
+  transition: opacity 0.28s ease, visibility 0s 0s;
+}
+#topbar.dragging {
+  transition: none !important;
+}
+
+/* ---------------- 标题 ---------------- */
+#topbar > .label {
+  display: block;
+  padding: 12px 16px 10px;
+  font-weight: bold;
+  font-size: 16px;
+  color: #6f4e37;
+  line-height: 1.4;
+  border-bottom: 1px solid rgba(242, 160, 192, 0.55);
+  cursor: grab;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+#topbar > .label:active {
+  cursor: grabbing;
+}
+
+/* ---------------- 抽屉项 ---------------- */
+.menu-item {
+  flex: 0 0 auto;
+  border-bottom: 1px solid rgba(242, 160, 192, 0.55);
+  cursor: pointer;
+  user-select: none;
+}
+
+.menu-item > .label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  font-size: 15px;
+  color: #6f4e37;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.menu-item > .label:hover {
+  background: rgba(242, 160, 192, 0.3);
+  color: #4e3426;
+}
+
+/* 右侧箭头（CSS 生成，不依赖 HTML 里的▾文字） */
+.menu-item > .label::after {
+  content: "▾";
+  margin-left: auto;
+  font-size: 12px;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.menu-item.open > .label {
+  background: rgba(242, 160, 192, 0.22);
+  color: #4e3426;
+}
+
+.menu-item.open > .label::after {
+  transform: rotate(180deg);
+}
+
+/* ---------------- 抽屉内容体 ---------------- */
+.dropdown {
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: max-height 0.32s ease-in-out,
+              opacity 0.3s ease;
+}
+
+.menu-item.open > .dropdown {
+  opacity: 1;
+  transition: max-height 0.42s cubic-bezier(0.34, 1.56, 0.64, 1),
+              opacity 0.26s ease;
+}
+
+.dropdown a {
+  display: block;
+  padding: 9px 16px 9px 30px;
+  text-decoration: none;
+  color: #6f4e37;
+  font-size: 14px;
+  transition: background 0.18s ease, color 0.18s ease, padding-left 0.18s ease;
+}
+
+.dropdown a:hover {
+  background: rgba(242, 160, 192, 0.3);
+  color: #4e3426;
+  padding-left: 36px;
+}
+
+/* 设置类抽屉内的选项行 */
+.dropdown .opt {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 16px 9px 30px;
+  font-size: 14px;
+  color: #6f4e37;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.18s ease, color 0.18s ease;
+}
+.dropdown .opt:hover {
+  background: rgba(242, 160, 192, 0.3);
+  color: #4e3426;
+}
+.dropdown .opt .dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 2px solid #f2a0c0;
+  flex: 0 0 auto;
+  transition: background 0.18s ease, border-color 0.18s ease;
+}
+.dropdown .opt.selected .dot {
+  background: #f2a0c0;
+  border-color: #f2a0c0;
+}
+.dropdown .opt.selected {
+  color: #4e3426;
+  font-weight: bold;
+}
+.dropdown .opt .fps-badge {
+  font-size: 11px;
+  padding: 1px 7px;
+  border-radius: 8px;
+  background: rgba(242, 160, 192, 0.25);
+  color: #6f4e37;
+  margin-left: auto;
+}
+
+/* ---------------- 信息行（底部） ---------------- */
+.infotext {
+  flex: 0 0 auto;
+  font-size: 12px;
+  text-align: center;
+  color: #6f4e37;
+  padding: 10px 16px;
+  border-top: 1px solid rgba(242, 160, 192, 0.55);
+}
+.infotext a {
+  color: inherit;
+  text-decoration: none;
+}
+.infotext a:hover {
+  color: #4e3426;
+  text-decoration: underline;
+}
+
+/* ---------------- 切换图标（可拖动，无阴影） ---------------- */
+#toggle-icon {
+  position: fixed;
+  top: 8px;
+  right: 8px;
+  height: 44px;
+  width: auto;
+  cursor: grab;
+  z-index: 1000;
+  border-radius: 14px;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  user-select: none;
+  -webkit-user-drag: none;
+}
+#toggle-icon:hover {
+  transform: scale(1.08);
+}
+#toggle-icon:active,
+#toggle-icon.dragging {
+  cursor: grabbing;
+  transform: scale(0.96);
+}
+
+/* ---------------- Loading 框 ---------------- */
+#loading {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  width: 120px;
+  height: 32px;
+  background: rgba(255, 255, 255, 0.82);
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  transition: opacity 1s ease-in-out;
+  font-size: 18px;
+  color: #6f4e37;
+  text-align: center;
+}
+
+/* ---------------- 窄屏适配 ---------------- */
+@media (max-width: 480px) {
+  #topbar {
+    width: min(264px, calc(100vw - 16px));
+  }
+  .menu-item > .label {
+    font-size: 14px;
+    padding: 11px 14px;
+  }
+  .dropdown a {
+    padding: 9px 14px 9px 26px;
+    font-size: 13px;
+  }
+  #toggle-icon {
+    height: 38px;
+  }
+}
