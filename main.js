@@ -69,6 +69,10 @@ function getHeightRatio(height) {
 
 async function run(width, height, zipUrl, reactionConfig) {
     EmotePlayer.createRenderCanvas(width, height);
+    // 应用用户在“设置”里选择的帧率限制（默认 60，可设无上限）
+    if (window.NekoUI && typeof window.NekoUI.applyFps === 'function') {
+        window.NekoUI.applyFps();
+    }
     const canvas = document.getElementById('canvas');
     const player = new EmotePlayer(canvas);
     canvas.width = width;

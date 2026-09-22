@@ -39,7 +39,13 @@ const translations = {
         'english': 'English',
         'chineseSimplified': '简体中文',
         'chineseTraditional': '繁體中文',
-        'japanese': '日本語'
+        'japanese': '日本語',
+        // 设置
+        'settings': 'Settings',
+        'fpsLimit': 'Frame Rate Limit',
+        'fpsUnlimited': 'Unlimited',
+        'fpsRecommended': 'Recommended',
+
     },
     
     'zh-CN': {
@@ -81,7 +87,13 @@ const translations = {
         'english': 'English',
         'chineseSimplified': '简体中文',
         'chineseTraditional': '繁體中文',
-        'japanese': '日本語'
+        'japanese': '日本語',
+        // 设置
+        'settings': '设置',
+        'fpsLimit': '帧率限制',
+        'fpsUnlimited': '无上限',
+        'fpsRecommended': '推荐',
+
     },
     
     'zh-TW': {
@@ -123,7 +135,13 @@ const translations = {
         'english': 'English',
         'chineseSimplified': '简体中文',
         'chineseTraditional': '繁體中文',
-        'japanese': '日本語'
+        'japanese': '日本語',
+        // 设置
+        'settings': '設定',
+        'fpsLimit': '幀率限制',
+        'fpsUnlimited': '無上限',
+        'fpsRecommended': '推薦',
+
     },
     
     'ja': {
@@ -165,7 +183,13 @@ const translations = {
         'english': 'English',
         'chineseSimplified': '簡体中文',
         'chineseTraditional': '繁體中文',
-        'japanese': '日本語'
+        'japanese': '日本語',
+        // 设置
+        'settings': '設定',
+        'fpsLimit': 'フレームレート制限',
+        'fpsUnlimited': '無制限',
+        'fpsRecommended': 'おすすめ',
+
     }
 };
 
@@ -378,7 +402,7 @@ class LanguageManager {
         menuLabels.forEach(label => {
             const key = label.getAttribute('data-i18n');
             const translation = this.get(key);
-            label.textContent = `${translation} ▾`;
+            label.textContent = `${translation}`;
         });
     }
     
@@ -421,7 +445,7 @@ class LanguageManager {
         const languageSelector = document.createElement('div');
         languageSelector.className = 'menu-item language-selector';
         languageSelector.innerHTML = `
-            <span class="label" data-i18n="language">Language ▾</span>
+            <span class="label" data-i18n="language">Language</span>
             <div class="dropdown language-dropdown">
                 <a href="#" data-lang="en" data-i18n="english">English</a>
                 <a href="#" data-lang="zh-CN" data-i18n="chineseSimplified">简体中文</a>
@@ -436,11 +460,11 @@ class LanguageManager {
         // 添加点击事件
         languageSelector.addEventListener('click', (e) => {
             e.stopPropagation();
-            const dropdown = languageSelector.querySelector('.language-dropdown');
-            document.querySelectorAll('.dropdown.open').forEach(dd => {
-                if (dd !== dropdown) dd.classList.remove('open');
-            });
-            dropdown.classList.toggle('open');
+            if (window.NekoUI && typeof window.NekoUI.toggleDrawer === 'function') {
+                window.NekoUI.toggleDrawer(languageSelector);
+            } else {
+                languageSelector.classList.toggle('open');
+            }
         });
         
         // 添加语言选择事件
