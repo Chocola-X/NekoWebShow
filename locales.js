@@ -45,6 +45,11 @@ const translations = {
         'fpsLimit': 'Frame Rate Limit',
         'fpsUnlimited': 'Unlimited',
         'fpsRecommended': 'Recommended',
+        'characterSettings': 'Character',
+        'lockCharacter': 'Lock character position & size',
+        'muteSound': 'Mute sound',
+        'wallpaper': 'Wallpaper',
+        'resetCharacter': 'Reset character position',
 
     },
     
@@ -93,6 +98,11 @@ const translations = {
         'fpsLimit': '帧率限制',
         'fpsUnlimited': '无上限',
         'fpsRecommended': '推荐',
+        'characterSettings': '角色',
+        'lockCharacter': '锁定人物位置与大小',
+        'muteSound': '关闭声音',
+        'wallpaper': '壁纸选择',
+        'resetCharacter': '重设角色位置',
 
     },
     
@@ -141,6 +151,11 @@ const translations = {
         'fpsLimit': '幀率限制',
         'fpsUnlimited': '無上限',
         'fpsRecommended': '推薦',
+        'characterSettings': '角色',
+        'lockCharacter': '鎖定人物位置與大小',
+        'muteSound': '關閉聲音',
+        'wallpaper': '桌布選擇',
+        'resetCharacter': '重設角色位置',
 
     },
     
@@ -189,6 +204,11 @@ const translations = {
         'fpsLimit': 'フレームレート制限',
         'fpsUnlimited': '無制限',
         'fpsRecommended': 'おすすめ',
+        'characterSettings': 'キャラクター',
+        'lockCharacter': 'キャラクターの位置とサイズをロック',
+        'muteSound': 'サウンドをオフ',
+        'wallpaper': '壁紙',
+        'resetCharacter': 'キャラクターの位置をリセット',
 
     }
 };

@@ -1,8 +1,19 @@
+// 最低渲染分辨率（渲染画布高度下限，单位像素）。
+// 渲染分辨率在页面加载时确定后无法在运行中改变（驱动里 WebGL 帧缓冲/纹理/顶点缓冲在初始化时一次性烘焙，
+// 且缺少干净的设备重建路径），因此预设一个下限，给“放大”留出清晰度余量。按需调大（如 2160）更清晰，但 GPU/显存占用更高。
+const RENDER_MIN_HEIGHT = 1440;
+
 function start(zipUrl) {
     const canvas = document.getElementById('canvas');
-    const displaySize = getDisplaySize();
-    applyCanvasLayout(canvas, displaySize);
+    // 加载阶段先铺满整个窗口作为占位，避免默认样式在两侧留白
+    canvas.style.position = 'fixed';
+    canvas.style.top = '0';
+    canvas.style.left = '0';
+    canvas.style.width = '100%';
+    canvas.style.height = '100%';
+    canvas.style.transform = 'none';
 
+    const displaySize = getDisplaySize();
     const renderSize = getRenderSize(displaySize);
     run(renderSize.width, renderSize.height, zipUrl, getConfig());
 }
@@ -26,7 +37,7 @@ function getDisplaySize() {
     const viewport = getViewportSize();
 
     return {
-        width: Math.ceil(viewport.height * 1.2),
+        width: viewport.width,
         height: viewport.height,
         viewportWidth: viewport.width,
         viewportHeight: viewport.height
@@ -34,8 +45,10 @@ function getDisplaySize() {
 }
 
 function getRenderSize(displaySize = getDisplaySize()) {
-    const aspectRatio = displaySize.height > 0 ? displaySize.width / displaySize.height : 1.2;
-    const renderHeight = Math.max(Math.ceil(displaySize.height), 1080);
+    // 渲染画布按“窗口宽高比 + 最小高度”计算：铺满窗口（拖动不会越出画布被裁），
+    // 且不低于 RENDER_MIN_HEIGHT，为放大留出清晰度余量。
+    const aspectRatio = displaySize.height > 0 ? displaySize.width / displaySize.height : 16 / 9;
+    const renderHeight = Math.max(Math.ceil(displaySize.height), RENDER_MIN_HEIGHT);
     const renderWidth = Math.ceil(renderHeight * aspectRatio);
 
     return {
@@ -49,12 +62,34 @@ function applyCanvasLayout(canvas, displaySize = getDisplaySize()) {
         return;
     }
 
+    const renderWidth = canvas.width || 0;
+    const renderHeight = canvas.height || 0;
+
+    // 渲染分辨率固定。这里用桌面壁纸“缩放并裁切(cover)”的思路：
+    // 画布始终铺满整个窗口（最窄的一边对齐，另一边超出的部分被裁掉），
+    // 所以无论窗口是横向、方形还是竖向，人物都能被拖到窗口任意位置，不会被画布边界截断。
+    if (!renderWidth || !renderHeight) {
+        canvas.style.position = 'fixed';
+        canvas.style.top = '0';
+        canvas.style.left = '0';
+        canvas.style.width = '100%';
+        canvas.style.height = '100%';
+        canvas.style.transform = 'none';
+        return;
+    }
+
+    const vw = displaySize.viewportWidth;
+    const vh = displaySize.viewportHeight;
+    const scale = Math.max(vw / renderWidth, vh / renderHeight);
+    const cw = Math.ceil(renderWidth * scale);
+    const ch = Math.ceil(renderHeight * scale);
+
     canvas.style.position = 'fixed';
     canvas.style.top = '0';
-    canvas.style.width = `${displaySize.width}px`;
-    canvas.style.height = `${displaySize.height}px`;
-    canvas.style.left = '50%';
-    canvas.style.transform = 'translateX(-50%)';
+    canvas.style.left = '0';
+    canvas.style.width = `${cw}px`;
+    canvas.style.height = `${ch}px`;
+    canvas.style.transform = `translate(${Math.floor((vw - cw) / 2)}px, ${Math.floor((vh - ch) / 2)}px)`;
 }
 
 function getHeightRatio(height) {
@@ -79,16 +114,30 @@ async function run(width, height, zipUrl, reactionConfig) {
     canvas.height = height;
     const baseCoord = player.coord.slice();
 
+    // 用户自定义偏移（解锁后拖动）与缩放倍率（鼠标滚轮），在响应式布局之上叠加
+    let userOffsetX = 0;
+    let userOffsetY = 0;
+    let userScale = 1;
+
     function applyResponsivePlayerLayout() {
         const displaySize = getDisplaySize();
-        const displayScale = height / displaySize.height;
+        const renderWidth = canvas.width;
+        const renderHeight = canvas.height;
 
         applyCanvasLayout(canvas, displaySize);
-        player.scale = getHeightRatio(displaySize.height) * displayScale;
+
+        // 渲染分辨率固定：1 屏幕像素 = 1/scale 渲染单位。
+        // 人物屏幕尺寸保持为 getHeightRatio(视口高度)，与之前的一致；userScale 为滚轮缩放倍率。
+        const scale = Math.max(
+            displaySize.viewportWidth / renderWidth,
+            displaySize.viewportHeight / renderHeight
+        );
+
+        player.scale = (getHeightRatio(displaySize.viewportHeight) / scale) * userScale;
 
         const c = player.coord;
-        c[0] = baseCoord[0];
-        c[1] = baseCoord[1] - 40 * displayScale;
+        c[0] = baseCoord[0] + userOffsetX;
+        c[1] = baseCoord[1] - 40 / scale + userOffsetY;
         player.coord = c;
 
         if (EmotePlayer.device) {
@@ -211,6 +260,10 @@ async function run(width, height, zipUrl, reactionConfig) {
         async function play(url) {
             stop();
             if (!url) {
+                return { durationMs: 0, ended: Promise.resolve() };
+            }
+            // 静音开关：开启后不播放角色声音（嘴型仍由动作变量驱动）
+            if (window.NekoUI && typeof window.NekoUI.isMuted === 'function' && window.NekoUI.isMuted()) {
                 return { durationMs: 0, ended: Promise.resolve() };
             }
 
@@ -548,7 +601,83 @@ async function run(width, height, zipUrl, reactionConfig) {
             }
         };
 
-        canvas.onclick = touch_reaction;
+        // ---------- 角色拖动与缩放（未锁定时生效） ----------
+        const isLocked = () => {
+            return !!(window.NekoUI && typeof window.NekoUI.isLocked === 'function' && window.NekoUI.isLocked());
+        };
+
+        const dragState = { active: false, moved: false, startX: 0, startY: 0 };
+
+        function modelUnitsPerScreenPixel() {
+            const rect = canvas.getBoundingClientRect();
+            if (!rect || rect.width <= 0) return 1;
+            return canvas.width / rect.width;
+        }
+
+        function applyUserTransform() {
+            const displaySize = getDisplaySize();
+            const scale = Math.max(
+                displaySize.viewportWidth / canvas.width,
+                displaySize.viewportHeight / canvas.height
+            );
+            const c = player.coord;
+            c[0] = baseCoord[0] + userOffsetX;
+            c[1] = baseCoord[1] - 40 / scale + userOffsetY;
+            player.coord = c;
+        }
+
+        canvas.addEventListener('mousedown', (ev) => {
+            if (ev.button !== 0) return;         // 仅响应左键
+            dragState.moved = false;
+            if (isLocked()) return;              // 锁定后禁止拖动
+            dragState.active = true;
+            dragState.startX = ev.clientX;
+            dragState.startY = ev.clientY;
+        });
+
+        window.addEventListener('mousemove', (ev) => {
+            if (!dragState.active) return;
+            const dx = ev.clientX - dragState.startX;
+            const dy = ev.clientY - dragState.startY;
+            if (!dragState.moved && (Math.abs(dx) + Math.abs(dy)) > 3) {
+                dragState.moved = true;
+            }
+            if (!dragState.moved) return;
+            const mp = modelUnitsPerScreenPixel();
+            userOffsetX += dx * mp;
+            userOffsetY += dy * mp;
+            dragState.startX = ev.clientX;
+            dragState.startY = ev.clientY;
+            applyUserTransform();
+        });
+
+        const endDrag = () => { dragState.active = false; };
+        window.addEventListener('mouseup', endDrag);
+        window.addEventListener('blur', endDrag);
+
+        canvas.addEventListener('wheel', (ev) => {
+            if (isLocked()) return;              // 锁定后禁止缩放
+            ev.preventDefault();
+            const factor = Math.exp(-ev.deltaY * 0.0012);
+            userScale = Math.max(0.25, Math.min(5, userScale * factor));
+            applyResponsivePlayerLayout();
+        }, { passive: false });
+
+        // 重设角色位置/大小：把被拖到屏外找不到的角色拉回默认位置（设置里“重设角色位置”按钮触发）
+        document.addEventListener('neko:reset-character', () => {
+            userOffsetX = 0;
+            userOffsetY = 0;
+            userScale = 1;
+            applyResponsivePlayerLayout();
+        });
+
+        canvas.onclick = (ev) => {
+            if (dragState.moved) {
+                dragState.moved = false;
+                return;
+            }
+            touch_reaction(ev);
+        };
         canvas.addEventListener('touchstart', (ev) => {
             touch_reaction(ev.touches[0]);
             ev.preventDefault();
