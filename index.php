@@ -8,6 +8,29 @@ $domain_cinnamon = 'https://cinnamon.nekopara.uk';
 $domain_milk = 'https://milk.nekopara.uk';
 $domain_fraise = 'https://fraise.nekopara.uk';
 $background_url = './img/bg.png';
+
+// 扫描 img 文件夹，列出可用壁纸图片（供前端壁纸选择器使用）。
+$wallpaper_files = [];
+if (is_dir(__DIR__ . '/img')) {
+    $wallpaper_exts = ['png', 'jpg', 'jpeg', 'gif', 'webp', 'bmp'];
+    foreach (scandir(__DIR__ . '/img') as $wallpaper_file) {
+        if ($wallpaper_file === '.' || $wallpaper_file === '..') {
+            continue;
+        }
+        if (!is_file(__DIR__ . '/img/' . $wallpaper_file)) {
+            continue;
+        }
+        $wallpaper_ext = strtolower(pathinfo($wallpaper_file, PATHINFO_EXTENSION));
+        if (in_array($wallpaper_ext, $wallpaper_exts, true)) {
+            $wallpaper_files[] = $wallpaper_file;
+        }
+    }
+}
+sort($wallpaper_files);
+$default_wallpaper = in_array('bg.png', $wallpaper_files, true) ? 'bg.png' : ($wallpaper_files[0] ?? 'bg.png');
+$wallpaper_files_json = json_encode(array_values($wallpaper_files));
+$default_wallpaper_json = json_encode($default_wallpaper);
+
 // 获取当前请求路径，并兼容部署在 /NekoWebShow/ 这类子目录下的情况。
 $request_path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $script_dir = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'])), '/');
@@ -293,6 +316,7 @@ if (!isset($pages[$path])) {
   <script src="./locales.js" charset="UTF-8"></script>
   <script type="text/JavaScript" src="main.js" charset="UTF-8"></script>
   <script type="text/JavaScript" src="fflate.js" charset="UTF-8"></script>
+  <script>window.NekoWallpapers = <?php echo $wallpaper_files_json; ?>; window.NekoDefaultWallpaper = <?php echo $default_wallpaper_json; ?>;</script>
 </head>
 <body onload="start('<?php echo $psb_url; ?>')">
 

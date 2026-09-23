@@ -15,18 +15,18 @@ body {
   background-size: cover;
   margin: 0;
   padding: 0;
-  overflow-x: hidden;
+  overflow: hidden;
 }
 
 #canvas {
   position: fixed;
   top: 0;
-  left: 50%;
-  width: 120vh;
-  height: 100vh;
+  left: 0;
+  width: 100%;
+  height: 100%;
   margin: 0;
   padding: 0;
-  transform: translateX(-50%);
+  transform: none;
   z-index: 1;
 }
 
@@ -228,7 +228,7 @@ body {
   top: 8px;
   right: 8px;
   height: 44px;
-  width: auto;
+  width: 44px;
   cursor: grab;
   z-index: 1000;
   border-radius: 14px;
@@ -279,5 +279,63 @@ body {
   }
   #toggle-icon {
     height: 38px;
+    width: 38px;
   }
 }
+
+
+/* ---------------- 设置项：开关（锁定人物 / 关闭声音） ---------------- */
+.dropdown .opt .switch {
+  width: 40px;
+  height: 22px;
+  border-radius: 11px;
+  background: rgba(111, 78, 55, 0.22);
+  position: relative;
+  flex: 0 0 auto;
+  margin-left: auto;
+  transition: background 0.2s ease;
+}
+.dropdown .opt .switch .knob {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  transition: left 0.2s ease;
+}
+.dropdown .opt.on .switch {
+  background: #f2a0c0;
+}
+.dropdown .opt.on .switch .knob {
+  left: 20px;
+}
+
+/* ---------------- 壁纸选项：文件名过长时省略 ---------------- */
+.dropdown .opt[data-wallpaper] {
+  gap: 8px;
+}
+.dropdown .opt[data-wallpaper] > span:last-child {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ---------------- 设置里“重设角色位置”动作按钮 ---------------- */
+.dropdown .opt.reset-opt {
+  font-weight: bold;
+  color: #c2527f;
+  border-top: 1px solid rgba(242, 160, 192, 0.45);
+  margin-top: 4px;
+}
+
+/* ---------------- 人物未锁定时，画布显示可拖动手型 ---------------- */
+body.char-unlocked #canvas {
+  cursor: grab;
+}
+body.char-unlocked #canvas:active {
+  cursor: grabbing;
+}
+
