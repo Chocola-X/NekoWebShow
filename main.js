@@ -538,7 +538,68 @@ async function run(width, height, zipUrl, reactionConfig) {
             }
         };
 
-        canvas.onmousemove = eyetracking_reaction;
+        // ---------- 鼠标注视"影子"平滑过渡 ----------
+        // 鼠标在 canvas 上时直接注视鼠标本体（完全跟手）；鼠标离开 canvas（切到其他窗口）
+        // 时记录离开点，重新进入时让注视沿"影子"路径用 1 秒从离开点 ease-out 追到当前
+        // 鼠标位置，过渡中影子终点随鼠标实时更新。首帧影子=离开点=角色当前注视位置，
+        // 无跳变，从而消除重新进入时的抽搐，且正常移动不被插值、保持跟手。
+        const SHADOW_TRANSITION_MS = 1000;
+        let lastMouseX = null, lastMouseY = null;
+        let leaveX = null, leaveY = null;
+        let shadowRAF = null;
+        let shadowState = null;
+        const runShadowStep = () => {
+            const t = Math.min(1, (performance.now() - shadowState.startTime) / SHADOW_TRANSITION_MS);
+            const e = 1 - Math.pow(1 - t, 3);
+            const sx = shadowState.fromX + (shadowState.toX - shadowState.fromX) * e;
+            const sy = shadowState.fromY + (shadowState.toY - shadowState.fromY) * e;
+            shadowState.curX = sx;
+            shadowState.curY = sy;
+            eyetracking_reaction({ clientX: sx, clientY: sy });
+            if (t < 1) {
+                shadowRAF = requestAnimationFrame(runShadowStep);
+            } else {
+                shadowRAF = null;
+                shadowState = null;
+            }
+        };
+        canvas.addEventListener('mouseleave', () => {
+            if (shadowState) {
+                leaveX = shadowState.curX;
+                leaveY = shadowState.curY;
+                cancelAnimationFrame(shadowRAF);
+                shadowRAF = null;
+                shadowState = null;
+            } else if (lastMouseX !== null) {
+                leaveX = lastMouseX;
+                leaveY = lastMouseY;
+            }
+        });
+        canvas.addEventListener('mouseenter', (ev) => {
+            if (leaveX === null) {
+                return;
+            }
+            shadowState = {
+                fromX: leaveX, fromY: leaveY,
+                toX: ev.clientX, toY: ev.clientY,
+                curX: leaveX, curY: leaveY,
+                startTime: performance.now(),
+            };
+            leaveX = null;
+            leaveY = null;
+            if (shadowRAF) cancelAnimationFrame(shadowRAF);
+            shadowRAF = requestAnimationFrame(runShadowStep);
+        });
+        canvas.onmousemove = (ev) => {
+            lastMouseX = ev.clientX;
+            lastMouseY = ev.clientY;
+            if (shadowState) {
+                shadowState.toX = ev.clientX;
+                shadowState.toY = ev.clientY;
+                return;
+            }
+            eyetracking_reaction(ev);
+        };
         canvas.addEventListener('touchmove', (ev) => {
             eyetracking_reaction(ev.touches[0]);
             ev.preventDefault();
