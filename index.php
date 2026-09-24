@@ -7,7 +7,7 @@ $domain_maple = 'https://maple.nekopara.uk';
 $domain_cinnamon = 'https://cinnamon.nekopara.uk';
 $domain_milk = 'https://milk.nekopara.uk';
 $domain_fraise = 'https://fraise.nekopara.uk';
-$background_url = './img/bg.png';
+$background_url = './img/bakery.png';
 
 // 扫描 img 文件夹，列出可用壁纸图片（供前端壁纸选择器使用）。
 $wallpaper_files = [];
@@ -27,7 +27,7 @@ if (is_dir(__DIR__ . '/img')) {
     }
 }
 sort($wallpaper_files);
-$default_wallpaper = in_array('bg.png', $wallpaper_files, true) ? 'bg.png' : ($wallpaper_files[0] ?? 'bg.png');
+$default_wallpaper = in_array('bakery.png', $wallpaper_files, true) ? 'bakery.png' : ($wallpaper_files[0] ?? 'bakery.png');
 $wallpaper_files_json = json_encode(array_values($wallpaper_files));
 $default_wallpaper_json = json_encode($default_wallpaper);
 

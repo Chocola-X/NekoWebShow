@@ -51,7 +51,7 @@
 
   // 静态版壁纸清单回退：PHP 版会由 index.php 扫描 img/ 动态注入 window.NekoWallpapers（覆盖此值）；
   // 静态版没有 PHP 扫描，走这里的手工清单。往 img/ 加新图后，请同时在此数组里补文件名。
-  var STATIC_WALLPAPERS = ['bg.png'];
+  var STATIC_WALLPAPERS = ['bakery.png', 'bathroom.png', 'fancy_pink_bedroom.png', 'japanese_corridor.png', 'japanese_room.png', 'pink_bathroom.png', 'street.png'];
 
   function wallpaperList() {
     return (window.NekoWallpapers && Array.isArray(window.NekoWallpapers)) ? window.NekoWallpapers : STATIC_WALLPAPERS;
@@ -62,7 +62,7 @@
     try { raw = localStorage.getItem(WP_KEY); } catch (e) {}
     if (raw && list.indexOf(raw) !== -1) return raw;
     if (window.NekoDefaultWallpaper && list.indexOf(window.NekoDefaultWallpaper) !== -1) return window.NekoDefaultWallpaper;
-    return list[0] || 'bg.png';
+    return list[0] || 'bakery.png';
   }
   function applyWallpaper(name) {
     if (!name) return;
