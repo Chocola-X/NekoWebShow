@@ -313,7 +313,11 @@ async function run(width, height, zipUrl, reactionConfig) {
         let modelData = null;
 
         try {
-            const resp = await fetch(zipUrl);
+            const resolvedZipUrl = new URL(zipUrl, window.location.href);
+            if (resolvedZipUrl.protocol !== 'https:' && resolvedZipUrl.protocol !== 'file:') {
+                throw new Error(`Refusing to load ${zipUrl} over insecure protocol ${resolvedZipUrl.protocol}`);
+            }
+            const resp = await fetch(resolvedZipUrl.href);
             if (!resp.ok) {
                 throw new Error(`Failed to load ${zipUrl}`);
             }
