@@ -236,8 +236,14 @@ class EmoteDevice
         if (canvas == null)
             return;
         if (! this.playerList.some(player => player.canvas == canvas)) {
-            const ctx = canvas.getContext("2d");
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            if (canvas === this.renderCanvas) {
+                this.gl.bindFramebuffer(this.gl.FRAMEBUFFER, null);
+                this.gl.clearColor(0, 0, 0, 0);
+                this.gl.clear(this.gl.COLOR_BUFFER_BIT);
+            } else {
+                const ctx = canvas.getContext("2d");
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+            }
         }
     }
 
@@ -303,7 +309,9 @@ class EmoteDevice
         }
 
         const endScene = (canvas) => {
-            if (canvas == null)
+            // A visible WebGL canvas is already presented by the browser.
+            // Keep the copy path for callers using a separate 2D canvas.
+            if (canvas == null || canvas === this.renderCanvas)
                 return;
             let ctx = canvas.getContext("2d");
             ctx.clearRect(0, 0, canvas.width, canvas.height);

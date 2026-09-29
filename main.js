@@ -103,15 +103,17 @@ function getHeightRatio(height) {
 }
 
 async function run(width, height, zipUrl, reactionConfig) {
-    EmotePlayer.createRenderCanvas(width, height);
+    // Render directly to the visible canvas. Set its size before creating the
+    // WebGL device: resizing afterwards would reset the drawing buffer/state.
+    const canvas = document.getElementById('canvas');
+    canvas.width = width;
+    canvas.height = height;
+    EmotePlayer.setRenderCanvas(canvas);
     // 应用用户在“设置”里选择的帧率限制（默认 60，可设无上限）
     if (window.NekoUI && typeof window.NekoUI.applyFps === 'function') {
         window.NekoUI.applyFps();
     }
-    const canvas = document.getElementById('canvas');
     const player = new EmotePlayer(canvas);
-    canvas.width = width;
-    canvas.height = height;
     const baseCoord = player.coord.slice();
 
     // 用户自定义偏移（解锁后拖动）与缩放倍率（鼠标滚轮），在响应式布局之上叠加
