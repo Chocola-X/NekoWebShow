@@ -182,6 +182,8 @@ class EmoteDevice
     initMembers() {
         this.playerList = [];
         this.animating = false;
+        this.animationCallback = this.drawAnimation.bind(this);
+        this.requestId = null;
         this.date = new Date();
         return true;
     }
@@ -244,31 +246,43 @@ class EmoteDevice
             && ! this.checkAnimationRequired()) {
             this.animating = false;
             cancelAnimationFrame(this.requestId);
+            this.requestId = null;
         }
         else if (! this.animating
                  && this.checkAnimationRequired()) {
             this.animating = true;
             this.lastAnimationTime = null;
-            this.lastFrameTime = null;
-            this.requestId = requestAnimationFrame(this.drawAnimation.bind(this));
+            this.nextFrameTime = null;
+            this.activeFpsLimit = null;
+            this.requestId = requestAnimationFrame(this.animationCallback);
         }                
     }
 
     drawAnimation(timeStamp) {
-        // FPS cap: skip this rAF tick and reschedule when not yet due.
+        this.requestId = null;
+        if (!this.animating)
+            return;
+
+        // Keep one rAF chain. A timer followed by rAF can miss the next refresh.
+        // Advance the deadline from its previous value to preserve fractional
+        // intervals (e.g. 60 FPS on a 144 Hz display), without catch-up renders.
         const fpsLimit = EmotePlayer.fpsLimit || 0;
+        if (fpsLimit !== this.activeFpsLimit) {
+            this.activeFpsLimit = fpsLimit;
+            this.nextFrameTime = null;
+        }
         if (fpsLimit > 0) {
             const minInterval = 1000 / fpsLimit;
-            if (this.lastFrameTime !== null && this.lastFrameTime !== undefined) {
-                const elapsed = timeStamp - this.lastFrameTime;
-                if (elapsed < minInterval) {
-                    setTimeout(() => {
-                        this.requestId = requestAnimationFrame(this.drawAnimation.bind(this));
-                    }, minInterval - elapsed);
-                    return;
-                }
+            // Allow for timestamp rounding and small refresh-clock variations.
+            const tolerance = Math.min(1, minInterval / 4);
+            if (this.nextFrameTime === null)
+                this.nextFrameTime = timeStamp;
+            if (timeStamp + tolerance < this.nextFrameTime) {
+                this.requestId = requestAnimationFrame(this.animationCallback);
+                return;
             }
-            this.lastFrameTime = timeStamp;
+            const intervals = Math.floor((timeStamp + tolerance - this.nextFrameTime) / minInterval) + 1;
+            this.nextFrameTime += intervals * minInterval;
         }
         if (this.lastAnimationTime === null)
             this.lastAnimationTime = timeStamp;
@@ -379,7 +393,8 @@ class EmoteDevice
 
         endScene(canvas);
         
-        this.requestId = requestAnimationFrame(this.drawAnimation.bind(this));
+        if (this.animating)
+            this.requestId = requestAnimationFrame(this.animationCallback);
     }
 };
 
