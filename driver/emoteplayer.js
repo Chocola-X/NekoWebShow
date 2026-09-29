@@ -331,19 +331,20 @@ class EmoteDevice
                 beginScene(canvas);
             }
 
-            player.onUpdate();
-            if (! player.stepUpdate
-                && player.convolveCanvasMovementToPhysics) {
+            player.onUpdate(timeStamp);
+            if (player.convolveCanvasMovementToPhysics) {
                 const curCanvasPosition = player.canvasPosition;
-                const prevCanvasPosition = player.prevCanvasPosition;
-                const scale = player.getState("scale");
-                const vec = [ (curCanvasPosition.left - prevCanvasPosition.left) / scale * frameCount,
-                              (curCanvasPosition.top - prevCanvasPosition.top) / scale * frameCount ];
-                EmotePlayer_SetOuterForce(player.playerId, "bust", vec[0], vec[1], 0, 0);
-                EmotePlayer_SetOuterForce(player.playerId, "parts", vec[0], vec[1], 0, 0);
-                EmotePlayer_SetOuterForce(player.playerId, "hair", vec[0], vec[1], 0, 0);
+                if (!player.stepUpdate) {
+                    const prevCanvasPosition = player.prevCanvasPosition;
+                    const scale = player.getState("scale");
+                    const vec = [ (curCanvasPosition.left - prevCanvasPosition.left) / scale * frameCount,
+                                  (curCanvasPosition.top - prevCanvasPosition.top) / scale * frameCount ];
+                    EmotePlayer_SetOuterForce(player.playerId, "bust", vec[0], vec[1], 0, 0);
+                    EmotePlayer_SetOuterForce(player.playerId, "parts", vec[0], vec[1], 0, 0);
+                    EmotePlayer_SetOuterForce(player.playerId, "hair", vec[0], vec[1], 0, 0);
+                }
+                player.prevCanvasPosition = curCanvasPosition;
             }
-            player.prevCanvasPosition = player.canvasPosition;
             if (player.stepUpdate) {
                 if (player.modified) {
                     EmotePlayer_Step(player.playerId);
@@ -712,7 +713,7 @@ class EmotePlayer
         return EmotePlayer_GetState(this.playerId, label);
     }
 
-    getMarkerPosition(marker) {
+    getMarkerPosition(marker, canvasRect = null) {
         if (! this.initialized
             || this.canvas == null)
             return null;
@@ -730,7 +731,7 @@ class EmotePlayer
             markerCoord = [ markerX * c * _scale + markerY * -s * _scale + _x,
                             markerX * s * _scale + markerY *  c * _scale + _y ];
         }
-        const rect = this.canvas.getBoundingClientRect();
+        const rect = canvasRect || this.canvas.getBoundingClientRect();
         const canvasWidth = this.canvas.width || rect.width;
         const canvasHeight = this.canvas.height || rect.height;
         const w = canvasWidth / 2;
@@ -901,6 +902,8 @@ class EmotePlayer
         if (val == this._convolveCanvasMovementToPhysics)
             return;
         this._convolveCanvasMovementToPhysics = val;
+        if (this.initialized && val)
+            this.prevCanvasPosition = this.canvasPosition;
         if (this.initialized
             && ! val) {
             EmotePlayer_SetOuterForce(this.playerId, "bust", 0, 0, 0, 0);

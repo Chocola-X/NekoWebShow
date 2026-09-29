@@ -120,6 +120,10 @@ async function run(width, height, zipUrl, reactionConfig) {
     let userOffsetX = 0;
     let userOffsetY = 0;
     let userScale = 1;
+    let transformPending = false;
+    let layoutScale = 1;
+    let layoutPlayerScale = 1;
+    let modelPixelRatio = 1;
 
     function applyResponsivePlayerLayout() {
         const displaySize = getDisplaySize();
@@ -135,7 +139,11 @@ async function run(width, height, zipUrl, reactionConfig) {
             displaySize.viewportHeight / renderHeight
         );
 
-        player.scale = (getHeightRatio(displaySize.viewportHeight) / scale) * userScale;
+        layoutScale = scale;
+        layoutPlayerScale = getHeightRatio(displaySize.viewportHeight) / scale;
+        modelPixelRatio = renderWidth / Math.ceil(renderWidth * scale);
+        player.scale = layoutPlayerScale * userScale;
+        transformPending = false;
 
         const c = player.coord;
         c[0] = baseCoord[0] + userOffsetX;
@@ -519,24 +527,21 @@ async function run(width, height, zipUrl, reactionConfig) {
             }
             const mouseOffsetX = ev.clientX - eyePosition.clientX;
             const mouseOffsetY = ev.clientY - eyePosition.clientY;
-            const angle = Math.atan2(mouseOffsetY, mouseOffsetX);
-            const len = Math.sqrt(mouseOffsetX ** 2 + mouseOffsetY ** 2);
-            const c = Math.cos(angle);
-            const s = Math.sin(angle);
+            const distanceSquared = mouseOffsetX ** 2 + mouseOffsetY ** 2;
 
-            player.setVariableDiff('eyetrack', 'face_eye_LR', len / 3 * c, 500, -1);
-            player.setVariableDiff('eyetrack', 'face_eye_UD', len / 3 * s, 500, -1);
+            player.setVariableDiff('eyetrack', 'face_eye_LR', mouseOffsetX / 3, 500, -1);
+            player.setVariableDiff('eyetrack', 'face_eye_UD', mouseOffsetY / 3, 500, -1);
 
-            if (len > 60) {
-                player.setVariableDiff('eyetrack', 'head_slant', len / 12 * c, 1000, -1);
-                player.setVariableDiff('eyetrack', 'head_LR', len / 6 * c, 1000, -1);
-                player.setVariableDiff('eyetrack', 'head_UD', len / 6 * s, 1000, -1);
+            if (distanceSquared > 60 * 60) {
+                player.setVariableDiff('eyetrack', 'head_slant', mouseOffsetX / 12, 1000, -1);
+                player.setVariableDiff('eyetrack', 'head_LR', mouseOffsetX / 6, 1000, -1);
+                player.setVariableDiff('eyetrack', 'head_UD', mouseOffsetY / 6, 1000, -1);
             }
 
-            if (len > 120) {
-                player.setVariableDiff('eyetrack', 'body_slant', len / 18 * c, 2000, -1);
-                player.setVariableDiff('eyetrack', 'body_LR', len / 9 * c, 2000, -1);
-                player.setVariableDiff('eyetrack', 'body_UD', len / 9 * s, 2000, -1);
+            if (distanceSquared > 120 * 120) {
+                player.setVariableDiff('eyetrack', 'body_slant', mouseOffsetX / 18, 2000, -1);
+                player.setVariableDiff('eyetrack', 'body_LR', mouseOffsetX / 9, 2000, -1);
+                player.setVariableDiff('eyetrack', 'body_UD', mouseOffsetY / 9, 2000, -1);
             }
         };
 
@@ -548,29 +553,22 @@ async function run(width, height, zipUrl, reactionConfig) {
         const SHADOW_TRANSITION_MS = 1000;
         let lastMouseX = null, lastMouseY = null;
         let leaveX = null, leaveY = null;
-        let shadowRAF = null;
+        let pendingGaze = null;
         let shadowState = null;
-        const runShadowStep = () => {
-            const t = Math.min(1, (performance.now() - shadowState.startTime) / SHADOW_TRANSITION_MS);
+        const runShadowStep = (now) => {
+            const t = Math.max(0, Math.min(1, (now - shadowState.startTime) / SHADOW_TRANSITION_MS));
             const e = 1 - Math.pow(1 - t, 3);
             const sx = shadowState.fromX + (shadowState.toX - shadowState.fromX) * e;
             const sy = shadowState.fromY + (shadowState.toY - shadowState.fromY) * e;
             shadowState.curX = sx;
             shadowState.curY = sy;
             eyetracking_reaction({ clientX: sx, clientY: sy });
-            if (t < 1) {
-                shadowRAF = requestAnimationFrame(runShadowStep);
-            } else {
-                shadowRAF = null;
-                shadowState = null;
-            }
+            if (t >= 1) shadowState = null;
         };
         canvas.addEventListener('mouseleave', () => {
             if (shadowState) {
                 leaveX = shadowState.curX;
                 leaveY = shadowState.curY;
-                cancelAnimationFrame(shadowRAF);
-                shadowRAF = null;
                 shadowState = null;
             } else if (lastMouseX !== null) {
                 leaveX = lastMouseX;
@@ -589,8 +587,7 @@ async function run(width, height, zipUrl, reactionConfig) {
             };
             leaveX = null;
             leaveY = null;
-            if (shadowRAF) cancelAnimationFrame(shadowRAF);
-            shadowRAF = requestAnimationFrame(runShadowStep);
+            pendingGaze = null;
         });
         canvas.onmousemove = (ev) => {
             lastMouseX = ev.clientX;
@@ -600,10 +597,11 @@ async function run(width, height, zipUrl, reactionConfig) {
                 shadowState.toY = ev.clientY;
                 return;
             }
-            eyetracking_reaction(ev);
+            pendingGaze = { clientX: ev.clientX, clientY: ev.clientY };
         };
         canvas.addEventListener('touchmove', (ev) => {
-            eyetracking_reaction(ev.touches[0]);
+            shadowState = null;
+            pendingGaze = { clientX: ev.touches[0].clientX, clientY: ev.touches[0].clientY };
             ev.preventDefault();
         }, false);
 
@@ -613,16 +611,18 @@ async function run(width, height, zipUrl, reactionConfig) {
                 return;
             }
 
-            const bustPosition = player.getMarkerPosition('bust');
-            const eyePosition = player.getMarkerPosition('eye');
-            const headPositionAX = player.getMarkerPosition('headAX');
-            const headPositionAY = player.getMarkerPosition('headAY');
-            const headPositionBX = player.getMarkerPosition('headBX');
-            const headPositionBY = player.getMarkerPosition('headBY');
-            const pantPositionAX = player.getMarkerPosition('pantAX');
-            const pantPositionAY = player.getMarkerPosition('pantAY');
-            const pantPositionBX = player.getMarkerPosition('pantBX');
-            const pantPositionBY = player.getMarkerPosition('pantBY');
+            flushUserTransform();
+            const canvasRect = canvas.getBoundingClientRect();
+            const bustPosition = player.getMarkerPosition('bust', canvasRect);
+            const eyePosition = player.getMarkerPosition('eye', canvasRect);
+            const headPositionAX = player.getMarkerPosition('headAX', canvasRect);
+            const headPositionAY = player.getMarkerPosition('headAY', canvasRect);
+            const headPositionBX = player.getMarkerPosition('headBX', canvasRect);
+            const headPositionBY = player.getMarkerPosition('headBY', canvasRect);
+            const pantPositionAX = player.getMarkerPosition('pantAX', canvasRect);
+            const pantPositionAY = player.getMarkerPosition('pantAY', canvasRect);
+            const pantPositionBX = player.getMarkerPosition('pantBX', canvasRect);
+            const pantPositionBY = player.getMarkerPosition('pantBY', canvasRect);
 
             if (!bustPosition || !eyePosition || !headPositionAX || !headPositionAY || !headPositionBX || !headPositionBY || !pantPositionAX || !pantPositionAY || !pantPositionBX || !pantPositionBY) {
                 return;
@@ -671,23 +671,26 @@ async function run(width, height, zipUrl, reactionConfig) {
 
         const dragState = { active: false, moved: false, startX: 0, startY: 0 };
 
-        function modelUnitsPerScreenPixel() {
-            const rect = canvas.getBoundingClientRect();
-            if (!rect || rect.width <= 0) return 1;
-            return canvas.width / rect.width;
+        function flushUserTransform() {
+            if (!transformPending) return;
+            transformPending = false;
+            player.scale = layoutPlayerScale * userScale;
+            player.coord = [baseCoord[0] + userOffsetX, baseCoord[1] - 40 / layoutScale + userOffsetY];
         }
 
-        function applyUserTransform() {
-            const displaySize = getDisplaySize();
-            const scale = Math.max(
-                displaySize.viewportWidth / canvas.width,
-                displaySize.viewportHeight / canvas.height
-            );
-            const c = player.coord;
-            c[0] = baseCoord[0] + userOffsetX;
-            c[1] = baseCoord[1] - 40 / scale + userOffsetY;
-            player.coord = c;
-        }
+        // Consume the latest input once per rendered frame, including at 30 FPS.
+        // Idle frames do no gaze work; the one-second return transition shares
+        // the renderer's clock instead of running a second animation loop.
+        player.onUpdate = (timeStamp) => {
+            flushUserTransform();
+            if (shadowState) {
+                runShadowStep(timeStamp);
+            } else if (pendingGaze) {
+                const gaze = pendingGaze;
+                pendingGaze = null;
+                eyetracking_reaction(gaze);
+            }
+        };
 
         canvas.addEventListener('mousedown', (ev) => {
             if (ev.button !== 0) return;         // 仅响应左键
@@ -706,15 +709,18 @@ async function run(width, height, zipUrl, reactionConfig) {
                 dragState.moved = true;
             }
             if (!dragState.moved) return;
-            const mp = modelUnitsPerScreenPixel();
+            const mp = modelPixelRatio;
             userOffsetX += dx * mp;
             userOffsetY += dy * mp;
             dragState.startX = ev.clientX;
             dragState.startY = ev.clientY;
-            applyUserTransform();
+            transformPending = true;
         });
 
-        const endDrag = () => { dragState.active = false; };
+        const endDrag = () => {
+            dragState.active = false;
+            flushUserTransform();
+        };
         window.addEventListener('mouseup', endDrag);
         window.addEventListener('blur', endDrag);
 
@@ -723,7 +729,7 @@ async function run(width, height, zipUrl, reactionConfig) {
             ev.preventDefault();
             const factor = Math.exp(-ev.deltaY * 0.0012);
             userScale = Math.max(0.25, Math.min(5, userScale * factor));
-            applyResponsivePlayerLayout();
+            transformPending = true;
         }, { passive: false });
 
         // 重设角色位置/大小：把被拖到屏外找不到的角色拉回默认位置（设置里“重设角色位置”按钮触发）
