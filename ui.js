@@ -108,6 +108,23 @@
     opts = opts || {};
     var dragging = false, moved = false;
     var startX = 0, startY = 0, origX = 0, origY = 0;
+    var moveFrame = null, pendingMove = null;
+
+    function applyMove() {
+      moveFrame = null;
+      if (!pendingMove) return;
+      var point = pendingMove;
+      pendingMove = null;
+      var vw = window.innerWidth || document.documentElement.clientWidth;
+      var vh = window.innerHeight || document.documentElement.clientHeight;
+      var w = target.offsetWidth;
+      var h = target.offsetHeight;
+      var nx = Math.max(0, Math.min(vw - w, origX + point.dx));
+      var ny = Math.max(0, Math.min(vh - h, origY + point.dy));
+      target.style.left = nx + 'px';
+      target.style.top = ny + 'px';
+      target.style.right = 'auto';
+    }
 
     handle.addEventListener('pointerdown', function (e) {
       if (e.button !== undefined && e.button !== 0) return;
@@ -131,19 +148,14 @@
       var dy = e.clientY - startY;
       if (!moved && Math.abs(dx) + Math.abs(dy) > 3) moved = true;
       if (!moved) return;
-      var vw = window.innerWidth || document.documentElement.clientWidth;
-      var vh = window.innerHeight || document.documentElement.clientHeight;
-      var w = target.offsetWidth;
-      var h = target.offsetHeight;
-      var nx = Math.max(0, Math.min(vw - w, origX + dx));
-      var ny = Math.max(0, Math.min(vh - h, origY + dy));
-      target.style.left = nx + 'px';
-      target.style.top = ny + 'px';
-      target.style.right = 'auto';
+      pendingMove = { dx: dx, dy: dy };
+      if (moveFrame === null) moveFrame = requestAnimationFrame(applyMove);
     });
 
     function end() {
       if (!dragging) return;
+      if (moveFrame !== null) cancelAnimationFrame(moveFrame);
+      applyMove();
       dragging = false;
       target.classList.remove('dragging');
       if (moved && key) {
@@ -153,6 +165,8 @@
     }
     handle.addEventListener('pointerup', end);
     handle.addEventListener('pointercancel', end);
+    handle.addEventListener('lostpointercapture', end);
+    window.addEventListener('blur', end);
 
     return { wasMoved: function () { return moved; } };
   }
@@ -341,7 +355,7 @@
       row.addEventListener('click', function (e) {
         e.stopPropagation();
         NekoUI.setFps(o.value);
-        dd.querySelectorAll('.opt').forEach(function (r) {
+        dd.querySelectorAll('.opt[data-fps]').forEach(function (r) {
           r.classList.toggle('selected', parseInt(r.dataset.fps, 10) === o.value);
         });
       });
@@ -459,7 +473,9 @@
     initToggleIcon(icon, topbar);
 
     // 窗口尺寸变化时，重新校准已展开抽屉的高度
-    window.addEventListener('resize', function () {
+    var resizeFrame = null;
+    function updateViewport() {
+      resizeFrame = null;
       document.querySelectorAll('#topbar .menu-item.open > .dropdown').forEach(function (dd) {
         dd.style.maxHeight = dd.scrollHeight + 'px';
       });
@@ -470,6 +486,9 @@
       if (topbar.classList.contains('open')) {
         clampToViewport(topbar, 8);
       }
+    }
+    window.addEventListener('resize', function () {
+      if (resizeFrame === null) resizeFrame = requestAnimationFrame(updateViewport);
     });
 
     // 静态版有 i18n：注入设置项后补一次翻译

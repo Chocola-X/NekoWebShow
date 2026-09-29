@@ -182,6 +182,8 @@ class EmoteDevice
     initMembers() {
         this.playerList = [];
         this.animating = false;
+        this.animationCallback = this.drawAnimation.bind(this);
+        this.requestId = null;
         this.date = new Date();
         return true;
     }
@@ -234,8 +236,14 @@ class EmoteDevice
         if (canvas == null)
             return;
         if (! this.playerList.some(player => player.canvas == canvas)) {
-            const ctx = canvas.getContext("2d");
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            if (canvas === this.renderCanvas) {
+                this.gl.bindFramebuffer(this.gl.FRAMEBUFFER, null);
+                this.gl.clearColor(0, 0, 0, 0);
+                this.gl.clear(this.gl.COLOR_BUFFER_BIT);
+            } else {
+                const ctx = canvas.getContext("2d");
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+            }
         }
     }
 
@@ -244,31 +252,43 @@ class EmoteDevice
             && ! this.checkAnimationRequired()) {
             this.animating = false;
             cancelAnimationFrame(this.requestId);
+            this.requestId = null;
         }
         else if (! this.animating
                  && this.checkAnimationRequired()) {
             this.animating = true;
             this.lastAnimationTime = null;
-            this.lastFrameTime = null;
-            this.requestId = requestAnimationFrame(this.drawAnimation.bind(this));
+            this.nextFrameTime = null;
+            this.activeFpsLimit = null;
+            this.requestId = requestAnimationFrame(this.animationCallback);
         }                
     }
 
     drawAnimation(timeStamp) {
-        // FPS cap: skip this rAF tick and reschedule when not yet due.
+        this.requestId = null;
+        if (!this.animating)
+            return;
+
+        // Keep one rAF chain. A timer followed by rAF can miss the next refresh.
+        // Advance the deadline from its previous value to preserve fractional
+        // intervals (e.g. 60 FPS on a 144 Hz display), without catch-up renders.
         const fpsLimit = EmotePlayer.fpsLimit || 0;
+        if (fpsLimit !== this.activeFpsLimit) {
+            this.activeFpsLimit = fpsLimit;
+            this.nextFrameTime = null;
+        }
         if (fpsLimit > 0) {
             const minInterval = 1000 / fpsLimit;
-            if (this.lastFrameTime !== null && this.lastFrameTime !== undefined) {
-                const elapsed = timeStamp - this.lastFrameTime;
-                if (elapsed < minInterval) {
-                    setTimeout(() => {
-                        this.requestId = requestAnimationFrame(this.drawAnimation.bind(this));
-                    }, minInterval - elapsed);
-                    return;
-                }
+            // Allow for timestamp rounding and small refresh-clock variations.
+            const tolerance = Math.min(1, minInterval / 4);
+            if (this.nextFrameTime === null)
+                this.nextFrameTime = timeStamp;
+            if (timeStamp + tolerance < this.nextFrameTime) {
+                this.requestId = requestAnimationFrame(this.animationCallback);
+                return;
             }
-            this.lastFrameTime = timeStamp;
+            const intervals = Math.floor((timeStamp + tolerance - this.nextFrameTime) / minInterval) + 1;
+            this.nextFrameTime += intervals * minInterval;
         }
         if (this.lastAnimationTime === null)
             this.lastAnimationTime = timeStamp;
@@ -289,7 +309,9 @@ class EmoteDevice
         }
 
         const endScene = (canvas) => {
-            if (canvas == null)
+            // A visible WebGL canvas is already presented by the browser.
+            // Keep the copy path for callers using a separate 2D canvas.
+            if (canvas == null || canvas === this.renderCanvas)
                 return;
             let ctx = canvas.getContext("2d");
             ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -309,19 +331,20 @@ class EmoteDevice
                 beginScene(canvas);
             }
 
-            player.onUpdate();
-            if (! player.stepUpdate
-                && player.convolveCanvasMovementToPhysics) {
+            player.onUpdate(timeStamp);
+            if (player.convolveCanvasMovementToPhysics) {
                 const curCanvasPosition = player.canvasPosition;
-                const prevCanvasPosition = player.prevCanvasPosition;
-                const scale = player.getState("scale");
-                const vec = [ (curCanvasPosition.left - prevCanvasPosition.left) / scale * frameCount,
-                              (curCanvasPosition.top - prevCanvasPosition.top) / scale * frameCount ];
-                EmotePlayer_SetOuterForce(player.playerId, "bust", vec[0], vec[1], 0, 0);
-                EmotePlayer_SetOuterForce(player.playerId, "parts", vec[0], vec[1], 0, 0);
-                EmotePlayer_SetOuterForce(player.playerId, "hair", vec[0], vec[1], 0, 0);
+                if (!player.stepUpdate) {
+                    const prevCanvasPosition = player.prevCanvasPosition;
+                    const scale = player.getState("scale");
+                    const vec = [ (curCanvasPosition.left - prevCanvasPosition.left) / scale * frameCount,
+                                  (curCanvasPosition.top - prevCanvasPosition.top) / scale * frameCount ];
+                    EmotePlayer_SetOuterForce(player.playerId, "bust", vec[0], vec[1], 0, 0);
+                    EmotePlayer_SetOuterForce(player.playerId, "parts", vec[0], vec[1], 0, 0);
+                    EmotePlayer_SetOuterForce(player.playerId, "hair", vec[0], vec[1], 0, 0);
+                }
+                player.prevCanvasPosition = curCanvasPosition;
             }
-            player.prevCanvasPosition = player.canvasPosition;
             if (player.stepUpdate) {
                 if (player.modified) {
                     EmotePlayer_Step(player.playerId);
@@ -379,7 +402,8 @@ class EmoteDevice
 
         endScene(canvas);
         
-        this.requestId = requestAnimationFrame(this.drawAnimation.bind(this));
+        if (this.animating)
+            this.requestId = requestAnimationFrame(this.animationCallback);
     }
 };
 
@@ -689,7 +713,7 @@ class EmotePlayer
         return EmotePlayer_GetState(this.playerId, label);
     }
 
-    getMarkerPosition(marker) {
+    getMarkerPosition(marker, canvasRect = null) {
         if (! this.initialized
             || this.canvas == null)
             return null;
@@ -707,7 +731,7 @@ class EmotePlayer
             markerCoord = [ markerX * c * _scale + markerY * -s * _scale + _x,
                             markerX * s * _scale + markerY *  c * _scale + _y ];
         }
-        const rect = this.canvas.getBoundingClientRect();
+        const rect = canvasRect || this.canvas.getBoundingClientRect();
         const canvasWidth = this.canvas.width || rect.width;
         const canvasHeight = this.canvas.height || rect.height;
         const w = canvasWidth / 2;
@@ -878,6 +902,8 @@ class EmotePlayer
         if (val == this._convolveCanvasMovementToPhysics)
             return;
         this._convolveCanvasMovementToPhysics = val;
+        if (this.initialized && val)
+            this.prevCanvasPosition = this.canvasPosition;
         if (this.initialized
             && ! val) {
             EmotePlayer_SetOuterForce(this.playerId, "bust", 0, 0, 0, 0);
