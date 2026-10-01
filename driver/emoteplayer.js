@@ -418,7 +418,10 @@ class EmotePlayer
     }
 
     destroy() {
-        unloadData();
+        if (this.destroyed) return;
+        this.destroyed = true;
+        this.onUpdate = () => {};
+        this.unloadData();
         EmotePlayer.releaseDevice();
     }
 
@@ -1289,13 +1292,14 @@ EmotePlayer.createRenderCanvas = (width, height) => {
 }
 
 EmotePlayer.requireDevice = () => {
-    if (EmotePlayer.deviceRefCount++ <= 0)
+    if (!EmotePlayer.device)
         EmotePlayer.device = new EmoteDevice();
+    EmotePlayer.deviceRefCount++;
 };
 
 EmotePlayer.releaseDevice = () => {
-    if (--sEmotePlayer.deviceRefCount <= 0) {
-        EmotePlayer.device.destroy();
-        EmotePlayer.device = null;
-    }
+    // The native device is a singleton. Keep its canvas/context and render
+    // targets for the next model; unloadData releases each native player.
+    // An empty player list stops the animation loop.
+    EmotePlayer.deviceRefCount = Math.max(0, EmotePlayer.deviceRefCount - 1);
 };
