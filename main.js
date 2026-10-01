@@ -235,6 +235,7 @@ async function run(width, height, zipUrl, reactionConfig) {
         function driveMouthFromAnalyser(analyser) {
             const data = new Uint8Array(analyser.fftSize);
             let smoothed = 0;
+            const talkMax = player.variableList.find(v => v.label === 'face_talk')?.maxValue || 5;
 
             const update = () => {
                 analyser.getByteTimeDomainData(data);
@@ -244,7 +245,7 @@ async function run(width, height, zipUrl, reactionConfig) {
                     sum += centered * centered;
                 }
                 const rms = Math.sqrt(sum / data.length);
-                const talk = Math.min(10, Math.max(0, (rms - 0.015) * 75));
+                const talk = Math.min(talkMax, Math.max(0, (rms - 0.015) * 50));
                 smoothed = smoothed * 0.62 + talk * 0.38;
                 player.setVariableDiff('lipSync', 'face_talk', smoothed, 70, -1);
                 rafId = requestAnimationFrame(update);
@@ -255,6 +256,7 @@ async function run(width, height, zipUrl, reactionConfig) {
 
         function driveMouthFallback(durationMs) {
             const startedAt = performance.now();
+            const talkMax = player.variableList.find(v => v.label === 'face_talk')?.maxValue || 5;
             fallbackTimer = setInterval(() => {
                 const elapsed = performance.now() - startedAt;
                 if (elapsed > durationMs) {
@@ -263,7 +265,7 @@ async function run(width, height, zipUrl, reactionConfig) {
                 }
                 const wave = Math.sin(elapsed / 55) * 0.5 + 0.5;
                 const jitter = Math.random() * 2;
-                player.setVariableDiff('lipSync', 'face_talk', Math.min(8, 2 + wave * 5 + jitter), 80, -1);
+                player.setVariableDiff('lipSync', 'face_talk', Math.min(talkMax, wave * 3 + jitter), 80, -1);
             }, 90);
         }
 
@@ -389,7 +391,8 @@ async function run(width, height, zipUrl, reactionConfig) {
                 .map(variable => {
                     const result = { ...variable };
                     if (phase === 'reaction' && config.audio && result.name === 'face_talk') {
-                        result.value = Math.min(result.value, 4);
+                        // The analyser supplies opening as a diff; a nonzero base leaves the mouth open in pauses.
+                        result.value = 0;
                         result.duration = Math.min(result.duration || 180, 220);
                     }
                     return result;
@@ -401,7 +404,7 @@ async function run(width, height, zipUrl, reactionConfig) {
                 variableLabels.includes('face_talk') &&
                 !variables.some(variable => variable.name === 'face_talk')
             ) {
-                variables.push({ name: 'face_talk', value: 2, duration: 160 });
+                variables.push({ name: 'face_talk', value: 0, duration: 120 });
             }
 
             return variables;
@@ -513,11 +516,24 @@ async function run(width, height, zipUrl, reactionConfig) {
             const startedAt = performance.now();
             const reaction = buildPlaybackConfig(selected.reaction, zone, 'reaction');
             const recovery = buildPlaybackConfig(selected.recovery, zone, 'recovery');
-            const audioPlaybackPromise = applyReactionConfig(reaction, { playAudio: true });
-            await waitForReaction(selected, reaction, audioPlaybackPromise, startedAt);
-            lipSync.stop();
-            applyReactionConfig(recovery, { playAudio: false });
-            await sleep(180);
+            const timers = [];
+            try {
+                const audioPlaybackPromise = applyReactionConfig(reaction, { playAudio: true });
+                // Start the mid-line changes only once fetching/decoding has finished.
+                await audioPlaybackPromise;
+                for (const beat of selected.beats || []) {
+                    if (!Number.isFinite(beat.at) || beat.at < 0 || beat.at >= selected.duration) continue;
+                    timers.push(setTimeout(() => {
+                        applyReactionConfig(buildPlaybackConfig(beat, zone, 'beat'), { playAudio: false });
+                    }, beat.at));
+                }
+                await waitForReaction(selected, reaction, audioPlaybackPromise, startedAt);
+            } finally {
+                timers.forEach(clearTimeout);
+                lipSync.stop();
+                applyReactionConfig(recovery, { playAudio: false });
+            }
+            await sleep(selected.recoveryDuration ?? 180);
         }
 
         const eyetracking_reaction = (ev) => {
