@@ -1,6 +1,6 @@
 // 语音情绪为转写与声学特征辅助的设计推定；逐条依据见 voice-analysis.json。
 // [声音, 触发部位, 实测毫秒, 主表情, 叠加动作, 配布意图, 可选的中途变化]
-function getConfig() {
+window.NekoConfigs["kovanilla"] = function () {
     return NekoReactions.create("kovanilla", "小香草：安静观察；胸部触摸含蓄克制，下身触摸冷静质疑、保持距离。", [
         ["h01", "head face", 1024, "平常", "疑問", "轻叫，安静观察"],
         ["h02", "head face", 517, "喜ぶ01", "うん", "小声回应，点一下头"],

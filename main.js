@@ -3,7 +3,9 @@
 // 且缺少干净的设备重建路径），因此预设一个下限，给“放大”留出清晰度余量。按需调大（如 2160）更清晰，但 GPU/显存占用更高。
 const RENDER_MIN_HEIGHT = 1440;
 
-function start(zipUrl) {
+let activeCharacterSession = null;
+
+function start(zipUrl, reactionConfig) {
     const canvas = document.getElementById('canvas');
     // 加载阶段先铺满整个窗口作为占位，避免默认样式在两侧留白
     canvas.style.position = 'fixed';
@@ -15,7 +17,7 @@ function start(zipUrl) {
 
     const displaySize = getDisplaySize();
     const renderSize = getRenderSize(displaySize);
-    run(renderSize.width, renderSize.height, zipUrl, getConfig());
+    return run(renderSize.width, renderSize.height, zipUrl, reactionConfig);
 }
 
 function getViewportSize() {
@@ -106,14 +108,43 @@ async function run(width, height, zipUrl, reactionConfig) {
     // Render directly to the visible canvas. Set its size before creating the
     // WebGL device: resizing afterwards would reset the drawing buffer/state.
     const canvas = document.getElementById('canvas');
-    canvas.width = width;
-    canvas.height = height;
+    activeCharacterSession?.dispose();
+    // Never resize the initialized WebGL drawing buffer during a model switch.
+    if (!EmotePlayer.device) {
+        canvas.width = width;
+        canvas.height = height;
+    }
     EmotePlayer.setRenderCanvas(canvas);
     // 应用用户在“设置”里选择的帧率限制（默认 60，可设无上限）
     if (window.NekoUI && typeof window.NekoUI.applyFps === 'function') {
         window.NekoUI.applyFps();
     }
     const player = new EmotePlayer(canvas);
+    const controller = new AbortController();
+    const { signal } = controller;
+    const timers = new Map();
+    const listen = (target, type, callback, options = {}) => target.addEventListener(
+        type, callback, { ...(typeof options === 'boolean' ? { capture: options } : options), signal });
+    const later = (callback, ms, onCancel = () => {}) => {
+        const id = window.setTimeout(() => {
+            timers.delete(id);
+            if (!signal.aborted) callback();
+        }, ms);
+        timers.set(id, onCancel);
+        return id;
+    };
+    const cancelLater = id => { window.clearTimeout(id); timers.delete(id); };
+    const session = { dispose() {
+        if (signal.aborted) return;
+        controller.abort();
+        for (const [id, resolve] of timers) { window.clearTimeout(id); resolve(); }
+        timers.clear();
+        if (resizeFrame !== null) cancelAnimationFrame(resizeFrame);
+        lipSync.dispose();
+        canvas.onclick = canvas.onmousemove = null;
+        player.destroy();
+    }};
+    activeCharacterSession = session;
     const baseCoord = player.coord.slice();
 
     // 用户自定义偏移（解锁后拖动）与缩放倍率（鼠标滚轮），在响应式布局之上叠加
@@ -159,7 +190,7 @@ async function run(width, height, zipUrl, reactionConfig) {
     player.diffTimelineSlot4 = '差分用_waiting_loop';
 
     let resizeFrame = null;
-    window.addEventListener('resize', () => {
+    listen(window, 'resize', () => {
         if (resizeFrame !== null) {
             cancelAnimationFrame(resizeFrame);
         }
@@ -169,7 +200,7 @@ async function run(width, height, zipUrl, reactionConfig) {
         });
     });
 
-    const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+    const sleep = (ms) => signal.aborted ? Promise.resolve() : new Promise(resolve => later(resolve, ms, resolve));
     const hasOwn = (obj, key) => Object.prototype.hasOwnProperty.call(obj, key);
 
     function pickSupported(labels, supportedLabels) {
@@ -187,6 +218,7 @@ async function run(width, height, zipUrl, reactionConfig) {
         let rafId = null;
         let activeSource = null;
         let fallbackTimer = null;
+        let fallbackAudio = null;
 
         function stop() {
             if (rafId !== null) {
@@ -205,7 +237,8 @@ async function run(width, height, zipUrl, reactionConfig) {
                 }
                 activeSource = null;
             }
-            player.setVariableDiff('lipSync', 'face_talk', 0, 120, -1);
+            if (fallbackAudio) { fallbackAudio.pause(); fallbackAudio.removeAttribute('src'); fallbackAudio.load(); fallbackAudio = null; }
+            if (!signal.aborted) player.setVariableDiff('lipSync', 'face_talk', 0, 120, -1);
         }
 
         async function getDecodedAudio(url) {
@@ -222,12 +255,13 @@ async function run(width, height, zipUrl, reactionConfig) {
                 return decodedAudioCache.get(url);
             }
 
-            const response = await fetch(url);
+            const response = await fetch(url, { signal });
             if (!response.ok) {
                 throw new Error(`Failed to load audio ${url}`);
             }
             const buffer = await response.arrayBuffer();
             const decoded = await audioContext.decodeAudioData(buffer.slice(0));
+            signal.throwIfAborted();
             decodedAudioCache.set(url, decoded);
             return decoded;
         }
@@ -281,22 +315,27 @@ async function run(width, height, zipUrl, reactionConfig) {
 
             if (!AudioContextClass) {
                 const audio = new Audio(url);
+                fallbackAudio = audio;
                 const metadataLoaded = new Promise(resolve => {
                     audio.addEventListener('loadedmetadata', resolve, { once: true });
                     audio.addEventListener('error', resolve, { once: true });
+                    signal.addEventListener('abort', resolve, { once: true });
                 });
                 await metadataLoaded;
+                signal.throwIfAborted();
                 const durationMs = Number.isFinite(audio.duration) ? audio.duration * 1000 : 1200;
                 driveMouthFallback(durationMs);
                 const ended = new Promise(resolve => {
                     audio.addEventListener('ended', resolve, { once: true });
                     audio.addEventListener('error', resolve, { once: true });
+                    signal.addEventListener('abort', resolve, { once: true });
                 }).finally(stop);
                 audio.play().catch(error => console.error('Audio playback error:', error));
                 return { durationMs, ended, startedAt: performance.now() };
             }
 
             const decoded = await getDecodedAudio(url);
+            signal.throwIfAborted();
             const source = audioContext.createBufferSource();
             const analyser = audioContext.createAnalyser();
             analyser.fftSize = 512;
@@ -314,7 +353,11 @@ async function run(width, height, zipUrl, reactionConfig) {
             return { durationMs: decoded.duration * 1000, ended, startedAt: performance.now() };
         }
 
-        return { play, stop };
+        return { play, stop, dispose() {
+            stop();
+            decodedAudioCache.clear();
+            if (audioContext) audioContext.close().catch(() => {});
+        }};
     }
 
     const lipSync = createLipSync();
@@ -325,19 +368,23 @@ async function run(width, height, zipUrl, reactionConfig) {
         let modelData = null;
 
         try {
-            const resp = await fetch(zipUrl);
+            const resp = await fetch(zipUrl, { signal });
             if (!resp.ok) {
                 throw new Error(`Failed to load ${zipUrl}`);
             }
             zipData = new Uint8Array(await resp.arrayBuffer());
+            signal.throwIfAborted();
             files = await new Promise((resolve, reject) => {
-                fflate.unzip(zipData, (err, unzipped) => {
+                const abort = () => { terminate(); reject(signal.reason); };
+                const terminate = fflate.unzip(zipData, (err, unzipped) => {
+                    signal.removeEventListener('abort', abort);
                     if (err) {
                         reject(err);
                     } else {
                         resolve(unzipped);
                     }
                 });
+                signal.addEventListener('abort', abort, { once: true });
             });
 
             zipData = null;
@@ -350,6 +397,7 @@ async function run(width, height, zipUrl, reactionConfig) {
             modelData = files[binFileName];
             files = null;
 
+            signal.throwIfAborted();
             player.loadData(modelData);
         } finally {
             modelData = null;
@@ -357,10 +405,6 @@ async function run(width, height, zipUrl, reactionConfig) {
             zipData = null;
         }
 
-        document.getElementById('loading').innerHTML = 'Done!';
-        setTimeout(() => {
-            document.getElementById('loading').style.visibility = 'hidden';
-        }, 1000);
 
         const mainTimelineLabels = player.mainTimelineLabels;
         const diffTimelineLabels = player.diffTimelineLabels;
@@ -463,6 +507,7 @@ async function run(width, height, zipUrl, reactionConfig) {
         }
 
         function applyReactionConfig(config, options = {}) {
+            if (signal.aborted) return Promise.resolve({ durationMs: 0 });
             const playAudio = options.playAudio !== false;
             if (hasOwn(config, 'mainTimelineLabel')) {
                 player.mainTimelineLabel = config.mainTimelineLabel || '';
@@ -521,15 +566,16 @@ async function run(width, height, zipUrl, reactionConfig) {
                 const audioPlaybackPromise = applyReactionConfig(reaction, { playAudio: true });
                 // Start the mid-line changes only once fetching/decoding has finished.
                 await audioPlaybackPromise;
+                if (signal.aborted) return;
                 for (const beat of selected.beats || []) {
                     if (!Number.isFinite(beat.at) || beat.at < 0 || beat.at >= selected.duration) continue;
-                    timers.push(setTimeout(() => {
+                    timers.push(later(() => {
                         applyReactionConfig(buildPlaybackConfig(beat, zone, 'beat'), { playAudio: false });
                     }, beat.at));
                 }
                 await waitForReaction(selected, reaction, audioPlaybackPromise, startedAt);
             } finally {
-                timers.forEach(clearTimeout);
+                timers.forEach(cancelLater);
                 lipSync.stop();
                 applyReactionConfig(recovery, { playAudio: false });
             }
@@ -581,7 +627,7 @@ async function run(width, height, zipUrl, reactionConfig) {
             eyetracking_reaction({ clientX: sx, clientY: sy });
             if (t >= 1) shadowState = null;
         };
-        canvas.addEventListener('mouseleave', () => {
+        listen(canvas, 'mouseleave', () => {
             if (shadowState) {
                 leaveX = shadowState.curX;
                 leaveY = shadowState.curY;
@@ -591,7 +637,7 @@ async function run(width, height, zipUrl, reactionConfig) {
                 leaveY = lastMouseY;
             }
         });
-        canvas.addEventListener('mouseenter', (ev) => {
+        listen(canvas, 'mouseenter', (ev) => {
             if (leaveX === null) {
                 return;
             }
@@ -615,7 +661,7 @@ async function run(width, height, zipUrl, reactionConfig) {
             }
             pendingGaze = { clientX: ev.clientX, clientY: ev.clientY };
         };
-        canvas.addEventListener('touchmove', (ev) => {
+        listen(canvas, 'touchmove', (ev) => {
             shadowState = null;
             pendingGaze = { clientX: ev.touches[0].clientX, clientY: ev.touches[0].clientY };
             ev.preventDefault();
@@ -662,7 +708,7 @@ async function run(width, height, zipUrl, reactionConfig) {
                 touching = true;
                 const selected = reactions[Math.floor(Math.random() * reactions.length)];
                 playSelectedReaction(selected, zone)
-                    .catch(error => console.error('Touch reaction error:', error))
+                    .catch(error => { if (!signal.aborted) console.error('Touch reaction error:', error); })
                     .finally(() => {
                         touching = false;
                     });
@@ -708,7 +754,7 @@ async function run(width, height, zipUrl, reactionConfig) {
             }
         };
 
-        canvas.addEventListener('mousedown', (ev) => {
+        listen(canvas, 'mousedown', (ev) => {
             if (ev.button !== 0) return;         // 仅响应左键
             dragState.moved = false;
             if (isLocked()) return;              // 锁定后禁止拖动
@@ -717,7 +763,7 @@ async function run(width, height, zipUrl, reactionConfig) {
             dragState.startY = ev.clientY;
         });
 
-        window.addEventListener('mousemove', (ev) => {
+        listen(window, 'mousemove', (ev) => {
             if (!dragState.active) return;
             const dx = ev.clientX - dragState.startX;
             const dy = ev.clientY - dragState.startY;
@@ -737,10 +783,10 @@ async function run(width, height, zipUrl, reactionConfig) {
             dragState.active = false;
             flushUserTransform();
         };
-        window.addEventListener('mouseup', endDrag);
-        window.addEventListener('blur', endDrag);
+        listen(window, 'mouseup', endDrag);
+        listen(window, 'blur', endDrag);
 
-        canvas.addEventListener('wheel', (ev) => {
+        listen(canvas, 'wheel', (ev) => {
             if (isLocked()) return;              // 锁定后禁止缩放
             ev.preventDefault();
             const factor = Math.exp(-ev.deltaY * 0.0012);
@@ -749,7 +795,7 @@ async function run(width, height, zipUrl, reactionConfig) {
         }, { passive: false });
 
         // 重设角色位置/大小：把被拖到屏外找不到的角色拉回默认位置（设置里“重设角色位置”按钮触发）
-        document.addEventListener('neko:reset-character', () => {
+        listen(document, 'neko:reset-character', () => {
             userOffsetX = 0;
             userOffsetY = 0;
             userScale = 1;
@@ -763,15 +809,15 @@ async function run(width, height, zipUrl, reactionConfig) {
             }
             touch_reaction(ev);
         };
-        canvas.addEventListener('touchstart', (ev) => {
+        listen(canvas, 'touchstart', (ev) => {
             touch_reaction(ev.touches[0]);
             ev.preventDefault();
         }, false);
-        canvas.addEventListener('touchend', (ev) => {
+        listen(canvas, 'touchend', (ev) => {
             ev.preventDefault();
         }, false);
     } catch (error) {
-        console.error('Failed to load or decompress model:', error);
-        document.getElementById('loading').innerHTML = 'Error!';
+        session.dispose();
+        throw error;
     }
 }

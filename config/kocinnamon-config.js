@@ -1,6 +1,6 @@
 // 语音情绪为转写与声学特征辅助的设计推定；逐条依据见 voice-analysis.json。
 // [声音, 触发部位, 实测毫秒, 主表情, 叠加动作, 配布意图, 可选的中途变化]
-function getConfig() {
+window.NekoConfigs["kocinnamon"] = function () {
     return NekoReactions.create("kocinnamon", "小桂：温和、慢半拍；胸部触摸柔和接受，下身触摸温和地摇头示意停止。", [
         ["h01", "head face", 385, "平常", "疑問", "很短的疑问声，侧头看"],
         ["h02", "head face", 1291, "喜ぶ01", "うん", "柔和长叫，轻轻点头", [775, "喜ぶ01", "にっこり"]],

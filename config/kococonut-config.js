@@ -1,6 +1,6 @@
 // 语音情绪为转写与声学特征辅助的设计推定；逐条依据见 voice-analysis.json。
 // [声音, 触发部位, 实测毫秒, 主表情, 叠加动作, 配布意图, 可选的中途变化]
-function getConfig() {
+window.NekoConfigs["kococonut"] = function () {
     return NekoReactions.create("kococonut", "小椰子：热心、笨拙；胸部触摸笨拙地开心，下身触摸明显慌张、努力抗议。", [
         ["h01", "head face", 1472, "喜ぶ00", "うん", "长叫，认真回应", [883, "喜ぶ01", "うん"]],
         ["h02", "head face", 1718, "喜ぶ02", "うんうん", "更长的叫声，开心点头", [1031, "喜ぶ01", "うん"]],

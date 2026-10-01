@@ -1,6 +1,6 @@
 // 语音情绪为转写与声学特征辅助的设计推定；逐条依据见 voice-analysis.json。
 // [声音, 触发部位, 实测毫秒, 主表情, 叠加动作, 配布意图, 可选的中途变化]
-function getConfig() {
+window.NekoConfigs["koazuki"] = function () {
     return NekoReactions.create("koazuki", "小红豆：爱逞强、反应直接；胸部触摸嘴硬但藏不住开心，下身触摸直接抗议。", [
         ["h01", "head face", 886, "平常", "疑問", "低声回应，先看一眼"],
         ["h02", "head face", 929, "喜ぶ00", "うん", "短叫，爽快点头"],

@@ -1,6 +1,6 @@
 // 语音情绪为转写与声学特征辅助的设计推定；逐条依据见 voice-analysis.json。
 // [声音, 触发部位, 实测毫秒, 主表情, 叠加动作, 配布意图, 可选的中途变化]
-function getConfig() {
+window.NekoConfigs["coconut"] = function () {
     return NekoReactions.create("coconut", "热心但有些笨拙；惊讶较明显，随后确认对方的意思。", [
         ["h01", "head face", 1011, "喜ぶ00", "うん", "响亮回应，认真接受摸头"],
         ["h02", "head face", 1681, "喜ぶ02", "ごきげん", "长叫，开心地眯眼", [1009, "喜ぶ01", "にっこり"]],

@@ -1,6 +1,6 @@
 // 语音情绪为转写与声学特征辅助的设计推定；逐条依据见 voice-analysis.json。
 // [声音, 触发部位, 实测毫秒, 主表情, 叠加动作, 配布意图, 可选的中途变化]
-function getConfig() {
+window.NekoConfigs["milk"] = function () {
     return NekoReactions.create("milk", "好奇、活泼的幼年陪伴型；胸部触摸偏好奇开心，下身触摸以困惑退缩为主。", [
         ["h01", "head face", 1405, "平常", "疑問", "轻叫，好奇地看过来", [843, "喜ぶ00", "うん"]],
         ["h02", "head face", 2000, "喜ぶ00", "うん", "短声回应摸头", [1200, "喜ぶ00", ""]],

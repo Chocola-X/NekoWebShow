@@ -1,6 +1,6 @@
 // 语音情绪为转写与声学特征辅助的设计推定；逐条依据见 voice-analysis.json。
 // [声音, 触发部位, 实测毫秒, 主表情, 叠加动作, 配布意图, 可选的中途变化]
-function getConfig() {
+window.NekoConfigs["azuki"] = function () {
     return NekoReactions.create("azuki", "直率、爱逞强；先扬眉或抱怨，满意时才短暂露出笑容。", [
         ["h01", "head face", 926, "平常", "疑問", "短叫，扬眉看过来"],
         ["h02", "head face", 1333, "困る00", "いやいや2", "低鸣，嫌弃地晃一下头", [800, "平常", "疑問"]],

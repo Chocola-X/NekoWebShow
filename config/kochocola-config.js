@@ -1,6 +1,6 @@
 // 语音情绪为转写与声学特征辅助的设计推定；逐条依据见 voice-analysis.json。
 // [声音, 触发部位, 实测毫秒, 主表情, 叠加动作, 配布意图, 可选的中途变化]
-function getConfig() {
+window.NekoConfigs["kochocola"] = function () {
     return NekoReactions.create("kochocola", "小巧克力：外向、好奇；胸部触摸开心直接，下身触摸困惑但反应幅度较大。", [
         ["h01", "head face", 849, "喜ぶ00", "うんうん", "短叫，主动回应摸头"],
         ["h02", "head face", 1072, "楽しい00", "わくわく", "较响亮的叫声，期待继续玩"],

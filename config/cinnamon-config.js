@@ -1,6 +1,6 @@
 // 语音情绪为转写与声学特征辅助的设计推定；逐条依据见 voice-analysis.json。
 // [声音, 触发部位, 实测毫秒, 主表情, 叠加动作, 配布意图, 可选的中途变化]
-function getConfig() {
+window.NekoConfigs["cinnamon"] = function () {
     return NekoReactions.create("cinnamon", "随和、温柔，动作舒缓；用微笑、低头和轻轻点头表达情绪。", [
         ["h01", "head face", 792, "喜ぶ01", "にっこり", "轻声回应摸头"],
         ["h02", "head face", 1114, "喜ぶ00", "うん", "短叫，温柔地点头"],

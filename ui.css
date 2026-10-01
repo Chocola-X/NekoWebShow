@@ -339,3 +339,9 @@ body.char-unlocked #canvas:active {
   cursor: grabbing;
 }
 
+
+.dropdown a[aria-current="true"] {
+  background: #ffe2ed;
+  font-weight: bold;
+}
+#character-status { color: #9b364e; font-size: 13px; }
