@@ -3,6 +3,20 @@
 // 且缺少干净的设备重建路径），因此预设一个下限，给“放大”留出清晰度余量。按需调大（如 2160）更清晰，但 GPU/显存占用更高。
 const RENDER_MIN_HEIGHT = 1440;
 
+function isAllowedFetchUrl(targetUrl) {
+    try {
+        const parsed = new URL(targetUrl, window.location.href);
+        if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') {
+            return false;
+        }
+        const hostname = parsed.hostname.toLowerCase();
+        const privateHostPattern = /^(localhost|127\.|0\.|10\.|192\.168\.|169\.254\.|172\.(1[6-9]|2\d|3[0-1])\.|\[?::1\]?)$/;
+        return !privateHostPattern.test(hostname);
+    } catch (error) {
+        return false;
+    }
+}
+
 function start(zipUrl) {
     const canvas = document.getElementById('canvas');
     // 加载阶段先铺满整个窗口作为占位，避免默认样式在两侧留白
@@ -222,6 +236,9 @@ async function run(width, height, zipUrl, reactionConfig) {
                 return decodedAudioCache.get(url);
             }
 
+            if (!isAllowedFetchUrl(url)) {
+                throw new Error(`Blocked unsafe audio URL: ${url}`);
+            }
             const response = await fetch(url);
             if (!response.ok) {
                 throw new Error(`Failed to load audio ${url}`);
@@ -325,6 +342,9 @@ async function run(width, height, zipUrl, reactionConfig) {
         let modelData = null;
 
         try {
+            if (!isAllowedFetchUrl(zipUrl)) {
+                throw new Error(`Blocked unsafe zip URL: ${zipUrl}`);
+            }
             const resp = await fetch(zipUrl);
             if (!resp.ok) {
                 throw new Error(`Failed to load ${zipUrl}`);
