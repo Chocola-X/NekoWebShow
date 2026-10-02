@@ -71,30 +71,17 @@
         "var_ud": "bust_UD_spare"
       }],
     "charaProfile": {
-      "height": 168,
+      "height": 160,
       "pixelMarker": {
-        "QQ": 410733261,
-        "bottom": 1172.0,
-        "boundsBottom": 1270.0,
-        "boundsLeft": -680.0,
-        "boundsRight": 800.0,
-        "boundsTop": -930.0,
+        "bottom": 1211.0,
+        "boundsBottom": 1211.0,
+        "boundsLeft": -533.0,
+        "boundsRight": 539.0,
+        "boundsTop": -749.0,
         "bust": 38.5,
-        "bustAX": -199.0,
-        "bustAY": -87.0,
-        "bustBX": 199.0,
-        "bustBY": 166.0,
         "eye": -401.0,
-        "headAX": -179.0,
-        "headAY": -656.0,
-        "headBX": 172.0,
-        "headBY": -257.0,
         "mouth": -294.0,
-        "pantAX": -213.0,
-        "pantAY": 341.0,
-        "pantBX": 224.0,
-        "pantBY": 843.0,
-        "top": -670.0
+        "top": -749.0
       }
     },
     "clampControl": [{

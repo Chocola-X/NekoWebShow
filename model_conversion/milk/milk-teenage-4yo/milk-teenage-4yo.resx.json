@@ -1,0 +1,13 @@
+{
+  "PsbVersion": 4,
+  "PsbType": "Motion",
+  "Platform": "ems",
+  "CryptKey": null,
+  "ExternalTextures": false,
+  "Context": {},
+  "Resources": {
+    "0": "milk-teenage-4yo-resources/tex#002-texture.png",
+    "1": "milk-teenage-4yo-resources/tex#001-texture.png",
+    "2": "milk-teenage-4yo-resources/tex#000-texture.png"
+  }
+}

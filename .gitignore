@@ -1,2 +1,6 @@
 .codeartsdoer/
 .codex/
+/model_conversion/.comparison/
+tests/
+docs/
+tools/

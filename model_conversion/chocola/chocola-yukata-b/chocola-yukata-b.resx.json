@@ -1,0 +1,12 @@
+{
+  "PsbVersion": 4,
+  "PsbType": "Motion",
+  "Platform": "ems",
+  "CryptKey": null,
+  "ExternalTextures": false,
+  "Context": {},
+  "Resources": {
+    "0": "chocola-yukata-b-resources/tex#001-texture.png",
+    "1": "chocola-yukata-b-resources/tex#000-texture.png"
+  }
+}
