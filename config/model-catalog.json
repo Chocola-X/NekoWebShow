@@ -1,0 +1,1582 @@
+{
+  "azuki-casual": {
+    "character": "azuki",
+    "costume": "casual",
+    "variants": [
+      "original"
+    ],
+    "config": "azuki-config.js"
+  },
+  "azuki-casual-a": {
+    "character": "azuki",
+    "costume": "casual",
+    "variants": [
+      "a"
+    ],
+    "config": "azuki-config.js"
+  },
+  "azuki-casual-a-ohtoro": {
+    "character": "azuki",
+    "costume": "casual",
+    "variants": [
+      "a",
+      "ohtoro"
+    ],
+    "config": "azuki-config.js"
+  },
+  "azuki-casual-b": {
+    "character": "azuki",
+    "costume": "casual",
+    "variants": [
+      "b"
+    ],
+    "config": "azuki-config.js"
+  },
+  "azuki-dress": {
+    "character": "azuki",
+    "costume": "dress",
+    "variants": [
+      "original"
+    ],
+    "config": "azuki-config.js"
+  },
+  "azuki-dress-a": {
+    "character": "azuki",
+    "costume": "dress",
+    "variants": [
+      "a"
+    ],
+    "config": "azuki-config.js"
+  },
+  "azuki-hawaii-a": {
+    "character": "azuki",
+    "costume": "hawaii",
+    "variants": [
+      "a"
+    ],
+    "config": "azuki-config.js"
+  },
+  "azuki-hawaii-b": {
+    "character": "azuki",
+    "costume": "hawaii",
+    "variants": [
+      "b"
+    ],
+    "config": "azuki-config.js"
+  },
+  "azuki-maid": {
+    "character": "azuki",
+    "costume": "maid",
+    "variants": [
+      "original"
+    ],
+    "config": "azuki-config.js"
+  },
+  "azuki-maid-a": {
+    "character": "azuki",
+    "costume": "maid",
+    "variants": [
+      "a"
+    ],
+    "config": "azuki-config.js"
+  },
+  "azuki-maid-a-custard": {
+    "character": "azuki",
+    "costume": "maid",
+    "variants": [
+      "a",
+      "custard"
+    ],
+    "config": "azuki-config.js"
+  },
+  "azuki-maid-b": {
+    "character": "azuki",
+    "costume": "maid",
+    "variants": [
+      "b"
+    ],
+    "config": "azuki-config.js"
+  },
+  "azuki-maid-b-custard": {
+    "character": "azuki",
+    "costume": "maid",
+    "variants": [
+      "b",
+      "custard"
+    ],
+    "config": "azuki-config.js"
+  },
+  "azuki-santa": {
+    "character": "azuki",
+    "costume": "santa",
+    "variants": [
+      "a"
+    ],
+    "config": "azuki-config.js"
+  },
+  "azuki-santa-b": {
+    "character": "azuki",
+    "costume": "santa",
+    "variants": [
+      "b"
+    ],
+    "config": "azuki-config.js"
+  },
+  "azuki-swimsuit-a": {
+    "character": "azuki",
+    "costume": "swimsuit",
+    "variants": [
+      "a"
+    ],
+    "config": "azuki-config.js"
+  },
+  "azuki-swimsuit-b": {
+    "character": "azuki",
+    "costume": "swimsuit",
+    "variants": [
+      "b"
+    ],
+    "config": "azuki-config.js"
+  },
+  "azuki-teenage": {
+    "character": "azuki",
+    "costume": "teenage",
+    "variants": [
+      "original"
+    ],
+    "config": "koazuki-config.js"
+  },
+  "azuki-teenage-a": {
+    "character": "azuki",
+    "costume": "teenage",
+    "variants": [
+      "a"
+    ],
+    "config": "koazuki-config.js"
+  },
+  "azuki-teenage-b": {
+    "character": "azuki",
+    "costume": "teenage",
+    "variants": [
+      "b"
+    ],
+    "config": "koazuki-config.js"
+  },
+  "azuki-winter": {
+    "character": "azuki",
+    "costume": "winter",
+    "variants": [
+      "a"
+    ],
+    "config": "azuki-config.js"
+  },
+  "azuki-winter-b": {
+    "character": "azuki",
+    "costume": "winter",
+    "variants": [
+      "b"
+    ],
+    "config": "azuki-config.js"
+  },
+  "azuki-wintermaid": {
+    "character": "azuki",
+    "costume": "wintermaid",
+    "variants": [
+      "a"
+    ],
+    "config": "azuki-config.js"
+  },
+  "azuki-wintermaid-b": {
+    "character": "azuki",
+    "costume": "wintermaid",
+    "variants": [
+      "b"
+    ],
+    "config": "azuki-config.js"
+  },
+  "azuki-yukata": {
+    "character": "azuki",
+    "costume": "yukata",
+    "variants": [
+      "a"
+    ],
+    "config": "azuki-config.js"
+  },
+  "azuki-yukata-b": {
+    "character": "azuki",
+    "costume": "yukata",
+    "variants": [
+      "b"
+    ],
+    "config": "azuki-config.js"
+  },
+  "chocola-casual": {
+    "character": "chocola",
+    "costume": "casual",
+    "variants": [
+      "original"
+    ],
+    "config": "chocola-config.js"
+  },
+  "chocola-casual-a-no-bell": {
+    "character": "chocola",
+    "costume": "casual",
+    "variants": [
+      "a",
+      "no-bell"
+    ],
+    "config": "chocola-config.js"
+  },
+  "chocola-casual-a-with-bell": {
+    "character": "chocola",
+    "costume": "casual",
+    "variants": [
+      "a",
+      "with-bell"
+    ],
+    "config": "chocola-config.js"
+  },
+  "chocola-casual-b-no-bell": {
+    "character": "chocola",
+    "costume": "casual",
+    "variants": [
+      "b",
+      "no-bell"
+    ],
+    "config": "chocola-config.js"
+  },
+  "chocola-casual-b-with-bell": {
+    "character": "chocola",
+    "costume": "casual",
+    "variants": [
+      "b",
+      "with-bell"
+    ],
+    "config": "chocola-config.js"
+  },
+  "chocola-date-a": {
+    "character": "chocola",
+    "costume": "date",
+    "variants": [
+      "a"
+    ],
+    "config": "chocola-config.js"
+  },
+  "chocola-date-b": {
+    "character": "chocola",
+    "costume": "date",
+    "variants": [
+      "b"
+    ],
+    "config": "chocola-config.js"
+  },
+  "chocola-dress": {
+    "character": "chocola",
+    "costume": "dress",
+    "variants": [
+      "original"
+    ],
+    "config": "chocola-config.js"
+  },
+  "chocola-dress-a": {
+    "character": "chocola",
+    "costume": "dress",
+    "variants": [
+      "a"
+    ],
+    "config": "chocola-config.js"
+  },
+  "chocola-hawaii-a": {
+    "character": "chocola",
+    "costume": "hawaii",
+    "variants": [
+      "a"
+    ],
+    "config": "chocola-config.js"
+  },
+  "chocola-hawaii-b": {
+    "character": "chocola",
+    "costume": "hawaii",
+    "variants": [
+      "b"
+    ],
+    "config": "chocola-config.js"
+  },
+  "chocola-koneko": {
+    "character": "chocola",
+    "costume": "koneko",
+    "variants": [
+      "original"
+    ],
+    "config": "kochocola-config.js"
+  },
+  "chocola-koneko-a": {
+    "character": "chocola",
+    "costume": "koneko",
+    "variants": [
+      "a"
+    ],
+    "config": "kochocola-config.js"
+  },
+  "chocola-koneko-b": {
+    "character": "chocola",
+    "costume": "koneko",
+    "variants": [
+      "b"
+    ],
+    "config": "kochocola-config.js"
+  },
+  "chocola-lolita": {
+    "character": "chocola",
+    "costume": "lolita",
+    "variants": [
+      "original"
+    ],
+    "config": "chocola-config.js"
+  },
+  "chocola-maid": {
+    "character": "chocola",
+    "costume": "maid",
+    "variants": [
+      "original"
+    ],
+    "config": "chocola-config.js"
+  },
+  "chocola-maid-a-no-bell": {
+    "character": "chocola",
+    "costume": "maid",
+    "variants": [
+      "a",
+      "no-bell"
+    ],
+    "config": "chocola-config.js"
+  },
+  "chocola-maid-a-with-bell": {
+    "character": "chocola",
+    "costume": "maid",
+    "variants": [
+      "a",
+      "with-bell"
+    ],
+    "config": "chocola-config.js"
+  },
+  "chocola-maid-b-no-bell": {
+    "character": "chocola",
+    "costume": "maid",
+    "variants": [
+      "b",
+      "no-bell"
+    ],
+    "config": "chocola-config.js"
+  },
+  "chocola-maid-b-with-bell": {
+    "character": "chocola",
+    "costume": "maid",
+    "variants": [
+      "b",
+      "with-bell"
+    ],
+    "config": "chocola-config.js"
+  },
+  "chocola-pajama": {
+    "character": "chocola",
+    "costume": "pajama",
+    "variants": [
+      "original"
+    ],
+    "config": "chocola-config.js"
+  },
+  "chocola-pajama-a": {
+    "character": "chocola",
+    "costume": "pajama",
+    "variants": [
+      "a"
+    ],
+    "config": "chocola-config.js"
+  },
+  "chocola-pajama-b": {
+    "character": "chocola",
+    "costume": "pajama",
+    "variants": [
+      "b"
+    ],
+    "config": "chocola-config.js"
+  },
+  "chocola-santa": {
+    "character": "chocola",
+    "costume": "santa",
+    "variants": [
+      "a"
+    ],
+    "config": "chocola-config.js"
+  },
+  "chocola-santa-b": {
+    "character": "chocola",
+    "costume": "santa",
+    "variants": [
+      "b"
+    ],
+    "config": "chocola-config.js"
+  },
+  "chocola-swimsuit-a": {
+    "character": "chocola",
+    "costume": "swimsuit",
+    "variants": [
+      "a"
+    ],
+    "config": "chocola-config.js"
+  },
+  "chocola-swimsuit-b": {
+    "character": "chocola",
+    "costume": "swimsuit",
+    "variants": [
+      "b"
+    ],
+    "config": "chocola-config.js"
+  },
+  "chocola-teenage": {
+    "character": "chocola",
+    "costume": "teenage",
+    "variants": [
+      "original"
+    ],
+    "config": "kochocola-config.js"
+  },
+  "chocola-teenage-a": {
+    "character": "chocola",
+    "costume": "teenage",
+    "variants": [
+      "a"
+    ],
+    "config": "kochocola-config.js"
+  },
+  "chocola-teenage-b": {
+    "character": "chocola",
+    "costume": "teenage",
+    "variants": [
+      "b"
+    ],
+    "config": "kochocola-config.js"
+  },
+  "chocola-winter": {
+    "character": "chocola",
+    "costume": "winter",
+    "variants": [
+      "a"
+    ],
+    "config": "chocola-config.js"
+  },
+  "chocola-winter-b": {
+    "character": "chocola",
+    "costume": "winter",
+    "variants": [
+      "b"
+    ],
+    "config": "chocola-config.js"
+  },
+  "chocola-wintermaid": {
+    "character": "chocola",
+    "costume": "wintermaid",
+    "variants": [
+      "a"
+    ],
+    "config": "chocola-config.js"
+  },
+  "chocola-wintermaid-b": {
+    "character": "chocola",
+    "costume": "wintermaid",
+    "variants": [
+      "b"
+    ],
+    "config": "chocola-config.js"
+  },
+  "chocola-yukata": {
+    "character": "chocola",
+    "costume": "yukata",
+    "variants": [
+      "a"
+    ],
+    "config": "chocola-config.js"
+  },
+  "chocola-yukata-b": {
+    "character": "chocola",
+    "costume": "yukata",
+    "variants": [
+      "b"
+    ],
+    "config": "chocola-config.js"
+  },
+  "cinnamon-casual": {
+    "character": "cinnamon",
+    "costume": "casual",
+    "variants": [
+      "original"
+    ],
+    "config": "cinnamon-config.js"
+  },
+  "cinnamon-casual-a": {
+    "character": "cinnamon",
+    "costume": "casual",
+    "variants": [
+      "a"
+    ],
+    "config": "cinnamon-config.js"
+  },
+  "cinnamon-casual-b": {
+    "character": "cinnamon",
+    "costume": "casual",
+    "variants": [
+      "b"
+    ],
+    "config": "cinnamon-config.js"
+  },
+  "cinnamon-dress": {
+    "character": "cinnamon",
+    "costume": "dress",
+    "variants": [
+      "original"
+    ],
+    "config": "cinnamon-config.js"
+  },
+  "cinnamon-dress-a": {
+    "character": "cinnamon",
+    "costume": "dress",
+    "variants": [
+      "a"
+    ],
+    "config": "cinnamon-config.js"
+  },
+  "cinnamon-dress-b": {
+    "character": "cinnamon",
+    "costume": "dress",
+    "variants": [
+      "b"
+    ],
+    "config": "cinnamon-config.js"
+  },
+  "cinnamon-hawaii-a": {
+    "character": "cinnamon",
+    "costume": "hawaii",
+    "variants": [
+      "a"
+    ],
+    "config": "cinnamon-config.js"
+  },
+  "cinnamon-hawaii-b": {
+    "character": "cinnamon",
+    "costume": "hawaii",
+    "variants": [
+      "b"
+    ],
+    "config": "cinnamon-config.js"
+  },
+  "cinnamon-maid": {
+    "character": "cinnamon",
+    "costume": "maid",
+    "variants": [
+      "original"
+    ],
+    "config": "cinnamon-config.js"
+  },
+  "cinnamon-maid-a": {
+    "character": "cinnamon",
+    "costume": "maid",
+    "variants": [
+      "a"
+    ],
+    "config": "cinnamon-config.js"
+  },
+  "cinnamon-maid-b": {
+    "character": "cinnamon",
+    "costume": "maid",
+    "variants": [
+      "b"
+    ],
+    "config": "cinnamon-config.js"
+  },
+  "cinnamon-santa": {
+    "character": "cinnamon",
+    "costume": "santa",
+    "variants": [
+      "a"
+    ],
+    "config": "cinnamon-config.js"
+  },
+  "cinnamon-santa-b": {
+    "character": "cinnamon",
+    "costume": "santa",
+    "variants": [
+      "b"
+    ],
+    "config": "cinnamon-config.js"
+  },
+  "cinnamon-swimsuit-a": {
+    "character": "cinnamon",
+    "costume": "swimsuit",
+    "variants": [
+      "a"
+    ],
+    "config": "cinnamon-config.js"
+  },
+  "cinnamon-swimsuit-b": {
+    "character": "cinnamon",
+    "costume": "swimsuit",
+    "variants": [
+      "b"
+    ],
+    "config": "cinnamon-config.js"
+  },
+  "cinnamon-teenage": {
+    "character": "cinnamon",
+    "costume": "teenage",
+    "variants": [
+      "original"
+    ],
+    "config": "kocinnamon-config.js"
+  },
+  "cinnamon-teenage-a": {
+    "character": "cinnamon",
+    "costume": "teenage",
+    "variants": [
+      "a"
+    ],
+    "config": "kocinnamon-config.js"
+  },
+  "cinnamon-teenage-b": {
+    "character": "cinnamon",
+    "costume": "teenage",
+    "variants": [
+      "b"
+    ],
+    "config": "kocinnamon-config.js"
+  },
+  "cinnamon-winter": {
+    "character": "cinnamon",
+    "costume": "winter",
+    "variants": [
+      "a"
+    ],
+    "config": "cinnamon-config.js"
+  },
+  "cinnamon-winter-b": {
+    "character": "cinnamon",
+    "costume": "winter",
+    "variants": [
+      "b"
+    ],
+    "config": "cinnamon-config.js"
+  },
+  "cinnamon-wintermaid": {
+    "character": "cinnamon",
+    "costume": "wintermaid",
+    "variants": [
+      "a"
+    ],
+    "config": "cinnamon-config.js"
+  },
+  "cinnamon-wintermaid-b": {
+    "character": "cinnamon",
+    "costume": "wintermaid",
+    "variants": [
+      "b"
+    ],
+    "config": "cinnamon-config.js"
+  },
+  "cinnamon-yukata": {
+    "character": "cinnamon",
+    "costume": "yukata",
+    "variants": [
+      "a"
+    ],
+    "config": "cinnamon-config.js"
+  },
+  "cinnamon-yukata-b": {
+    "character": "cinnamon",
+    "costume": "yukata",
+    "variants": [
+      "b"
+    ],
+    "config": "cinnamon-config.js"
+  },
+  "coconut-casual": {
+    "character": "coconut",
+    "costume": "casual",
+    "variants": [
+      "original"
+    ],
+    "config": "coconut-config.js"
+  },
+  "coconut-casual-a": {
+    "character": "coconut",
+    "costume": "casual",
+    "variants": [
+      "a"
+    ],
+    "config": "coconut-config.js"
+  },
+  "coconut-casual-a-4yo": {
+    "character": "coconut",
+    "costume": "casual",
+    "variants": [
+      "a",
+      "4yo"
+    ],
+    "config": "coconut-config.js"
+  },
+  "coconut-casual-b": {
+    "character": "coconut",
+    "costume": "casual",
+    "variants": [
+      "b"
+    ],
+    "config": "coconut-config.js"
+  },
+  "coconut-casual-b-4yo": {
+    "character": "coconut",
+    "costume": "casual",
+    "variants": [
+      "b",
+      "4yo"
+    ],
+    "config": "coconut-config.js"
+  },
+  "coconut-dress": {
+    "character": "coconut",
+    "costume": "dress",
+    "variants": [
+      "original"
+    ],
+    "config": "coconut-config.js"
+  },
+  "coconut-dress-a": {
+    "character": "coconut",
+    "costume": "dress",
+    "variants": [
+      "a"
+    ],
+    "config": "coconut-config.js"
+  },
+  "coconut-hawaii-a": {
+    "character": "coconut",
+    "costume": "hawaii",
+    "variants": [
+      "a"
+    ],
+    "config": "coconut-config.js"
+  },
+  "coconut-hawaii-b": {
+    "character": "coconut",
+    "costume": "hawaii",
+    "variants": [
+      "b"
+    ],
+    "config": "coconut-config.js"
+  },
+  "coconut-koneko": {
+    "character": "coconut",
+    "costume": "koneko",
+    "variants": [
+      "original"
+    ],
+    "config": "kococonut-config.js"
+  },
+  "coconut-koneko-a": {
+    "character": "coconut",
+    "costume": "koneko",
+    "variants": [
+      "a"
+    ],
+    "config": "kococonut-config.js"
+  },
+  "coconut-koneko-b": {
+    "character": "coconut",
+    "costume": "koneko",
+    "variants": [
+      "b"
+    ],
+    "config": "kococonut-config.js"
+  },
+  "coconut-maid": {
+    "character": "coconut",
+    "costume": "maid",
+    "variants": [
+      "original"
+    ],
+    "config": "coconut-config.js"
+  },
+  "coconut-maid-a": {
+    "character": "coconut",
+    "costume": "maid",
+    "variants": [
+      "a"
+    ],
+    "config": "coconut-config.js"
+  },
+  "coconut-maid-a-4yo": {
+    "character": "coconut",
+    "costume": "maid",
+    "variants": [
+      "a",
+      "4yo"
+    ],
+    "config": "coconut-config.js"
+  },
+  "coconut-maid-b": {
+    "character": "coconut",
+    "costume": "maid",
+    "variants": [
+      "b"
+    ],
+    "config": "coconut-config.js"
+  },
+  "coconut-maid-b-4yo": {
+    "character": "coconut",
+    "costume": "maid",
+    "variants": [
+      "b",
+      "4yo"
+    ],
+    "config": "coconut-config.js"
+  },
+  "coconut-pajama": {
+    "character": "coconut",
+    "costume": "pajama",
+    "variants": [
+      "original"
+    ],
+    "config": "coconut-config.js"
+  },
+  "coconut-santa": {
+    "character": "coconut",
+    "costume": "santa",
+    "variants": [
+      "a"
+    ],
+    "config": "coconut-config.js"
+  },
+  "coconut-santa-b": {
+    "character": "coconut",
+    "costume": "santa",
+    "variants": [
+      "b"
+    ],
+    "config": "coconut-config.js"
+  },
+  "coconut-shirt-a": {
+    "character": "coconut",
+    "costume": "shirt",
+    "variants": [
+      "a"
+    ],
+    "config": "coconut-config.js"
+  },
+  "coconut-swimsuit-a": {
+    "character": "coconut",
+    "costume": "swimsuit",
+    "variants": [
+      "a"
+    ],
+    "config": "coconut-config.js"
+  },
+  "coconut-swimsuit-b": {
+    "character": "coconut",
+    "costume": "swimsuit",
+    "variants": [
+      "b"
+    ],
+    "config": "coconut-config.js"
+  },
+  "coconut-teenage": {
+    "character": "coconut",
+    "costume": "teenage",
+    "variants": [
+      "original"
+    ],
+    "config": "kococonut-config.js"
+  },
+  "coconut-teenage-a": {
+    "character": "coconut",
+    "costume": "teenage",
+    "variants": [
+      "a"
+    ],
+    "config": "kococonut-config.js"
+  },
+  "coconut-teenage-b": {
+    "character": "coconut",
+    "costume": "teenage",
+    "variants": [
+      "b"
+    ],
+    "config": "kococonut-config.js"
+  },
+  "coconut-winter": {
+    "character": "coconut",
+    "costume": "winter",
+    "variants": [
+      "a"
+    ],
+    "config": "coconut-config.js"
+  },
+  "coconut-winter-b": {
+    "character": "coconut",
+    "costume": "winter",
+    "variants": [
+      "b"
+    ],
+    "config": "coconut-config.js"
+  },
+  "coconut-wintermaid": {
+    "character": "coconut",
+    "costume": "wintermaid",
+    "variants": [
+      "a"
+    ],
+    "config": "coconut-config.js"
+  },
+  "coconut-wintermaid-b": {
+    "character": "coconut",
+    "costume": "wintermaid",
+    "variants": [
+      "b"
+    ],
+    "config": "coconut-config.js"
+  },
+  "coconut-yukata": {
+    "character": "coconut",
+    "costume": "yukata",
+    "variants": [
+      "a"
+    ],
+    "config": "coconut-config.js"
+  },
+  "coconut-yukata-b": {
+    "character": "coconut",
+    "costume": "yukata",
+    "variants": [
+      "b"
+    ],
+    "config": "coconut-config.js"
+  },
+  "fraise-casual-a": {
+    "character": "fraise",
+    "costume": "casual",
+    "variants": [
+      "a"
+    ],
+    "config": "fraise-config.js"
+  },
+  "fraise-casual-b": {
+    "character": "fraise",
+    "costume": "casual",
+    "variants": [
+      "b"
+    ],
+    "config": "fraise-config.js"
+  },
+  "fraise-france-maid-a": {
+    "character": "fraise",
+    "costume": "france-maid",
+    "variants": [
+      "a"
+    ],
+    "config": "fraise-config.js"
+  },
+  "fraise-france-maid-b": {
+    "character": "fraise",
+    "costume": "france-maid",
+    "variants": [
+      "b"
+    ],
+    "config": "fraise-config.js"
+  },
+  "fraise-hawaii-a": {
+    "character": "fraise",
+    "costume": "hawaii",
+    "variants": [
+      "a"
+    ],
+    "config": "fraise-config.js"
+  },
+  "fraise-hawaii-b": {
+    "character": "fraise",
+    "costume": "hawaii",
+    "variants": [
+      "b"
+    ],
+    "config": "fraise-config.js"
+  },
+  "fraise-maid-a": {
+    "character": "fraise",
+    "costume": "maid",
+    "variants": [
+      "a"
+    ],
+    "config": "fraise-config.js"
+  },
+  "fraise-maid-b": {
+    "character": "fraise",
+    "costume": "maid",
+    "variants": [
+      "b"
+    ],
+    "config": "fraise-config.js"
+  },
+  "fraise-pajama-a": {
+    "character": "fraise",
+    "costume": "pajama",
+    "variants": [
+      "a"
+    ],
+    "config": "fraise-config.js"
+  },
+  "fraise-pajama-b": {
+    "character": "fraise",
+    "costume": "pajama",
+    "variants": [
+      "b"
+    ],
+    "config": "fraise-config.js"
+  },
+  "fraise-swimsuit-a": {
+    "character": "fraise",
+    "costume": "swimsuit",
+    "variants": [
+      "a"
+    ],
+    "config": "fraise-config.js"
+  },
+  "fraise-swimsuit-b": {
+    "character": "fraise",
+    "costume": "swimsuit",
+    "variants": [
+      "b"
+    ],
+    "config": "fraise-config.js"
+  },
+  "maple-casual": {
+    "character": "maple",
+    "costume": "casual",
+    "variants": [
+      "original"
+    ],
+    "config": "maple-config.js"
+  },
+  "maple-casual-a": {
+    "character": "maple",
+    "costume": "casual",
+    "variants": [
+      "a"
+    ],
+    "config": "maple-config.js"
+  },
+  "maple-casual-b": {
+    "character": "maple",
+    "costume": "casual",
+    "variants": [
+      "b"
+    ],
+    "config": "maple-config.js"
+  },
+  "maple-dress": {
+    "character": "maple",
+    "costume": "dress",
+    "variants": [
+      "original"
+    ],
+    "config": "maple-config.js"
+  },
+  "maple-dress-a": {
+    "character": "maple",
+    "costume": "dress",
+    "variants": [
+      "a"
+    ],
+    "config": "maple-config.js"
+  },
+  "maple-dress-b": {
+    "character": "maple",
+    "costume": "dress",
+    "variants": [
+      "b"
+    ],
+    "config": "maple-config.js"
+  },
+  "maple-hawaii-a": {
+    "character": "maple",
+    "costume": "hawaii",
+    "variants": [
+      "a"
+    ],
+    "config": "maple-config.js"
+  },
+  "maple-hawaii-b": {
+    "character": "maple",
+    "costume": "hawaii",
+    "variants": [
+      "b"
+    ],
+    "config": "maple-config.js"
+  },
+  "maple-maid": {
+    "character": "maple",
+    "costume": "maid",
+    "variants": [
+      "original"
+    ],
+    "config": "maple-config.js"
+  },
+  "maple-maid-a": {
+    "character": "maple",
+    "costume": "maid",
+    "variants": [
+      "a"
+    ],
+    "config": "maple-config.js"
+  },
+  "maple-maid-b": {
+    "character": "maple",
+    "costume": "maid",
+    "variants": [
+      "b"
+    ],
+    "config": "maple-config.js"
+  },
+  "maple-santa": {
+    "character": "maple",
+    "costume": "santa",
+    "variants": [
+      "a"
+    ],
+    "config": "maple-config.js"
+  },
+  "maple-santa-b": {
+    "character": "maple",
+    "costume": "santa",
+    "variants": [
+      "b"
+    ],
+    "config": "maple-config.js"
+  },
+  "maple-swimsuit-a": {
+    "character": "maple",
+    "costume": "swimsuit",
+    "variants": [
+      "a"
+    ],
+    "config": "maple-config.js"
+  },
+  "maple-swimsuit-b": {
+    "character": "maple",
+    "costume": "swimsuit",
+    "variants": [
+      "b"
+    ],
+    "config": "maple-config.js"
+  },
+  "maple-teenage": {
+    "character": "maple",
+    "costume": "teenage",
+    "variants": [
+      "original"
+    ],
+    "config": "komaple-config.js"
+  },
+  "maple-teenage-a": {
+    "character": "maple",
+    "costume": "teenage",
+    "variants": [
+      "a"
+    ],
+    "config": "komaple-config.js"
+  },
+  "maple-teenage-b": {
+    "character": "maple",
+    "costume": "teenage",
+    "variants": [
+      "b"
+    ],
+    "config": "komaple-config.js"
+  },
+  "maple-winter": {
+    "character": "maple",
+    "costume": "winter",
+    "variants": [
+      "a"
+    ],
+    "config": "maple-config.js"
+  },
+  "maple-winter-b": {
+    "character": "maple",
+    "costume": "winter",
+    "variants": [
+      "b"
+    ],
+    "config": "maple-config.js"
+  },
+  "maple-wintermaid": {
+    "character": "maple",
+    "costume": "wintermaid",
+    "variants": [
+      "a"
+    ],
+    "config": "maple-config.js"
+  },
+  "maple-wintermaid-b": {
+    "character": "maple",
+    "costume": "wintermaid",
+    "variants": [
+      "b"
+    ],
+    "config": "maple-config.js"
+  },
+  "maple-yukata": {
+    "character": "maple",
+    "costume": "yukata",
+    "variants": [
+      "a"
+    ],
+    "config": "maple-config.js"
+  },
+  "maple-yukata-b": {
+    "character": "maple",
+    "costume": "yukata",
+    "variants": [
+      "b"
+    ],
+    "config": "maple-config.js"
+  },
+  "milk-summer": {
+    "character": "milk",
+    "costume": "summer",
+    "variants": [],
+    "config": "milk-config.js"
+  },
+  "milk-teenage": {
+    "character": "milk",
+    "costume": "teenage",
+    "variants": [
+      "original"
+    ],
+    "config": "komilk-config.js"
+  },
+  "milk-teenage-4yo": {
+    "character": "milk",
+    "costume": "teenage",
+    "variants": [
+      "4yo"
+    ],
+    "config": "komilk-config.js"
+  },
+  "milk-winter": {
+    "character": "milk",
+    "costume": "winter",
+    "variants": [],
+    "config": "milk-config.js"
+  },
+  "vanilla-casual": {
+    "character": "vanilla",
+    "costume": "casual",
+    "variants": [
+      "original"
+    ],
+    "config": "vanilla-config.js"
+  },
+  "vanilla-casual-a-no-bell": {
+    "character": "vanilla",
+    "costume": "casual",
+    "variants": [
+      "a",
+      "no-bell"
+    ],
+    "config": "vanilla-config.js"
+  },
+  "vanilla-casual-a-with-bell": {
+    "character": "vanilla",
+    "costume": "casual",
+    "variants": [
+      "a",
+      "with-bell"
+    ],
+    "config": "vanilla-config.js"
+  },
+  "vanilla-casual-b-no-bell": {
+    "character": "vanilla",
+    "costume": "casual",
+    "variants": [
+      "b",
+      "no-bell"
+    ],
+    "config": "vanilla-config.js"
+  },
+  "vanilla-casual-b-no-bell-tail-pin": {
+    "character": "vanilla",
+    "costume": "casual",
+    "variants": [
+      "b",
+      "no-bell-tail-pin"
+    ],
+    "config": "vanilla-config.js"
+  },
+  "vanilla-casual-b-with-bell": {
+    "character": "vanilla",
+    "costume": "casual",
+    "variants": [
+      "b",
+      "with-bell"
+    ],
+    "config": "vanilla-config.js"
+  },
+  "vanilla-date-a": {
+    "character": "vanilla",
+    "costume": "date",
+    "variants": [
+      "a"
+    ],
+    "config": "vanilla-config.js"
+  },
+  "vanilla-date-b": {
+    "character": "vanilla",
+    "costume": "date",
+    "variants": [
+      "b"
+    ],
+    "config": "vanilla-config.js"
+  },
+  "vanilla-dress": {
+    "character": "vanilla",
+    "costume": "dress",
+    "variants": [
+      "original"
+    ],
+    "config": "vanilla-config.js"
+  },
+  "vanilla-dress-a": {
+    "character": "vanilla",
+    "costume": "dress",
+    "variants": [
+      "a"
+    ],
+    "config": "vanilla-config.js"
+  },
+  "vanilla-hawaii-a": {
+    "character": "vanilla",
+    "costume": "hawaii",
+    "variants": [
+      "a"
+    ],
+    "config": "vanilla-config.js"
+  },
+  "vanilla-hawaii-b": {
+    "character": "vanilla",
+    "costume": "hawaii",
+    "variants": [
+      "b"
+    ],
+    "config": "vanilla-config.js"
+  },
+  "vanilla-koneko": {
+    "character": "vanilla",
+    "costume": "koneko",
+    "variants": [
+      "original"
+    ],
+    "config": "kovanilla-config.js"
+  },
+  "vanilla-koneko-a": {
+    "character": "vanilla",
+    "costume": "koneko",
+    "variants": [
+      "a"
+    ],
+    "config": "kovanilla-config.js"
+  },
+  "vanilla-koneko-b": {
+    "character": "vanilla",
+    "costume": "koneko",
+    "variants": [
+      "b"
+    ],
+    "config": "kovanilla-config.js"
+  },
+  "vanilla-lolita": {
+    "character": "vanilla",
+    "costume": "lolita",
+    "variants": [
+      "original"
+    ],
+    "config": "vanilla-config.js"
+  },
+  "vanilla-maid": {
+    "character": "vanilla",
+    "costume": "maid",
+    "variants": [
+      "original"
+    ],
+    "config": "vanilla-config.js"
+  },
+  "vanilla-maid-a-no-bell": {
+    "character": "vanilla",
+    "costume": "maid",
+    "variants": [
+      "a",
+      "no-bell"
+    ],
+    "config": "vanilla-config.js"
+  },
+  "vanilla-maid-a-with-bell": {
+    "character": "vanilla",
+    "costume": "maid",
+    "variants": [
+      "a",
+      "with-bell"
+    ],
+    "config": "vanilla-config.js"
+  },
+  "vanilla-maid-b-no-bell": {
+    "character": "vanilla",
+    "costume": "maid",
+    "variants": [
+      "b",
+      "no-bell"
+    ],
+    "config": "vanilla-config.js"
+  },
+  "vanilla-maid-b-with-bell": {
+    "character": "vanilla",
+    "costume": "maid",
+    "variants": [
+      "b",
+      "with-bell"
+    ],
+    "config": "vanilla-config.js"
+  },
+  "vanilla-pajama": {
+    "character": "vanilla",
+    "costume": "pajama",
+    "variants": [
+      "original"
+    ],
+    "config": "vanilla-config.js"
+  },
+  "vanilla-pajama-a": {
+    "character": "vanilla",
+    "costume": "pajama",
+    "variants": [
+      "a"
+    ],
+    "config": "vanilla-config.js"
+  },
+  "vanilla-pajama-b": {
+    "character": "vanilla",
+    "costume": "pajama",
+    "variants": [
+      "b"
+    ],
+    "config": "vanilla-config.js"
+  },
+  "vanilla-santa": {
+    "character": "vanilla",
+    "costume": "santa",
+    "variants": [
+      "a"
+    ],
+    "config": "vanilla-config.js"
+  },
+  "vanilla-santa-b": {
+    "character": "vanilla",
+    "costume": "santa",
+    "variants": [
+      "b"
+    ],
+    "config": "vanilla-config.js"
+  },
+  "vanilla-swimsuit-a": {
+    "character": "vanilla",
+    "costume": "swimsuit",
+    "variants": [
+      "a"
+    ],
+    "config": "vanilla-config.js"
+  },
+  "vanilla-swimsuit-b": {
+    "character": "vanilla",
+    "costume": "swimsuit",
+    "variants": [
+      "b"
+    ],
+    "config": "vanilla-config.js"
+  },
+  "vanilla-teenage": {
+    "character": "vanilla",
+    "costume": "teenage",
+    "variants": [
+      "original"
+    ],
+    "config": "kovanilla-config.js"
+  },
+  "vanilla-teenage-a": {
+    "character": "vanilla",
+    "costume": "teenage",
+    "variants": [
+      "a"
+    ],
+    "config": "kovanilla-config.js"
+  },
+  "vanilla-teenage-b": {
+    "character": "vanilla",
+    "costume": "teenage",
+    "variants": [
+      "b"
+    ],
+    "config": "kovanilla-config.js"
+  },
+  "vanilla-winter": {
+    "character": "vanilla",
+    "costume": "winter",
+    "variants": [
+      "a"
+    ],
+    "config": "vanilla-config.js"
+  },
+  "vanilla-winter-b": {
+    "character": "vanilla",
+    "costume": "winter",
+    "variants": [
+      "b"
+    ],
+    "config": "vanilla-config.js"
+  },
+  "vanilla-wintermaid": {
+    "character": "vanilla",
+    "costume": "wintermaid",
+    "variants": [
+      "a"
+    ],
+    "config": "vanilla-config.js"
+  },
+  "vanilla-wintermaid-b": {
+    "character": "vanilla",
+    "costume": "wintermaid",
+    "variants": [
+      "b"
+    ],
+    "config": "vanilla-config.js"
+  },
+  "vanilla-yukata": {
+    "character": "vanilla",
+    "costume": "yukata",
+    "variants": [
+      "a"
+    ],
+    "config": "vanilla-config.js"
+  },
+  "vanilla-yukata-b": {
+    "character": "vanilla",
+    "costume": "yukata",
+    "variants": [
+      "b"
+    ],
+    "config": "vanilla-config.js"
+  }
+}

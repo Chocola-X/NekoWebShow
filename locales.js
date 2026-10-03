@@ -1,6 +1,22 @@
 // 多语言配置文件
 const translations = {
     'en': {
+        'hawaii': 'Hawaii',
+        'swimsuit': 'Swimsuit',
+        'date': 'Date',
+        'france-maid': 'France maid',
+        'shirt': 'Shirt',
+        'summer': 'Summer',
+        'variant-original': 'Original',
+        'variant-a': 'Pose A',
+        'variant-b': 'Pose B',
+        'variant-no-bell': 'No bell',
+        'variant-with-bell': 'With bell',
+        'variant-no-bell-tail-pin': 'No bell / tail pin',
+        'variant-ohtoro': 'Ohtoro',
+        'variant-custard': 'Custard',
+        'variant-4yo': '4yo version',
+        'variant-v2': 'Version 2',
         // 通用文本
         'pageTitle': 'NEKOPARA Character E-mote Gallery',
         'loading': 'Loading...',
@@ -49,11 +65,30 @@ const translations = {
         'lockCharacter': 'Lock character position & size',
         'muteSound': 'Mute sound',
         'wallpaper': 'Wallpaper',
+        'staticBackgrounds': 'Fixed backgrounds',
+        'dynamicBackgrounds': 'Scenes that follow local time',
+        'backgroundSchedule': 'Local time: 06–16 daytime · 16–18 sunset · 18–06 night',
         'resetCharacter': 'Reset character position',
 
     },
     
     'zh-CN': {
+        'hawaii': '夏威夷',
+        'swimsuit': '泳装',
+        'date': '约会',
+        'france-maid': '法国女仆',
+        'shirt': '衬衫',
+        'summer': '夏装',
+        'variant-original': '原版',
+        'variant-a': '站姿 A',
+        'variant-b': '站姿 B',
+        'variant-no-bell': '无铃铛',
+        'variant-with-bell': '有铃铛',
+        'variant-no-bell-tail-pin': '无铃铛 / 尾部固定',
+        'variant-ohtoro': 'Ohtoro',
+        'variant-custard': '卡仕达',
+        'variant-4yo': '4yo 版本',
+        'variant-v2': '版本 2',
         // 通用文本
         'pageTitle': '猫娘乐园角色E-mote图鉴',
         'loading': '加载中...',
@@ -102,11 +137,30 @@ const translations = {
         'lockCharacter': '锁定人物位置与大小',
         'muteSound': '关闭声音',
         'wallpaper': '壁纸选择',
+        'staticBackgrounds': '固定背景',
+        'dynamicBackgrounds': '随时间变化的场景',
+        'backgroundSchedule': '本地时间：06–16 日间 · 16–18 夕阳 · 18–06 夜间',
         'resetCharacter': '重设角色位置',
 
     },
     
     'zh-TW': {
+        'hawaii': '夏威夷',
+        'swimsuit': '泳裝',
+        'date': '約會',
+        'france-maid': '法國女僕',
+        'shirt': '襯衫',
+        'summer': '夏裝',
+        'variant-original': '原版',
+        'variant-a': '站姿 A',
+        'variant-b': '站姿 B',
+        'variant-no-bell': '無鈴鐺',
+        'variant-with-bell': '有鈴鐺',
+        'variant-no-bell-tail-pin': '無鈴鐺 / 尾部固定',
+        'variant-ohtoro': 'Ohtoro',
+        'variant-custard': '卡仕達',
+        'variant-4yo': '4yo 版本',
+        'variant-v2': '版本 2',
         // 通用文本
         'pageTitle': '貓娘樂園角色E-mote圖鑑',
         'loading': '載入中...',
@@ -155,11 +209,30 @@ const translations = {
         'lockCharacter': '鎖定人物位置與大小',
         'muteSound': '關閉聲音',
         'wallpaper': '桌布選擇',
+        'staticBackgrounds': '固定背景',
+        'dynamicBackgrounds': '隨時間變化的場景',
+        'backgroundSchedule': '本地時間：06–16 日間 · 16–18 夕陽 · 18–06 夜間',
         'resetCharacter': '重設角色位置',
 
     },
     
     'ja': {
+        'hawaii': 'ハワイ',
+        'swimsuit': '水着',
+        'date': 'デート',
+        'france-maid': 'フランスメイド',
+        'shirt': 'シャツ',
+        'summer': '夏服',
+        'variant-original': '従来版',
+        'variant-a': 'ポーズ A',
+        'variant-b': 'ポーズ B',
+        'variant-no-bell': '鈴なし',
+        'variant-with-bell': '鈴あり',
+        'variant-no-bell-tail-pin': '鈴なし / 尻尾固定',
+        'variant-ohtoro': '大トロ',
+        'variant-custard': 'カスタード',
+        'variant-4yo': '4yo バージョン',
+        'variant-v2': 'バージョン2',
         // 通用文本
         'pageTitle': 'ネコぱらキャラクターE-mote図鑑',
         'loading': '読み込み中...',
@@ -208,6 +281,9 @@ const translations = {
         'lockCharacter': 'キャラクターの位置とサイズをロック',
         'muteSound': 'サウンドをオフ',
         'wallpaper': '壁紙',
+        'staticBackgrounds': '固定背景',
+        'dynamicBackgrounds': '時刻に合わせて変わる背景',
+        'backgroundSchedule': '現地時刻：06–16 昼間 · 16–18 夕暮れ · 18–06 夜間',
         'resetCharacter': 'キャラクターの位置をリセット',
 
     }
@@ -219,6 +295,7 @@ class LanguageManager {
         this.currentLang = this.getSavedLanguage() || this.detectBrowserLanguage();
         this.characterName = this.extractCharacterName();
         this.characterCostume = this.extractCharacterCostume();
+        this.characterVariants = window.NekoCurrentModel?.variants || [];
     }
     
     // 检测浏览器语言
@@ -264,6 +341,7 @@ class LanguageManager {
     
     // 提取角色名称
     extractCharacterName() {
+        if (window.NekoCurrentModel) return window.NekoCurrentModel.character;
         const path = window.location.pathname;
         const filename = path.split('/').pop();
         
@@ -290,6 +368,7 @@ class LanguageManager {
     
     // 提取角色服装
     extractCharacterCostume() {
+        if (window.NekoCurrentModel) return window.NekoCurrentModel.costume;
         const path = window.location.pathname;
         const filename = path.split('/').pop();
         
@@ -337,7 +416,8 @@ class LanguageManager {
         if (this.characterName && this.characterCostume) {
             const characterName = this.get(this.characterName);
             const costumeName = this.get(this.characterCostume);
-            return `${baseTitle} - ${characterName} ${costumeName}`;
+            const variants = this.characterVariants.map(v => this.get('variant-' + v)).join(' · ');
+            return `${baseTitle} - ${characterName} ${costumeName}${variants ? ' · ' + variants : ''}`;
         }
         
         return baseTitle;
@@ -423,6 +503,11 @@ class LanguageManager {
             const key = label.getAttribute('data-i18n');
             const translation = this.get(key);
             label.textContent = `${translation}`;
+        });
+        const backgrounds = new Map((window.NekoWallpapers || []).map(entry => [entry.id, entry]));
+        document.querySelectorAll('[data-background-label]').forEach(label => {
+            const entry = backgrounds.get(label.dataset.backgroundLabel);
+            if (entry) label.textContent = entry.names[this.currentLang] || entry.names['zh-CN'] || entry.id;
         });
     }
     
