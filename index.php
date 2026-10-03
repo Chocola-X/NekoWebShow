@@ -18,28 +18,31 @@ if ($local_mode) {
     $domain_coconut .= '/'; $domain_maple .= '/'; $domain_cinnamon .= '/';
     $domain_milk .= '/'; $domain_fraise .= '/';
 }
-$background_url = './img/bakery.png';
-
-// 扫描 img 文件夹，列出可用壁纸图片（供前端壁纸选择器使用）。
+// 根目录是单张背景，dynamic/ 中的 A/B/C 是同一场景的三个时段。
+$background_names_path = __DIR__ . '/config/background-names.json';
+$background_names = is_file($background_names_path) ? json_decode(file_get_contents($background_names_path), true, 512, JSON_THROW_ON_ERROR) : [];
 $wallpaper_files = [];
-if (is_dir(__DIR__ . '/img')) {
-    $wallpaper_exts = ['png', 'jpg', 'jpeg', 'gif', 'webp', 'bmp'];
-    foreach (scandir(__DIR__ . '/img') as $wallpaper_file) {
-        if ($wallpaper_file === '.' || $wallpaper_file === '..') {
-            continue;
-        }
-        if (!is_file(__DIR__ . '/img/' . $wallpaper_file)) {
-            continue;
-        }
-        $wallpaper_ext = strtolower(pathinfo($wallpaper_file, PATHINFO_EXTENSION));
-        if (in_array($wallpaper_ext, $wallpaper_exts, true)) {
-            $wallpaper_files[] = $wallpaper_file;
-        }
+$wallpaper_exts = ['png', 'jpg', 'jpeg', 'gif', 'webp', 'bmp'];
+foreach (glob(__DIR__ . '/background/*') ?: [] as $wallpaper_path) {
+    if (!is_file($wallpaper_path) || !in_array(strtolower(pathinfo($wallpaper_path, PATHINFO_EXTENSION)), $wallpaper_exts, true)) continue;
+    $name = basename($wallpaper_path);
+    $wallpaper_files[] = ['id' => $name, 'type' => 'static', 'image' => $name, 'names' => $background_names[$name] ?? []];
+}
+$dynamic_groups = [];
+foreach (glob(__DIR__ . '/background/dynamic/*') ?: [] as $wallpaper_path) {
+    if (!is_file($wallpaper_path) || !in_array(strtolower(pathinfo($wallpaper_path, PATHINFO_EXTENSION)), $wallpaper_exts, true)) continue;
+    $name = basename($wallpaper_path);
+    if (preg_match('/^(.+)([ABC])\.[^.]+$/i', $name, $match)) {
+        $dynamic_groups[$match[1]][strtoupper($match[2])] = 'dynamic/' . $name;
     }
 }
-sort($wallpaper_files);
-$default_wallpaper = in_array('bakery.png', $wallpaper_files, true) ? 'bakery.png' : ($wallpaper_files[0] ?? 'bakery.png');
-$wallpaper_files_json = json_encode(array_values($wallpaper_files));
+ksort($dynamic_groups);
+foreach ($dynamic_groups as $scene => $images) {
+    if (count(array_intersect(['A', 'B', 'C'], array_keys($images))) !== 3) continue;
+    $wallpaper_files[] = ['id' => 'dynamic/' . $scene, 'type' => 'dynamic', 'images' => $images, 'names' => $background_names[$scene] ?? []];
+}
+$default_wallpaper = $wallpaper_files[0]['id'] ?? null;
+$wallpaper_files_json = json_encode($wallpaper_files, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
 $default_wallpaper_json = json_encode($default_wallpaper);
 
 // 获取当前请求路径，并兼容部署在 /NekoWebShow/ 这类子目录下的情况。
@@ -98,7 +101,7 @@ $current_model_json = json_encode(['id' => $current_model_id, 'presentation' => 
   <meta charset="UTF-8">
   <title>猫娘乐园角色E-mote图鉴</title>
   <link rel="icon" href="neko.png" type="image/png">
-  <link rel="stylesheet" href="ui.css">
+  <link rel="stylesheet" href="ui.css?v=<?php echo filemtime(__DIR__ . '/ui.css'); ?>">
   <script src="./driver/FreeMoteDriver.js" charset="UTF-8"></script>
   <script src="./driver/emoteplayer.js?v=<?php echo filemtime(__DIR__ . '/driver/emoteplayer.js'); ?>" charset="UTF-8"></script>
   <script src="./config/reaction-library.js?v=<?php echo filemtime(__DIR__ . '/config/reaction-library.js'); ?>" charset="UTF-8"></script>
@@ -108,6 +111,7 @@ $current_model_json = json_encode(['id' => $current_model_id, 'presentation' => 
   <script type="text/JavaScript" src="main.js?v=<?php echo filemtime(__DIR__ . '/main.js'); ?>" charset="UTF-8"></script>
   <script type="text/JavaScript" src="fflate.js" charset="UTF-8"></script>
   <script>window.NekoWallpapers = <?php echo $wallpaper_files_json; ?>; window.NekoDefaultWallpaper = <?php echo $default_wallpaper_json; ?>;</script>
+  <script src="./background.js?v=<?php echo filemtime(__DIR__ . '/background.js'); ?>"></script>
 </head>
 <body onload="start('<?php echo $psb_url; ?>')">
 
@@ -141,6 +145,6 @@ $current_model_json = json_encode(['id' => $current_model_id, 'presentation' => 
     <div class="infotext" data-i18n="githubProject" data-i18n-params='{"project": "NekoWebShow"}'>Github Project:<a href="https://github.com/Chocola-X/NekoWebShow" target="_blank">NekoWebShow</a></div>
   </div>
 
-  <script type="text/JavaScript" src="ui.js" charset="UTF-8"></script>
+  <script type="text/JavaScript" src="ui.js?v=<?php echo filemtime(__DIR__ . '/ui.js'); ?>" charset="UTF-8"></script>
 </body>
 </html>

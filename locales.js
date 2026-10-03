@@ -65,6 +65,9 @@ const translations = {
         'lockCharacter': 'Lock character position & size',
         'muteSound': 'Mute sound',
         'wallpaper': 'Wallpaper',
+        'staticBackgrounds': 'Fixed backgrounds',
+        'dynamicBackgrounds': 'Scenes that follow local time',
+        'backgroundSchedule': 'Local time: 06–16 daytime · 16–18 sunset · 18–06 night',
         'resetCharacter': 'Reset character position',
 
     },
@@ -134,6 +137,9 @@ const translations = {
         'lockCharacter': '锁定人物位置与大小',
         'muteSound': '关闭声音',
         'wallpaper': '壁纸选择',
+        'staticBackgrounds': '固定背景',
+        'dynamicBackgrounds': '随时间变化的场景',
+        'backgroundSchedule': '本地时间：06–16 日间 · 16–18 夕阳 · 18–06 夜间',
         'resetCharacter': '重设角色位置',
 
     },
@@ -203,6 +209,9 @@ const translations = {
         'lockCharacter': '鎖定人物位置與大小',
         'muteSound': '關閉聲音',
         'wallpaper': '桌布選擇',
+        'staticBackgrounds': '固定背景',
+        'dynamicBackgrounds': '隨時間變化的場景',
+        'backgroundSchedule': '本地時間：06–16 日間 · 16–18 夕陽 · 18–06 夜間',
         'resetCharacter': '重設角色位置',
 
     },
@@ -272,6 +281,9 @@ const translations = {
         'lockCharacter': 'キャラクターの位置とサイズをロック',
         'muteSound': 'サウンドをオフ',
         'wallpaper': '壁紙',
+        'staticBackgrounds': '固定背景',
+        'dynamicBackgrounds': '時刻に合わせて変わる背景',
+        'backgroundSchedule': '現地時刻：06–16 昼間 · 16–18 夕暮れ · 18–06 夜間',
         'resetCharacter': 'キャラクターの位置をリセット',
 
     }
@@ -491,6 +503,11 @@ class LanguageManager {
             const key = label.getAttribute('data-i18n');
             const translation = this.get(key);
             label.textContent = `${translation}`;
+        });
+        const backgrounds = new Map((window.NekoWallpapers || []).map(entry => [entry.id, entry]));
+        document.querySelectorAll('[data-background-label]').forEach(label => {
+            const entry = backgrounds.get(label.dataset.backgroundLabel);
+            if (entry) label.textContent = entry.names[this.currentLang] || entry.names['zh-CN'] || entry.id;
         });
     }
     
