@@ -11,12 +11,32 @@
 body {
   font-family: "微软雅黑", "PingFang SC", "Microsoft YaHei", sans-serif;
   color: white;
-  background: url("img/bakery.png") no-repeat center center fixed;
+  background: #f8eee6;
   background-size: cover;
   margin: 0;
   padding: 0;
   overflow: hidden;
 }
+
+#background-layers {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.background-layer {
+  position: absolute;
+  inset: 0;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  opacity: 0;
+}
+
+.background-section { font-weight: bold; cursor: default; }
+.background-schedule { padding: 0 16px 8px 30px; font-size: 12px; color: #806858; line-height: 1.5; }
 
 #canvas {
   position: fixed;

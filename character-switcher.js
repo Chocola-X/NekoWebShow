@@ -19,13 +19,20 @@
 
     async function select(id) {
         const link = models.get(id);
-        if (!link) return;
+        const model = window.NekoModels[id];
+        if (!link || !model) return;
         selection = id;
         const request = ++revision;
         loading.textContent = translate('loading');
         loading.style.visibility = 'visible';
         document.body.dataset.characterState = 'loading';
         status.textContent = '';
+        // Capture this selection's layout and touch parameters before starting its session.
+        window.NekoCurrentModel = model;
+        Object.assign(window.languageManager, {
+            characterName: model.character, characterCostume: model.costume, characterVariants: model.variants
+        });
+        window.languageManager.applyTranslations();
         try {
             await start(link.dataset.model, window.NekoConfigs[link.dataset.config]());
             if (request !== revision) return;
@@ -38,8 +45,6 @@
                 if (item === link) item.setAttribute('aria-current', 'true');
                 else item.removeAttribute('aria-current');
             }
-            const [character, costume] = id.split('-');
-            Object.assign(window.languageManager, { characterName: character, characterCostume: costume });
             window.languageManager.applyTranslations();
             document.body.dataset.character = id;
             document.body.dataset.characterState = 'ready';

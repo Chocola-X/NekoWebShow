@@ -34,7 +34,6 @@
   // ---------- 角色锁定 / 静音 / 壁纸状态 ----------
   var LOCK_KEY = 'nekoWebShowLock';
   var MUTE_KEY = 'nekoWebShowMute';
-  var WP_KEY = 'nekoWebShowWallpaper';
 
   function readBool(key, def) {
     var raw = null;
@@ -49,29 +48,6 @@
   function isLocked() { return readBool(LOCK_KEY, false); }
   function isMuted() { return readBool(MUTE_KEY, false); }
 
-  // 静态版壁纸清单回退：PHP 版会由 index.php 扫描 img/ 动态注入 window.NekoWallpapers（覆盖此值）；
-  // 静态版没有 PHP 扫描，走这里的手工清单。往 img/ 加新图后，请同时在此数组里补文件名。
-  var STATIC_WALLPAPERS = ['bakery.png', 'bathroom.png', 'fancy_pink_bedroom.png', 'japanese_corridor.png', 'japanese_room.png', 'pink_bathroom.png', 'street.png'];
-
-  function wallpaperList() {
-    return (window.NekoWallpapers && Array.isArray(window.NekoWallpapers)) ? window.NekoWallpapers : STATIC_WALLPAPERS;
-  }
-  function currentWallpaper() {
-    var list = wallpaperList();
-    var raw = null;
-    try { raw = localStorage.getItem(WP_KEY); } catch (e) {}
-    if (raw && list.indexOf(raw) !== -1) return raw;
-    if (window.NekoDefaultWallpaper && list.indexOf(window.NekoDefaultWallpaper) !== -1) return window.NekoDefaultWallpaper;
-    return list[0] || 'bakery.png';
-  }
-  function applyWallpaper(name) {
-    if (!name) return;
-    try { document.body.style.backgroundImage = 'url("./img/' + name + '")'; } catch (e) {}
-  }
-  function setWallpaper(name) {
-    try { localStorage.setItem(WP_KEY, name); } catch (e) {}
-    applyWallpaper(name);
-  }
   function applyCharCursor() {
     try { document.body.classList.toggle('char-unlocked', !isLocked()); } catch (e) {}
   }
@@ -425,9 +401,24 @@
     wpTitle.textContent = '壁纸选择';
     dd.appendChild(wpTitle);
 
-    var wps = wallpaperList();
-    var currentWp = currentWallpaper();
-    wps.forEach(function (name) {
+    var wps = window.NekoBackground.list();
+    var currentWp = window.NekoBackground.current();
+    var section = null;
+    wps.forEach(function (background) {
+      var name = background.id;
+      if (section !== background.type) {
+        section = background.type;
+        var heading = document.createElement('div');
+        heading.className = 'opt background-section';
+        heading.setAttribute('data-i18n', section === 'dynamic' ? 'dynamicBackgrounds' : 'staticBackgrounds');
+        dd.appendChild(heading);
+        if (section === 'dynamic') {
+          var schedule = document.createElement('div');
+          schedule.className = 'background-schedule';
+          schedule.setAttribute('data-i18n', 'backgroundSchedule');
+          dd.appendChild(schedule);
+        }
+      }
       var row = document.createElement('div');
       row.className = 'opt' + (name === currentWp ? ' selected' : '');
       row.dataset.wallpaper = name;
@@ -435,11 +426,13 @@
       dot.className = 'dot';
       row.appendChild(dot);
       var text = document.createElement('span');
-      text.textContent = name;
+      text.dataset.backgroundLabel = name;
+      var lang = window.languageManager?.currentLang || 'zh-CN';
+      text.textContent = background.names[lang] || background.names['zh-CN'] || name;
       row.appendChild(text);
       row.addEventListener('click', function (e) {
         e.stopPropagation();
-        setWallpaper(name);
+        window.NekoBackground.select(name);
         dd.querySelectorAll('.opt[data-wallpaper]').forEach(function (r) {
           r.classList.toggle('selected', r.dataset.wallpaper === name);
         });
@@ -463,7 +456,7 @@
   // ---------- 初始化 ----------
   function init() {
     applyFps();
-    applyWallpaper(currentWallpaper());
+    window.NekoBackground.init();
     applyCharCursor();
     var topbar = document.getElementById('topbar');
     var icon = document.getElementById('toggle-icon');

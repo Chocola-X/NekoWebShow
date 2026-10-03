@@ -1,0 +1,7 @@
+.codeartsdoer/
+.codex/
+/model_conversion/
+/tests/
+/docs/
+/tools/
+/scripts/__pycache__/

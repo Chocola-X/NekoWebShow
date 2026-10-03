@@ -1,0 +1,962 @@
+{
+  "azuki-casual": {
+    "cutoffY": 1042.91
+  },
+  "azuki-casual-a": {
+    "cutoffY": 1042.91
+  },
+  "azuki-casual-a-ohtoro": {
+    "cutoffY": 1042.91
+  },
+  "azuki-casual-b": {
+    "cutoffY": 1042.91
+  },
+  "azuki-dress": {
+    "cutoffY": 1042.91
+  },
+  "azuki-dress-a": {
+    "cutoffY": 1086.55
+  },
+  "azuki-hawaii-a": {
+    "cutoffY": 1042.91
+  },
+  "azuki-hawaii-b": {
+    "cutoffY": 1042.91
+  },
+  "azuki-maid": {
+    "cutoffY": 1042.91
+  },
+  "azuki-maid-a": {
+    "cutoffY": 1042.91
+  },
+  "azuki-maid-a-custard": {
+    "cutoffY": 1042.91
+  },
+  "azuki-maid-b": {
+    "cutoffY": 1042.91
+  },
+  "azuki-maid-b-custard": {
+    "cutoffY": 1042.91
+  },
+  "azuki-santa": {
+    "cutoffY": 1042.91,
+    "touchMarkers": {
+      "bust": -21,
+      "bustAX": -143,
+      "bustAY": -130,
+      "bustBX": 141,
+      "bustBY": 136,
+      "headAX": -176,
+      "headAY": -663,
+      "headBX": 174,
+      "headBY": -283,
+      "pantAX": -204,
+      "pantAY": 214,
+      "pantBX": 202,
+      "pantBY": 626
+    }
+  },
+  "azuki-santa-b": {
+    "cutoffY": 1042.91
+  },
+  "azuki-swimsuit-a": {
+    "cutoffY": 1042.91
+  },
+  "azuki-swimsuit-b": {
+    "cutoffY": 1042.91
+  },
+  "azuki-teenage": {
+    "cutoffY": 1042.91
+  },
+  "azuki-teenage-a": {
+    "cutoffY": 1042.91
+  },
+  "azuki-teenage-b": {
+    "cutoffY": 1084.36
+  },
+  "azuki-winter": {
+    "cutoffY": 1042.91,
+    "touchMarkers": {
+      "bust": -16,
+      "bustAX": -161,
+      "bustAY": -116,
+      "bustBX": 160,
+      "bustBY": 100,
+      "headAX": -182,
+      "headAY": -656,
+      "headBX": 175,
+      "headBY": -259,
+      "pantAX": -208,
+      "pantAY": 297,
+      "pantBX": 195,
+      "pantBY": 638
+    }
+  },
+  "azuki-winter-b": {
+    "cutoffY": 1084.36
+  },
+  "azuki-wintermaid": {
+    "cutoffY": 1042.91,
+    "touchMarkers": {
+      "bust": -21,
+      "bustAX": -152,
+      "bustAY": -187,
+      "bustBX": 153,
+      "bustBY": 65,
+      "headAX": -181,
+      "headAY": -656,
+      "headBX": 175,
+      "headBY": -269,
+      "pantAX": -218,
+      "pantAY": 204,
+      "pantBX": 219,
+      "pantBY": 681
+    }
+  },
+  "azuki-wintermaid-b": {
+    "cutoffY": 1042.91
+  },
+  "azuki-yukata": {
+    "cutoffY": 1042.91,
+    "touchMarkers": {
+      "bust": -16,
+      "bustAX": -142,
+      "bustAY": -87,
+      "bustBX": 166,
+      "bustBY": 68,
+      "headAX": -174,
+      "headAY": -659,
+      "headBX": 170,
+      "headBY": -278,
+      "pantAX": -135,
+      "pantAY": 163,
+      "pantBX": 160,
+      "pantBY": 570
+    }
+  },
+  "azuki-yukata-b": {
+    "cutoffY": 1042.91
+  },
+  "chocola-casual": {
+    "cutoffY": 1042.91
+  },
+  "chocola-casual-a-no-bell": {
+    "cutoffY": 1042.91
+  },
+  "chocola-casual-a-with-bell": {
+    "cutoffY": 1042.91
+  },
+  "chocola-casual-b-no-bell": {
+    "cutoffY": 1090.91
+  },
+  "chocola-casual-b-with-bell": {
+    "cutoffY": 1090.91
+  },
+  "chocola-date-a": {
+    "cutoffY": 1084.36
+  },
+  "chocola-date-b": {
+    "cutoffY": 1132.36
+  },
+  "chocola-dress": {
+    "cutoffY": 1042.91
+  },
+  "chocola-dress-a": {
+    "cutoffY": 1042.91
+  },
+  "chocola-hawaii-a": {
+    "cutoffY": 1075.64
+  },
+  "chocola-hawaii-b": {
+    "cutoffY": 1154.18
+  },
+  "chocola-koneko": {
+    "cutoffY": 1042.91
+  },
+  "chocola-koneko-a": {
+    "cutoffY": 1086.55
+  },
+  "chocola-koneko-b": {
+    "cutoffY": 1084.36
+  },
+  "chocola-lolita": {
+    "cutoffY": 1084.36
+  },
+  "chocola-maid": {
+    "cutoffY": 1042.91
+  },
+  "chocola-maid-a-no-bell": {
+    "cutoffY": 1042.91
+  },
+  "chocola-maid-a-with-bell": {
+    "cutoffY": 1042.91
+  },
+  "chocola-maid-b-no-bell": {
+    "cutoffY": 1040.73
+  },
+  "chocola-maid-b-with-bell": {
+    "cutoffY": 1040.73
+  },
+  "chocola-pajama": {
+    "cutoffY": 1042.91
+  },
+  "chocola-pajama-a": {
+    "cutoffY": 1042.91
+  },
+  "chocola-pajama-b": {
+    "cutoffY": 1040.73
+  },
+  "chocola-santa": {
+    "cutoffY": 1042.91,
+    "touchMarkers": {
+      "bust": -34,
+      "bustAX": -155,
+      "bustAY": -184,
+      "bustBX": 140,
+      "bustBY": 111,
+      "headAX": -167,
+      "headAY": -654,
+      "headBX": 175,
+      "headBY": -268,
+      "pantAX": -213,
+      "pantAY": 315,
+      "pantBX": 181,
+      "pantBY": 801
+    }
+  },
+  "chocola-santa-b": {
+    "cutoffY": 1040.73
+  },
+  "chocola-swimsuit-a": {
+    "cutoffY": 1075.64
+  },
+  "chocola-swimsuit-b": {
+    "cutoffY": 1154.18
+  },
+  "chocola-teenage": {
+    "cutoffY": 1042.91
+  },
+  "chocola-teenage-a": {
+    "cutoffY": 1042.91
+  },
+  "chocola-teenage-b": {
+    "cutoffY": 1086.55
+  },
+  "chocola-winter": {
+    "cutoffY": 1042.91,
+    "touchMarkers": {
+      "bust": -34,
+      "bustAX": -173,
+      "bustAY": -94,
+      "bustBX": 137,
+      "bustBY": 72,
+      "headAX": -181,
+      "headAY": -662,
+      "headBX": 176,
+      "headBY": -267,
+      "pantAX": -149,
+      "pantAY": 123,
+      "pantBX": 139,
+      "pantBY": 863
+    }
+  },
+  "chocola-winter-b": {
+    "cutoffY": 1090.91
+  },
+  "chocola-wintermaid": {
+    "cutoffY": 1042.91,
+    "touchMarkers": {
+      "bust": -34,
+      "bustAX": -165,
+      "bustAY": -85,
+      "bustBX": 139,
+      "bustBY": 79,
+      "headAX": -181,
+      "headAY": -662,
+      "headBX": 176,
+      "headBY": -267,
+      "pantAX": -158,
+      "pantAY": 236,
+      "pantBX": 188,
+      "pantBY": 733
+    }
+  },
+  "chocola-wintermaid-b": {
+    "cutoffY": 1040.73
+  },
+  "chocola-yukata": {
+    "cutoffY": 1042.91,
+    "touchMarkers": {
+      "bust": -34,
+      "bustAX": -155,
+      "bustAY": -112,
+      "bustBX": 169,
+      "bustBY": 110,
+      "headAX": -180,
+      "headAY": -662,
+      "headBX": 176,
+      "headBY": -267,
+      "pantAX": -215,
+      "pantAY": 224,
+      "pantBX": 209,
+      "pantBY": 710
+    }
+  },
+  "chocola-yukata-b": {
+    "cutoffY": 1090.91
+  },
+  "cinnamon-casual": {
+    "cutoffY": 1042.91
+  },
+  "cinnamon-casual-a": {
+    "cutoffY": 1042.91
+  },
+  "cinnamon-casual-b": {
+    "cutoffY": 1040.73
+  },
+  "cinnamon-dress": {
+    "cutoffY": 1042.91
+  },
+  "cinnamon-dress-a": {
+    "cutoffY": 1042.91
+  },
+  "cinnamon-dress-b": {
+    "cutoffY": 1040.73
+  },
+  "cinnamon-hawaii-a": {
+    "cutoffY": 1042.91
+  },
+  "cinnamon-hawaii-b": {
+    "cutoffY": 1040.73
+  },
+  "cinnamon-maid": {
+    "cutoffY": 1042.91
+  },
+  "cinnamon-maid-a": {
+    "cutoffY": 1042.91
+  },
+  "cinnamon-maid-b": {
+    "cutoffY": 1040.73
+  },
+  "cinnamon-santa": {
+    "cutoffY": 1042.91,
+    "touchMarkers": {
+      "bust": 3,
+      "bustAX": -185,
+      "bustAY": -148,
+      "bustBX": 188,
+      "bustBY": 111,
+      "headAX": -175,
+      "headAY": -640,
+      "headBX": 176,
+      "headBY": -274,
+      "pantAX": -177,
+      "pantAY": 286,
+      "pantBX": 188,
+      "pantBY": 722
+    }
+  },
+  "cinnamon-santa-b": {
+    "cutoffY": 1040.73
+  },
+  "cinnamon-swimsuit-a": {
+    "cutoffY": 1042.91
+  },
+  "cinnamon-swimsuit-b": {
+    "cutoffY": 1040.73
+  },
+  "cinnamon-teenage": {
+    "cutoffY": 1042.91
+  },
+  "cinnamon-teenage-a": {
+    "cutoffY": 1042.91
+  },
+  "cinnamon-teenage-b": {
+    "cutoffY": 1040.73
+  },
+  "cinnamon-winter": {
+    "cutoffY": 1042.91,
+    "touchMarkers": {
+      "bust": -14.5,
+      "bustAX": -186,
+      "bustAY": -129,
+      "bustBX": 186,
+      "bustBY": 92,
+      "headAX": -184,
+      "headAY": -633,
+      "headBX": 179,
+      "headBY": -263,
+      "pantAX": -199,
+      "pantAY": 181,
+      "pantBX": 202,
+      "pantBY": 799
+    }
+  },
+  "cinnamon-winter-b": {
+    "cutoffY": 1040.73
+  },
+  "cinnamon-wintermaid": {
+    "cutoffY": 1042.91,
+    "touchMarkers": {
+      "bust": 3,
+      "bustAX": -185,
+      "bustAY": -110,
+      "bustBX": 185,
+      "bustBY": 114,
+      "headAX": -184,
+      "headAY": -633,
+      "headBX": 179,
+      "headBY": -263,
+      "pantAX": -137,
+      "pantAY": 192,
+      "pantBX": 142,
+      "pantBY": 840
+    }
+  },
+  "cinnamon-wintermaid-b": {
+    "cutoffY": 1040.73
+  },
+  "cinnamon-yukata": {
+    "cutoffY": 1042.91,
+    "touchMarkers": {
+      "bust": -14.5,
+      "bustAX": -173,
+      "bustAY": -124,
+      "bustBX": 197,
+      "bustBY": 104,
+      "headAX": -161,
+      "headAY": -646,
+      "headBX": 168,
+      "headBY": -266,
+      "pantAX": -193,
+      "pantAY": 194,
+      "pantBX": 219,
+      "pantBY": 704
+    }
+  },
+  "cinnamon-yukata-b": {
+    "cutoffY": 1040.73
+  },
+  "coconut-casual": {
+    "cutoffY": 1167.27
+  },
+  "coconut-casual-a": {
+    "cutoffY": 1167.27
+  },
+  "coconut-casual-a-4yo": {
+    "cutoffY": 1167.27
+  },
+  "coconut-casual-b": {
+    "cutoffY": 1167.27
+  },
+  "coconut-casual-b-4yo": {
+    "cutoffY": 1167.27
+  },
+  "coconut-dress": {
+    "cutoffY": 1206.55
+  },
+  "coconut-dress-a": {
+    "cutoffY": 1167.27
+  },
+  "coconut-hawaii-a": {
+    "cutoffY": 1167.27
+  },
+  "coconut-hawaii-b": {
+    "cutoffY": 1167.27
+  },
+  "coconut-koneko": {
+    "cutoffY": 1167.27
+  },
+  "coconut-koneko-a": {
+    "cutoffY": 1167.27
+  },
+  "coconut-koneko-b": {
+    "cutoffY": 1215.27
+  },
+  "coconut-maid": {
+    "cutoffY": 1167.27
+  },
+  "coconut-maid-a": {
+    "cutoffY": 1167.27
+  },
+  "coconut-maid-a-4yo": {
+    "cutoffY": 1167.27
+  },
+  "coconut-maid-b": {
+    "cutoffY": 1167.27
+  },
+  "coconut-maid-b-4yo": {
+    "cutoffY": 1167.27
+  },
+  "coconut-pajama": {
+    "cutoffY": 1167.27
+  },
+  "coconut-santa": {
+    "cutoffY": 1167.27,
+    "touchMarkers": {
+      "bust": 38.5,
+      "bustAX": -197,
+      "bustAY": -80,
+      "bustBX": 199,
+      "bustBY": 161,
+      "headAX": -176,
+      "headAY": -669,
+      "headBX": 174,
+      "headBY": -271,
+      "pantAX": -225,
+      "pantAY": 401,
+      "pantBX": 224,
+      "pantBY": 789
+    }
+  },
+  "coconut-santa-b": {
+    "cutoffY": 1167.27
+  },
+  "coconut-shirt-a": {
+    "cutoffY": 1167.27
+  },
+  "coconut-swimsuit-a": {
+    "cutoffY": 1167.27
+  },
+  "coconut-swimsuit-b": {
+    "cutoffY": 1167.27
+  },
+  "coconut-teenage": {
+    "cutoffY": 1167.27
+  },
+  "coconut-teenage-a": {
+    "cutoffY": 1167.27
+  },
+  "coconut-teenage-b": {
+    "cutoffY": 1167.27
+  },
+  "coconut-winter": {
+    "cutoffY": 1167.27,
+    "touchMarkers": {
+      "bust": -28.5,
+      "bustAX": -187,
+      "bustAY": -48,
+      "bustBX": 185,
+      "bustBY": 168,
+      "headAX": -176,
+      "headAY": -669,
+      "headBX": 174,
+      "headBY": -254,
+      "pantAX": -238,
+      "pantAY": 375,
+      "pantBX": 238,
+      "pantBY": 738
+    }
+  },
+  "coconut-winter-b": {
+    "cutoffY": 1167.27
+  },
+  "coconut-wintermaid": {
+    "cutoffY": 1167.27,
+    "touchMarkers": {
+      "bust": 38.5,
+      "bustAX": -199,
+      "bustAY": -87,
+      "bustBX": 199,
+      "bustBY": 166,
+      "headAX": -179,
+      "headAY": -656,
+      "headBX": 172,
+      "headBY": -257,
+      "pantAX": -213,
+      "pantAY": 341,
+      "pantBX": 224,
+      "pantBY": 843
+    }
+  },
+  "coconut-wintermaid-b": {
+    "cutoffY": 1167.27
+  },
+  "coconut-yukata": {
+    "cutoffY": 1167.27,
+    "touchMarkers": {
+      "bust": 38.5,
+      "bustAX": -208,
+      "bustAY": -72,
+      "bustBX": 207,
+      "bustBY": 172,
+      "headAX": -188,
+      "headAY": -659,
+      "headBX": 177,
+      "headBY": -262,
+      "pantAX": -196,
+      "pantAY": 299,
+      "pantBX": 221,
+      "pantBY": 776
+    }
+  },
+  "coconut-yukata-b": {
+    "cutoffY": 1167.27
+  },
+  "fraise-casual-a": {
+    "cutoffY": 1095.27
+  },
+  "fraise-casual-b": {
+    "cutoffY": 1132.36
+  },
+  "fraise-france-maid-a": {
+    "cutoffY": 1097.45,
+    "touchMarkers": {
+      "bust": -34,
+      "bustAX": -146,
+      "bustAY": -157,
+      "bustBX": 140,
+      "bustBY": 48,
+      "headAX": -183,
+      "headAY": -678,
+      "headBX": 182,
+      "headBY": -283,
+      "pantAX": -142,
+      "pantAY": 170,
+      "pantBX": 153,
+      "pantBY": 550
+    }
+  },
+  "fraise-france-maid-b": {
+    "cutoffY": 1134.55
+  },
+  "fraise-hawaii-a": {
+    "cutoffY": 1095.27
+  },
+  "fraise-hawaii-b": {
+    "cutoffY": 1132.36
+  },
+  "fraise-maid-a": {
+    "cutoffY": 1095.27
+  },
+  "fraise-maid-b": {
+    "cutoffY": 1132.36
+  },
+  "fraise-pajama-a": {
+    "cutoffY": 1114.91
+  },
+  "fraise-pajama-b": {
+    "cutoffY": 1152.0
+  },
+  "fraise-swimsuit-a": {
+    "cutoffY": 1095.27
+  },
+  "fraise-swimsuit-b": {
+    "cutoffY": 1132.36
+  },
+  "maple-casual": {
+    "cutoffY": 1167.27
+  },
+  "maple-casual-a": {
+    "cutoffY": 1167.27
+  },
+  "maple-casual-b": {
+    "cutoffY": 1167.27
+  },
+  "maple-dress": {
+    "cutoffY": 1167.27
+  },
+  "maple-dress-a": {
+    "cutoffY": 1167.27
+  },
+  "maple-dress-b": {
+    "cutoffY": 1217.45
+  },
+  "maple-hawaii-a": {
+    "cutoffY": 1169.45
+  },
+  "maple-hawaii-b": {
+    "cutoffY": 1167.27
+  },
+  "maple-maid": {
+    "cutoffY": 1167.27
+  },
+  "maple-maid-a": {
+    "cutoffY": 1167.27
+  },
+  "maple-maid-b": {
+    "cutoffY": 1167.27
+  },
+  "maple-santa": {
+    "cutoffY": 1167.27,
+    "touchMarkers": {
+      "bust": 7.5,
+      "bustAX": -177,
+      "bustAY": -84,
+      "bustBX": 178,
+      "bustBY": 114,
+      "headAX": -175,
+      "headAY": -647,
+      "headBX": 173,
+      "headBY": -272,
+      "pantAX": -154,
+      "pantAY": 259,
+      "pantBX": 162,
+      "pantBY": 848
+    }
+  },
+  "maple-santa-b": {
+    "cutoffY": 1167.27
+  },
+  "maple-swimsuit-a": {
+    "cutoffY": 1169.45
+  },
+  "maple-swimsuit-b": {
+    "cutoffY": 1167.27
+  },
+  "maple-teenage": {
+    "cutoffY": 1167.27
+  },
+  "maple-teenage-a": {
+    "cutoffY": 1169.45
+  },
+  "maple-teenage-b": {
+    "cutoffY": 1167.27
+  },
+  "maple-winter": {
+    "cutoffY": 1169.45,
+    "touchMarkers": {
+      "bust": 7.5,
+      "bustAX": -178,
+      "bustAY": -94,
+      "bustBX": 177,
+      "bustBY": 114,
+      "headAX": -175,
+      "headAY": -647,
+      "headBX": 173,
+      "headBY": -260,
+      "pantAX": -205,
+      "pantAY": 254,
+      "pantBX": 210,
+      "pantBY": 800
+    }
+  },
+  "maple-winter-b": {
+    "cutoffY": 1167.27
+  },
+  "maple-wintermaid": {
+    "cutoffY": 1167.27,
+    "touchMarkers": {
+      "bust": 7.5,
+      "bustAX": -178,
+      "bustAY": -94,
+      "bustBX": 177,
+      "bustBY": 114,
+      "headAX": -175,
+      "headAY": -647,
+      "headBX": 173,
+      "headBY": -260,
+      "pantAX": -205,
+      "pantAY": 254,
+      "pantBX": 210,
+      "pantBY": 800
+    }
+  },
+  "maple-wintermaid-b": {
+    "cutoffY": 1167.27
+  },
+  "maple-yukata": {
+    "cutoffY": 1167.27,
+    "touchMarkers": {
+      "bust": -57,
+      "bustAX": -195,
+      "bustAY": -97,
+      "bustBX": 147,
+      "bustBY": 116,
+      "headAX": -174,
+      "headAY": -659,
+      "headBX": 168,
+      "headBY": -264,
+      "pantAX": -227,
+      "pantAY": 187,
+      "pantBX": 216,
+      "pantBY": 643
+    }
+  },
+  "maple-yukata-b": {
+    "cutoffY": 1167.27
+  },
+  "milk-summer": {
+    "cutoffY": 979.64
+  },
+  "milk-teenage": {
+    "cutoffY": 1016.73
+  },
+  "milk-teenage-4yo": {
+    "cutoffY": 1056.0
+  },
+  "milk-winter": {
+    "cutoffY": 979.64
+  },
+  "vanilla-casual": {
+    "cutoffY": 1042.91
+  },
+  "vanilla-casual-a-no-bell": {
+    "cutoffY": 1042.91
+  },
+  "vanilla-casual-a-with-bell": {
+    "cutoffY": 1042.91
+  },
+  "vanilla-casual-b-no-bell": {
+    "cutoffY": 1042.91
+  },
+  "vanilla-casual-b-no-bell-tail-pin": {
+    "cutoffY": 1042.91
+  },
+  "vanilla-casual-b-with-bell": {
+    "cutoffY": 1042.91
+  },
+  "vanilla-date-a": {
+    "cutoffY": 1042.91
+  },
+  "vanilla-date-b": {
+    "cutoffY": 1042.91
+  },
+  "vanilla-dress": {
+    "cutoffY": 1042.91
+  },
+  "vanilla-dress-a": {
+    "cutoffY": 1082.18
+  },
+  "vanilla-hawaii-a": {
+    "cutoffY": 1042.91
+  },
+  "vanilla-hawaii-b": {
+    "cutoffY": 1042.91
+  },
+  "vanilla-koneko": {
+    "cutoffY": 1042.91
+  },
+  "vanilla-koneko-a": {
+    "cutoffY": 1088.73
+  },
+  "vanilla-koneko-b": {
+    "cutoffY": 1088.73
+  },
+  "vanilla-lolita": {
+    "cutoffY": 1042.91
+  },
+  "vanilla-maid": {
+    "cutoffY": 1042.91
+  },
+  "vanilla-maid-a-no-bell": {
+    "cutoffY": 1042.91
+  },
+  "vanilla-maid-a-with-bell": {
+    "cutoffY": 1042.91
+  },
+  "vanilla-maid-b-no-bell": {
+    "cutoffY": 1042.91
+  },
+  "vanilla-maid-b-with-bell": {
+    "cutoffY": 1042.91
+  },
+  "vanilla-pajama": {
+    "cutoffY": 1042.91
+  },
+  "vanilla-pajama-a": {
+    "cutoffY": 1084.36
+  },
+  "vanilla-pajama-b": {
+    "cutoffY": 1042.91
+  },
+  "vanilla-santa": {
+    "cutoffY": 1042.91,
+    "touchMarkers": {
+      "bust": -34,
+      "bustAX": -143,
+      "bustAY": -188,
+      "bustBX": 151,
+      "bustBY": 111,
+      "headAX": -181,
+      "headAY": -663,
+      "headBX": 179,
+      "headBY": -258,
+      "pantAX": -185,
+      "pantAY": 213,
+      "pantBX": 183,
+      "pantBY": 785
+    }
+  },
+  "vanilla-santa-b": {
+    "cutoffY": 1042.91
+  },
+  "vanilla-swimsuit-a": {
+    "cutoffY": 1042.91
+  },
+  "vanilla-swimsuit-b": {
+    "cutoffY": 1042.91
+  },
+  "vanilla-teenage": {
+    "cutoffY": 1042.91
+  },
+  "vanilla-teenage-a": {
+    "cutoffY": 1086.55
+  },
+  "vanilla-teenage-b": {
+    "cutoffY": 1090.91
+  },
+  "vanilla-winter": {
+    "cutoffY": 1042.91,
+    "touchMarkers": {
+      "bust": -34,
+      "bustAX": -135,
+      "bustAY": -91,
+      "bustBX": 158,
+      "bustBY": 63,
+      "headAX": -172,
+      "headAY": -663,
+      "headBX": 188,
+      "headBY": -264,
+      "pantAX": -160,
+      "pantAY": 115,
+      "pantBX": 190,
+      "pantBY": 844
+    }
+  },
+  "vanilla-winter-b": {
+    "cutoffY": 1042.91
+  },
+  "vanilla-wintermaid": {
+    "cutoffY": 1042.91,
+    "touchMarkers": {
+      "bust": -34,
+      "bustAX": -130,
+      "bustAY": -85,
+      "bustBX": 154,
+      "bustBY": 67,
+      "headAX": -178,
+      "headAY": -650,
+      "headBX": 184,
+      "headBY": -267,
+      "pantAX": -180,
+      "pantAY": 250,
+      "pantBX": 182,
+      "pantBY": 744
+    }
+  },
+  "vanilla-wintermaid-b": {
+    "cutoffY": 1042.91
+  },
+  "vanilla-yukata": {
+    "cutoffY": 1042.91,
+    "touchMarkers": {
+      "bust": -34,
+      "bustAX": -155,
+      "bustAY": -105,
+      "bustBX": 151,
+      "bustBY": 105,
+      "headAX": -178,
+      "headAY": -650,
+      "headBX": 184,
+      "headBY": -267,
+      "pantAX": -198,
+      "pantAY": 394,
+      "pantBX": 215,
+      "pantBY": 721
+    }
+  },
+  "vanilla-yukata-b": {
+    "cutoffY": 1042.91
+  }
+}
