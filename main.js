@@ -124,6 +124,8 @@ async function run(width, height, zipUrl, reactionConfig) {
     let layoutScale = 1;
     let layoutPlayerScale = 1;
     let modelPixelRatio = 1;
+    let defaultOffsetY = 0;
+    const presentation = window.NekoCurrentModel?.presentation || {};
 
     function applyResponsivePlayerLayout() {
         const displaySize = getDisplaySize();
@@ -145,9 +147,19 @@ async function run(width, height, zipUrl, reactionConfig) {
         player.scale = layoutPlayerScale * userScale;
         transformPending = false;
 
+        // Use the visible thigh cutoff, not the PSB's export/texture bounds.
+        // Some models have shorter drawings; keep their cut edge below the viewport.
+        defaultOffsetY = -40 / scale;
+        const cutoff = presentation.cutoffY;
+        if (Number.isFinite(cutoff)) {
+            const rect = canvas.getBoundingClientRect();
+            const floor = (displaySize.viewportHeight + 40 - rect.top) / scale - renderHeight / 2;
+            defaultOffsetY = Math.max(defaultOffsetY, floor - cutoff * layoutPlayerScale - baseCoord[1]);
+        }
+
         const c = player.coord;
         c[0] = baseCoord[0] + userOffsetX;
-        c[1] = baseCoord[1] - 40 / scale + userOffsetY;
+        c[1] = baseCoord[1] + defaultOffsetY + userOffsetY;
         player.coord = c;
 
         if (EmotePlayer.device) {
@@ -351,6 +363,9 @@ async function run(width, height, zipUrl, reactionConfig) {
             files = null;
 
             player.loadData(modelData);
+            // Retained A poses lost the hand-authored interaction markers in conversion.
+            player.setPresentation(presentation);
+            applyResponsivePlayerLayout();
         } finally {
             modelData = null;
             files = null;
@@ -629,33 +644,9 @@ async function run(width, height, zipUrl, reactionConfig) {
 
             flushUserTransform();
             const canvasRect = canvas.getBoundingClientRect();
-            const bustPosition = player.getMarkerPosition('bust', canvasRect);
-            const eyePosition = player.getMarkerPosition('eye', canvasRect);
-            const headPositionAX = player.getMarkerPosition('headAX', canvasRect);
-            const headPositionAY = player.getMarkerPosition('headAY', canvasRect);
-            const headPositionBX = player.getMarkerPosition('headBX', canvasRect);
-            const headPositionBY = player.getMarkerPosition('headBY', canvasRect);
-            const pantPositionAX = player.getMarkerPosition('pantAX', canvasRect);
-            const pantPositionAY = player.getMarkerPosition('pantAY', canvasRect);
-            const pantPositionBX = player.getMarkerPosition('pantBX', canvasRect);
-            const pantPositionBY = player.getMarkerPosition('pantBY', canvasRect);
-
-            if (!bustPosition || !eyePosition || !headPositionAX || !headPositionAY || !headPositionBX || !headPositionBY || !pantPositionAX || !pantPositionAY || !pantPositionBX || !pantPositionBY) {
-                return;
-            }
-
-            const bustLength = Math.sqrt((bustPosition.clientX - ev.clientX) ** 2 + (bustPosition.clientY - ev.clientY) ** 2);
-            const eyeLength = Math.sqrt((eyePosition.clientX - ev.clientX) ** 2 + (eyePosition.clientY - ev.clientY) ** 2);
-            const headCenterX = (headPositionAX.clientX + headPositionBX.clientX) / 2;
-            const headCenterY = (headPositionAY.clientY + headPositionBY.clientY) / 2;
-            const headLength = Math.sqrt((headCenterX - ev.clientX) ** 2 + (headCenterY - ev.clientY) ** 2);
-            const faceLength = Math.sqrt((headCenterX - ev.clientX) ** 2 + ((headCenterY + 40) - ev.clientY) ** 2);
-            const pantCenterX = (pantPositionAX.clientX + pantPositionBX.clientX) / 2;
-            const pantCenterY = (pantPositionAY.clientY + pantPositionBY.clientY) / 2;
-            const pantLength = Math.sqrt((pantCenterX - ev.clientX) ** 2 + (pantCenterY - ev.clientY) ** 2);
-
-            const tryReact = (zone, distance, threshold, reactions) => {
-                if (distance >= threshold || !reactions?.length) {
+            const regions = player.getTouchRegions(canvasRect);
+            const tryReact = (zone, reactions) => {
+                if (!EmotePlayer.pointInRegion(regions[zone], ev.clientX, ev.clientY) || !reactions?.length) {
                     return false;
                 }
 
@@ -670,11 +661,11 @@ async function run(width, height, zipUrl, reactionConfig) {
             };
 
             if (
-                !tryReact('bust', bustLength, 50, reactionConfig.bust) &&
-                !tryReact('eye', eyeLength, 30, reactionConfig.eye) &&
-                !tryReact('face', faceLength, 80, reactionConfig.face) &&
-                !tryReact('head', headLength, 120, reactionConfig.head) &&
-                !tryReact('pant', pantLength, 180, reactionConfig.pant)
+                !tryReact('bust', reactionConfig.bust) &&
+                !tryReact('eye', reactionConfig.eye) &&
+                !tryReact('face', reactionConfig.face) &&
+                !tryReact('head', reactionConfig.head) &&
+                !tryReact('pant', reactionConfig.pant)
             ) {
                 // No reaction triggered.
             }
@@ -691,7 +682,7 @@ async function run(width, height, zipUrl, reactionConfig) {
             if (!transformPending) return;
             transformPending = false;
             player.scale = layoutPlayerScale * userScale;
-            player.coord = [baseCoord[0] + userOffsetX, baseCoord[1] - 40 / layoutScale + userOffsetY];
+            player.coord = [baseCoord[0] + userOffsetX, baseCoord[1] + defaultOffsetY + userOffsetY];
         }
 
         // Consume the latest input once per rendered frame, including at 30 FPS.

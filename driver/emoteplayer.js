@@ -718,22 +718,23 @@ class EmotePlayer
 
     getMarkerPosition(marker, canvasRect = null) {
         if (! this.initialized
-            || this.canvas == null)
+            || this.canvas == null
+            || !Number.isFinite(this.charaProfile[marker]))
             return null;
 
-        let markerCoord = [ 0, 0 ];
-        if (marker in this.charaProfile) {
-            const _x = this.getState("coordX");
-            const _y = this.getState("coordY");
-            const _scale = this.getState("scale");
-            const _rot = this.getState("rot");
-            const s = Math.sin(_rot);
-            const c = Math.cos(_rot);
-            const markerX = 0;
-            const markerY = this.charaProfile[marker];
-            markerCoord = [ markerX * c * _scale + markerY * -s * _scale + _x,
-                            markerX * s * _scale + markerY *  c * _scale + _y ];
-        }
+        return this.getPointPosition(0, this.charaProfile[marker], canvasRect);
+    }
+
+    getPointPosition(x, y, canvasRect = null) {
+        if (!this.initialized || this.canvas == null)
+            return null;
+        const scale = this.getState("scale");
+        const rot = this.getState("rot");
+        const s = Math.sin(rot), c = Math.cos(rot);
+        const markerCoord = [
+            (x * c - y * s) * scale + this.getState("coordX"),
+            (x * s + y * c) * scale + this.getState("coordY")
+        ];
         const rect = canvasRect || this.canvas.getBoundingClientRect();
         const canvasWidth = this.canvas.width || rect.width;
         const canvasHeight = this.canvas.height || rect.height;
@@ -750,6 +751,62 @@ class EmotePlayer
                  offsetY: offsetY,
                  clientX: rect.left + offsetX * scaleX,
                  clientY: rect.top + offsetY * scaleY };
+    }
+
+    getTouchRegions(canvasRect = null) {
+        if (!this.initialized || this.canvas == null)
+            return {};
+        const rect = canvasRect || this.canvas.getBoundingClientRect();
+        const profile = this.charaProfile;
+        const eye = profile.eye, mouth = profile.mouth;
+        if (!Number.isFinite(eye) || !Number.isFinite(mouth))
+            return {};
+        const faceSize = Math.max(60, Math.abs(mouth - eye));
+        const scale = Math.abs(this.getState("scale"));
+        const region = (x, y, rx, ry) => ({
+            ...this.getPointPosition(x, y, rect),
+            radiusX: rx * scale * rect.width / this.canvas.width,
+            radiusY: ry * scale * rect.height / this.canvas.height,
+            angle: this.getState("rot")
+        });
+        const authoredRegion = (name) => {
+            const values = ['AX', 'AY', 'BX', 'BY'].map(suffix => profile[name + suffix]);
+            if (!values.every(Number.isFinite)) return null;
+            const [ax, ay, bx, by] = values;
+            return region((ax + bx) / 2, (ay + by) / 2,
+                Math.max(30, Math.abs(bx - ax) / 2), Math.max(30, Math.abs(by - ay) / 2));
+        };
+        const bust = Number.isFinite(profile.bust) ? profile.bust : mouth + faceSize * 2.5;
+        const bottom = Number.isFinite(this.visibleBottom) ? this.visibleBottom : profile.bottom;
+        const waist = Number.isFinite(bottom) ? bust + (bottom - bust) * 0.55 : bust + faceSize * 4;
+        return {
+            eye: region(0, eye, faceSize * 0.5, faceSize * 0.35),
+            face: region(0, (eye + mouth) / 2, faceSize * 0.9, faceSize * 0.8),
+            head: authoredRegion('head') || region(0, eye - faceSize * 0.9, faceSize * 1.6, faceSize * 1.7),
+            bust: authoredRegion('bust') || region(0, bust, faceSize * 1.3, faceSize),
+            pant: authoredRegion('pant') || region(0, waist, faceSize * 2, faceSize * 2.5)
+        };
+    }
+
+    // 由外部（main.js）在 loadData 后注入模型展示参数：手标覆盖与可见下沿。
+    // touchMarkers 合并进 charaProfile，供 getMarkerPosition/getTouchRegions 使用；
+    // cutoffY 作为 visibleBottom，供 getTouchRegions 估算腰线。
+    setPresentation(presentation = {}) {
+        const markers = presentation.touchMarkers || {};
+        for (const key of Object.keys(markers)) {
+            this.charaProfile[key] = markers[key];
+        }
+        this.visibleBottom = presentation.cutoffY;
+    }
+
+    // 触摸区域命中判定：点 (x, y) 是否落在 region 椭圆内。
+    // 与 getTouchRegions 配对，触摸几何全部内聚到 driver 层。
+    static pointInRegion(region, x, y) {
+        if (!region || !(region.radiusX > 0) || !(region.radiusY > 0)) return false;
+        const dx = x - region.clientX, dy = y - region.clientY;
+        const c = Math.cos(region.angle || 0), s = Math.sin(region.angle || 0);
+        return ((dx * c + dy * s) / region.radiusX) ** 2
+            + ((dy * c - dx * s) / region.radiusY) ** 2 <= 1;
     }
 
     get speed() {
