@@ -788,6 +788,27 @@ class EmotePlayer
         };
     }
 
+    // 由外部（main.js）在 loadData 后注入模型展示参数：手标覆盖与可见下沿。
+    // touchMarkers 合并进 charaProfile，供 getMarkerPosition/getTouchRegions 使用；
+    // cutoffY 作为 visibleBottom，供 getTouchRegions 估算腰线。
+    setPresentation(presentation = {}) {
+        const markers = presentation.touchMarkers || {};
+        for (const key of Object.keys(markers)) {
+            this.charaProfile[key] = markers[key];
+        }
+        this.visibleBottom = presentation.cutoffY;
+    }
+
+    // 触摸区域命中判定：点 (x, y) 是否落在 region 椭圆内。
+    // 与 getTouchRegions 配对，触摸几何全部内聚到 driver 层。
+    static pointInRegion(region, x, y) {
+        if (!region || !(region.radiusX > 0) || !(region.radiusY > 0)) return false;
+        const dx = x - region.clientX, dy = y - region.clientY;
+        const c = Math.cos(region.angle || 0), s = Math.sin(region.angle || 0);
+        return ((dx * c + dy * s) / region.radiusX) ** 2
+            + ((dy * c - dx * s) / region.radiusY) ** 2 <= 1;
+    }
+
     get speed() {
         return this._speed;
     }

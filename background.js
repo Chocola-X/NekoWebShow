@@ -120,5 +120,5 @@
     window.addEventListener('pageshow', refresh);
     document.addEventListener('visibilitychange', function () { if (!document.hidden) refresh(); });
   }
-  window.NekoBackground = { init: init, current: current, select: select, refresh: refresh, phaseAt: phaseAt, nextBoundary: nextBoundary, imageFor: imageFor };
+  window.NekoBackground = { init: init, list: entries, current: current, select: select, refresh: refresh, phaseAt: phaseAt, nextBoundary: nextBoundary, imageFor: imageFor };
 })();

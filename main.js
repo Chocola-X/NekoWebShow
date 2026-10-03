@@ -3,14 +3,6 @@
 // 且缺少干净的设备重建路径），因此预设一个下限，给“放大”留出清晰度余量。按需调大（如 2160）更清晰，但 GPU/显存占用更高。
 const RENDER_MIN_HEIGHT = 1440;
 
-function isInsideTouchRegion(region, x, y) {
-    if (!region || !(region.radiusX > 0) || !(region.radiusY > 0)) return false;
-    const dx = x - region.clientX, dy = y - region.clientY;
-    const c = Math.cos(region.angle || 0), s = Math.sin(region.angle || 0);
-    return ((dx * c + dy * s) / region.radiusX) ** 2
-        + ((dy * c - dx * s) / region.radiusY) ** 2 <= 1;
-}
-
 function start(zipUrl) {
     const canvas = document.getElementById('canvas');
     // 加载阶段先铺满整个窗口作为占位，避免默认样式在两侧留白
@@ -372,8 +364,7 @@ async function run(width, height, zipUrl, reactionConfig) {
 
             player.loadData(modelData);
             // Retained A poses lost the hand-authored interaction markers in conversion.
-            Object.assign(player.charaProfile, presentation.touchMarkers || {});
-            player.visibleBottom = presentation.cutoffY;
+            player.setPresentation(presentation);
             applyResponsivePlayerLayout();
         } finally {
             modelData = null;
@@ -655,7 +646,7 @@ async function run(width, height, zipUrl, reactionConfig) {
             const canvasRect = canvas.getBoundingClientRect();
             const regions = player.getTouchRegions(canvasRect);
             const tryReact = (zone, reactions) => {
-                if (!isInsideTouchRegion(regions[zone], ev.clientX, ev.clientY) || !reactions?.length) {
+                if (!EmotePlayer.pointInRegion(regions[zone], ev.clientX, ev.clientY) || !reactions?.length) {
                     return false;
                 }
 

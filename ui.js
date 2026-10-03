@@ -48,9 +48,6 @@
   function isLocked() { return readBool(LOCK_KEY, false); }
   function isMuted() { return readBool(MUTE_KEY, false); }
 
-  function wallpaperList() { return Array.isArray(window.NekoWallpapers) ? window.NekoWallpapers : []; }
-  function currentWallpaper() { return window.NekoBackground.current(); }
-  function setWallpaper(id) { window.NekoBackground.select(id); }
   function applyCharCursor() {
     try { document.body.classList.toggle('char-unlocked', !isLocked()); } catch (e) {}
   }
@@ -404,8 +401,8 @@
     wpTitle.textContent = '壁纸选择';
     dd.appendChild(wpTitle);
 
-    var wps = wallpaperList();
-    var currentWp = currentWallpaper();
+    var wps = window.NekoBackground.list();
+    var currentWp = window.NekoBackground.current();
     var section = null;
     wps.forEach(function (background) {
       var name = background.id;
@@ -435,7 +432,7 @@
       row.appendChild(text);
       row.addEventListener('click', function (e) {
         e.stopPropagation();
-        setWallpaper(name);
+        window.NekoBackground.select(name);
         dd.querySelectorAll('.opt[data-wallpaper]').forEach(function (r) {
           r.classList.toggle('selected', r.dataset.wallpaper === name);
         });

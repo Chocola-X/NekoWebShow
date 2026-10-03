@@ -8,9 +8,8 @@ $domain_cinnamon = 'https://cinnamon.nekopara.uk';
 $domain_milk = 'https://milk.nekopara.uk';
 $domain_fraise = 'https://fraise.nekopara.uk';
 // === 模式开关：true=单URL模式(?char=)，false=域名独立模式(各角色子站) ===
+// 本地测试时手动改为 true；子目录部署也用 true。切到 false 会把菜单指向各角色子站域名。
 $local_mode = false;
-// 本机测试和子目录部署使用当前页面的查询参数，避免切换到线上子站。
-$local_mode = $local_mode || preg_match('/^(localhost|127\.[0-9.]+|\[::1\])(:[0-9]+)?$/', $_SERVER['HTTP_HOST'] ?? '') === 1;
 if ($local_mode) {
     $domain_chocola = $domain_vanilla = $domain_azuki = $domain_coconut = $domain_maple = $domain_cinnamon = $domain_milk = $domain_fraise = '?char=';
 } else {
