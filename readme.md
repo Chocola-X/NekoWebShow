@@ -1,7 +1,7 @@
 # NekoWebShow · 基于 FreeMote 的猫娘网页展示
 
 <div align="center">
-  <img src="https://teachermate.oss-cn-qingdao.aliyuncs.com/6QCbQ-1754206210534-NekoWebShow_logo.png" alt="NekoWebShow" />
+  <img src="./logo.png" alt="NekoWebShow" />
 </div>
 
 在浏览器中展示《猫娘乐园》的 E-mote 动态立绘，支持角色换装、触摸反应、语音与口型同步，以及随本地时间变化的背景，也可以用作网页动态壁纸。
